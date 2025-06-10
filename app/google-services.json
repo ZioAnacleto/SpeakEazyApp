@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "570177001449",
+    "project_id": "speakeazy-ec7b5",
+    "storage_bucket": "speakeazy-ec7b5.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:570177001449:android:bcbdaea56b0e1091ce5d78",
+        "android_client_info": {
+          "package_name": "com.zioanacleto.speakeazy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjDH5dUIIeT8FqMKwT_hxLvmHJ-QYtLpc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
