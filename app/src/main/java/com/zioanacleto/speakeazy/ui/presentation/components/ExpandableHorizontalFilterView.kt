@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
@@ -49,6 +48,7 @@ fun ExpandableHorizontalFilterView(
     onFilterDoneClick: (List<SelectedFilter>) -> Unit = { }
 ) {
     val filterItemHeight = 50.dp
+    // todo: change them
     val gradients = listOf(
         Brush.horizontalGradient(
             colors = listOf(
@@ -155,10 +155,9 @@ fun ExpandableHorizontalFilterView(
                 Row(
                     modifier = Modifier
                         .height(filterItemHeight)
+                        .fillParentMaxWidth(fraction = (1f / list.size))
                         .clip(
                             RoundedCornerShape(
-                                topStart = 0.dp,
-                                topEnd = 0.dp,
                                 bottomStart = 20.dp,
                                 bottomEnd = 20.dp
                             )
@@ -185,8 +184,7 @@ fun ExpandableHorizontalFilterView(
                 ) {
                     Image(
                         modifier = Modifier
-                            .padding(start = 12.dp)
-                            .size(26.dp),
+                            .padding(top = 12.dp, bottom = 12.dp),
                         painter = painterResource(filter.icon),
                         contentDescription = null
                     )
@@ -196,7 +194,7 @@ fun ExpandableHorizontalFilterView(
                             .padding(start = 5.dp, end = 12.dp),
                         color = if (!isFilterSelected) Color.LightGray else Color.Black,
                         text = filter.label,
-                        fontSize = TextUnit(12f, TextUnitType.Sp),
+                        fontSize = TextUnit(11f, TextUnitType.Sp),
                         textAlign = TextAlign.Center,
                         lineHeight = TextUnit(14f, TextUnitType.Sp)
                     )
@@ -219,3 +217,5 @@ fun ExpandableHorizontalFilterViewPreview() {
         list = SearchFilterItem.entries.map { it }
     )
 }
+
+typealias SelectedFilter = Pair<String, Boolean>

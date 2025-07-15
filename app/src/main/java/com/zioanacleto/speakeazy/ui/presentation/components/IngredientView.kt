@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.IngredientModel
 
+// todo: detail?
 @Composable
 fun IngredientView(ingredient: IngredientModel) {
     Row(

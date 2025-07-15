@@ -94,14 +94,14 @@ fun MainScreenHomeSuccessView(
     onCocktailClick: (String) -> Unit
 ) {
     LazyColumn(
-        modifier = Modifier
+        modifier = modifier
             .padding(top = 10.dp)
     ) {
         item {
             Text(
                 modifier = Modifier
                     .padding(start = 10.dp, top = 10.dp, bottom = 16.dp),
-                text = "Scegli il tuo cocktail",
+                text = "Choose your cocktail",
                 color = Color.White,
                 fontSize = TextUnit(36f, TextUnitType.Sp),
                 fontWeight = FontWeight.SemiBold,
@@ -146,85 +146,17 @@ fun MainScreenHomeSuccessView(
 }
 
 @Composable
-private fun MainScreenSuccessView(
-    modifier: Modifier = Modifier,
-    drinks: List<DrinkModel>,
-    onCocktailClick: (String) -> Unit
-) {
-    var currentStringSize by remember { mutableFloatStateOf(44f) }
-
-    val nestedScrollConnection = remember {
-        object : NestedScrollConnection {
-            override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-                val delta = available.y
-                val newComponentSize = currentStringSize + (delta * 0.05f)
-                val previousComponentSize = currentStringSize
-
-                currentStringSize = newComponentSize.coerceIn(28f, 44f)
-                val consumedSize = currentStringSize - previousComponentSize
-
-                return Offset(x = 0f, y = consumedSize)
-            }
-        }
-    }
-
-    Column(
-        modifier = Modifier.nestedScroll(nestedScrollConnection)
-    ) {
-        Text(
-            modifier = Modifier
-                .padding(top = 10.dp, start = 10.dp, bottom = 16.dp),
-            text = "All cocktails",
-            color = Color.White,
-            fontSize = TextUnit(currentStringSize, TextUnitType.Sp),
-            fontWeight = FontWeight.SemiBold
-        )
-
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2)
-        ) {
-            item(span = { GridItemSpan(maxLineSpan) }) {
-                MainFilterView(
-                    filterList = MainFilterItem.entries
-                )
-            }
-            items(drinks, key = { it.id }) {
-                MainDrinkCard(
-                    modifier = Modifier
-                        .padding(6.dp)
-                        .animateItem(),
-                    id = it.id,
-                    name = it.name,
-                    category = it.category,
-                    imageString = it.imageUrl,
-                    isFavorite = it.favorite,
-                    onClick = onCocktailClick
-                )
-            }
-
-            item(span = { GridItemSpan(maxLineSpan) }) {
-                Spacer(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(100.dp)
-                )
-            }
-        }
-    }
-}
-
-@Composable
 private fun MainScreenErrorView(errorMessage: String) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        androidx.compose.material.Text(
+        Text(
             text = "Sorry, there was a problem...",
             color = Color.White,
             fontSize = TextUnit(24f, TextUnitType.Sp)
         )
-        androidx.compose.material.Text(
+        Text(
             modifier = Modifier
                 .padding(top = 10.dp),
             text = errorMessage,

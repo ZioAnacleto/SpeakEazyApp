@@ -48,3 +48,16 @@ fun Modifier.parallaxLayoutModifier(scrollState: ScrollState, rate: Int) =
 
 fun Color.withAlpha(alpha: Float = 0.75f): Color =
     this.copy(alpha = alpha)
+
+@Composable
+fun rememberEnabledForButton(
+    delayTime: Long = 200L
+): Boolean {
+    var enabled by remember { mutableStateOf(true) }
+    LaunchedEffect(enabled) {
+        if(enabled) return@LaunchedEffect else delay(delayTime)
+        enabled = true
+    }
+
+    return enabled
+}

@@ -149,12 +149,12 @@ fun FavoritesScreenErrorView(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        androidx.compose.material.Text(
+        Text(
             text = "Sorry, there was a problem...",
             color = Color.White,
             fontSize = TextUnit(24f, TextUnitType.Sp)
         )
-        androidx.compose.material.Text(
+        Text(
             modifier = Modifier
                 .padding(top = 10.dp),
             text = errorMessage,

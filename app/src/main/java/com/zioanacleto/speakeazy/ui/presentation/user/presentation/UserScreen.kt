@@ -14,34 +14,30 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Email
-import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Modifier
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
@@ -53,9 +49,9 @@ import com.airbnb.lottie.compose.LottieCancellationBehavior
 import com.zioanacleto.buffa.compose.hideKeyboardOnTouch
 import com.zioanacleto.buffa.logging.AnacletoLogger
 import com.zioanacleto.speakeazy.R
-import com.zioanacleto.speakeazy.navigation.TopBarDestination
 import com.zioanacleto.speakeazy.ui.presentation.components.BackFloatingButton
 import com.zioanacleto.speakeazy.ui.presentation.components.CocktailLoadingAnimation
+import com.zioanacleto.speakeazy.ui.presentation.components.SafeClickableGenericButton
 import com.zioanacleto.speakeazy.ui.presentation.user.domain.model.UserModel
 import com.zioanacleto.speakeazy.ui.theme.YellowFFE271
 import kotlinx.coroutines.flow.Flow
@@ -90,7 +86,7 @@ private fun UserScreenContent(
     val userUiState: Flow<UserUiState> = remember { viewModel.userUiState }
     when (val state = userUiState.collectAsState(UserUiState.Loading).value) {
         is UserUiState.Success -> {
-            if(state.user.name.isNotEmpty()) {
+            if (state.user.name.isNotEmpty()) {
                 // show normal view
                 AnacletoLogger.mumbling(
                     "User name: ${state.user.name}"
@@ -110,7 +106,7 @@ private fun UserScreenContent(
                     visible = registrationSuccessful,
                     enter = fadeIn()
                 ) {
-                    if(registrationSuccessful) {
+                    if (registrationSuccessful) {
                         RegisterUserNameScreen(
                             viewModel = viewModel,
                             onBackButton = onBackButton
@@ -223,13 +219,13 @@ private fun RegisterUserScreen(
                 )
             )
 
-            Button(
+            SafeClickableGenericButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 20.dp, start = 24.dp, end = 24.dp),
                 enabled = mailTextState.text.isValidEmail(),
                 onClick = {
-                    if(mailTextState.text.isNotEmpty()) {
+                    if (mailTextState.text.isNotEmpty()) {
                         viewModel.sendEmail(mailTextState.text)
                     }
                 }
@@ -324,10 +320,11 @@ private fun RegisterUserNameScreen(
                 )
             )
 
-            Button(
+            SafeClickableGenericButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 20.dp, start = 24.dp, end = 24.dp),
+                enabled = true,
                 onClick = {
                     viewModel.updateUserWithName(
                         nameTextState.text.ifEmpty { "Barman anonimo" }
@@ -392,10 +389,11 @@ private fun UserDetailScreen(
             lineHeight = TextUnit(38f, TextUnitType.Sp)
         )
 
-        Button(
+        SafeClickableGenericButton(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 20.dp, start = 24.dp, end = 24.dp),
+            enabled = true,
             onClick = onLogoutClick
         ) {
             Image(
@@ -431,5 +429,5 @@ private fun UserDetailScreenPreview() {
             email = "test@gmail.com"
         ),
         onBackButton = { }
-    ) {  }
+    ) { }
 }
