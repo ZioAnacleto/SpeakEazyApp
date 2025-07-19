@@ -82,6 +82,7 @@ dependencies {
 
     // Ktor
     implementation(libs.ktor.client)
+    implementation(libs.ktor.client.cio)
     implementation(libs.ktor.client.negotiation)
     implementation(libs.ktor.client.android)
     implementation(libs.ktor.serialization)
@@ -107,10 +108,13 @@ dependencies {
     implementation(libs.google.play.services.auth)
 
     testImplementation(libs.junit)
+    testImplementation(libs.mockk)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation(libs.mockk.android)
+    testImplementation(libs.ktor.client.mock)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 }

@@ -3,6 +3,8 @@ package com.zioanacleto.speakeazy.data.api
 import com.zioanacleto.speakeazy.BuildConfig
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.engine.HttpClientEngine
+import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.cache.HttpCache
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -24,9 +26,11 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import java.security.MessageDigest
 
-class ApiClientImpl {
+class ApiClientImpl(
+    engine: HttpClientEngine = CIO.create()
+) {
 
-    private val _httpClient = HttpClient {
+    private val _httpClient = HttpClient(engine) {
         install(ContentNegotiation) {
             json(
                 Json {
