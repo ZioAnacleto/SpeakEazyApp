@@ -1,19 +1,17 @@
 package com.zioanacleto.speakeazy.ui.presentation.user.presentation
 
-import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.flow.Flow
-import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.ActionCodeSettings
 import com.google.firebase.auth.actionCodeSettings
-import com.google.firebase.auth.auth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.zioanacleto.buffa.base.BaseViewModel
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.buffa.default
 import com.zioanacleto.buffa.logging.AnacletoLogger
 import com.zioanacleto.speakeazy.ui.presentation.user.domain.UserRepository
 import com.zioanacleto.speakeazy.ui.presentation.user.domain.model.UserModel
 import com.zioanacleto.speakeazy.ui.presentation.user.navigation.USER_DEEPLINK_URI
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -21,7 +19,7 @@ import kotlinx.coroutines.launch
 class UserViewModel(
     private val repository: UserRepository,
     private val dispatcherProvider: DispatcherProvider
-): ViewModel() {
+): BaseViewModel(dispatcherProvider) {
 
     private val actionCodeSettings: ActionCodeSettings = actionCodeSettings {
         url = USER_DEEPLINK_URI
@@ -37,13 +35,13 @@ class UserViewModel(
         repository.getUser()
             .mapResourceAsUserUiState()
             .stateIn(
-                scope = viewModelScope,
+                scope = coroutineScope,
                 started = SharingStarted.WhileSubscribed(5000),
                 initialValue = UserUiState.Loading
             )
 
     fun sendEmail(userEmail: String) {
-        viewModelScope.launch(dispatcherProvider.io()) {
+        coroutineScope.launch(dispatcherProvider.io()) {
             repository.saveUser(
                 UserModel(
                     email = userEmail
@@ -69,7 +67,7 @@ class UserViewModel(
         // retrieving current user's mail
         val email = Firebase.auth.currentUser?.email.default()
 
-        viewModelScope.launch(dispatcherProvider.io()) {
+        coroutineScope.launch(dispatcherProvider.io()) {
             repository.updateUser(
                 UserModel(
                     email = email,

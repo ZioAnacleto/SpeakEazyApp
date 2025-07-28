@@ -1,7 +1,7 @@
 package com.zioanacleto.speakeazy.ui.presentation.detail.presentation
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.zioanacleto.buffa.base.BaseViewModel
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.speakeazy.ui.presentation.detail.domain.DetailRepository
 import com.zioanacleto.speakeazy.ui.presentation.main.domain.MainRepository
@@ -14,13 +14,13 @@ class DetailViewModel(
     private val detailRepository: DetailRepository,
     private val mainRepository: MainRepository,
     private val dispatcherProvider: DispatcherProvider
-) : ViewModel() {
+) : BaseViewModel(dispatcherProvider) {
 
     val detailUiState: (String) -> Flow<DetailUiState> = { cocktailId ->
         mainRepository.getMainById(cocktailId)
             .mapResourceAsDetailUiState()
             .stateIn(
-                scope = viewModelScope,
+                scope = coroutineScope,
                 started = SharingStarted.WhileSubscribed(5000),
                 initialValue = DetailUiState.Loading
             )

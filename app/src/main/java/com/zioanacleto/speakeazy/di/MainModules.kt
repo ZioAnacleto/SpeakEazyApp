@@ -78,7 +78,7 @@ val viewModelModule = module {
     factory { DetailViewModel(get(), get(), get()) }
     factory { SearchViewModel(get(), get()) }
     factory { UserViewModel(get(), get()) }
-    factory { FavoritesViewModel(get()) }
+    factory { FavoritesViewModel(get(), get()) }
 }
 
 // DataSource

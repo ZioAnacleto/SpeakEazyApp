@@ -55,10 +55,13 @@ class ApiClientImpl(
         isCached: Boolean = false
     ): T {
         return httpClient
-            .get(url){
+            .get(url) {
                 headers {
-                    if(isCached)
-                        append(HttpHeaders.CacheControl, CacheControl.MaxAge(3600).toString())
+                    if (isCached)
+                        append(
+                            HttpHeaders.CacheControl,
+                            CacheControl.MaxAge(CACHE_MAX_AGE).toString()
+                        )
                     append(HttpHeaders.Authorization, createAuthorizationHeader())
                 }
             }.body()
@@ -85,7 +88,7 @@ class ApiClientImpl(
             contentType(ContentType.Application.Json)
             setBody(Json.encodeToString(body))
             timeout {
-                requestTimeoutMillis = 45*1000
+                requestTimeoutMillis = REQUEST_TIMEOUT
             }
         }.body()
     }
@@ -98,5 +101,10 @@ class ApiClientImpl(
     private fun String.hashToken(): String {
         val bytes = MessageDigest.getInstance("SHA-256").digest(this.toByteArray())
         return bytes.joinToString("") { "%02x".format(it) }
+    }
+
+    companion object {
+        const val CACHE_MAX_AGE = 3600
+        const val REQUEST_TIMEOUT = 45_000L
     }
 }
