@@ -4,14 +4,10 @@ import com.zioanacleto.speakeazy.ui.presentation.detail.data.dto.IngredientDTO
 import com.zioanacleto.speakeazy.ui.presentation.detail.data.dto.IngredientsListDTO
 import io.mockk.clearAllMocks
 import org.junit.After
-import org.junit.Assert.*
-import org.junit.Before
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class IngredientsDataMapperTest {
-
-    @Before
-    fun setup() {}
 
     @After
     fun tearDown() {
@@ -20,6 +16,7 @@ class IngredientsDataMapperTest {
 
     @Test
     fun test_mapInto_sizeIs1() {
+        // given
         val input = IngredientsListDTO(
             ingredients = listOf(
                 IngredientDTO(
@@ -29,24 +26,27 @@ class IngredientsDataMapperTest {
                 )
             )
         )
-
         val sut = createSut()
 
+        // when
         val output = sut.mapInto(input)
 
+        // then
         assertEquals(1, output.ingredients.size)
     }
 
     @Test
     fun test_mapInto_sizeIs0() {
+        // given
         val input = IngredientsListDTO(
             ingredients = null
         )
-
         val sut = createSut()
 
+        // when
         val output = sut.mapInto(input)
 
+        // then
         assertEquals(0, output.ingredients.size)
     }
 
