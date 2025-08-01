@@ -3,6 +3,7 @@ package com.zioanacleto.speakeazy.di
 import com.zioanacleto.buffa.coroutines.DefaultDispatcherProvider
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.buffa.datamappers.DataMapper
+import com.zioanacleto.speakeazy.MainActivityViewModel
 import com.zioanacleto.speakeazy.data.api.ApiClientImpl
 import com.zioanacleto.speakeazy.domain.models.DataContext
 import com.zioanacleto.speakeazy.ui.presentation.detail.data.datamappers.IngredientsDataMapper
@@ -79,6 +80,7 @@ val viewModelModule = module {
     factory { SearchViewModel(get(), get()) }
     factory { UserViewModel(get(), get()) }
     factory { FavoritesViewModel(get()) }
+    factory { MainActivityViewModel(get(), get()) }
 }
 
 // DataSource

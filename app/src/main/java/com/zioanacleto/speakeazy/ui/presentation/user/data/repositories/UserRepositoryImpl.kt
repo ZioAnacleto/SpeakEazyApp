@@ -27,4 +27,8 @@ class UserRepositoryImpl(
     override suspend fun updateUser(user: UserModel) {
         localDataSource.updateUser(user)
     }
+
+    override suspend fun deleteUser(user: UserModel) {
+        localDataSource.deleteUser(user)
+    }
 }

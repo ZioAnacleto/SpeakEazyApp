@@ -12,6 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.zioanacleto.speakeazy.navigation.BottomBarDestination
 import com.zioanacleto.speakeazy.navigation.TopBarDestination
+import com.zioanacleto.speakeazy.navigation.bottomBarDestinations
 import com.zioanacleto.speakeazy.ui.presentation.favorites.navigation.navigateToFavorites
 import com.zioanacleto.speakeazy.ui.presentation.main.navigation.navigateToMain
 import com.zioanacleto.speakeazy.ui.presentation.search.navigation.navigateToSearch
@@ -19,14 +20,17 @@ import com.zioanacleto.speakeazy.ui.presentation.user.navigation.navigateToUser
 
 @Composable
 fun rememberSpeakEazyAppState(
-    navController: NavHostController = rememberNavController()
-) = remember(navController) {
-    SpeakEazyAppState(navController)
+    navController: NavHostController = rememberNavController(),
+    isUserLogged: Boolean = false
+) = remember(navController, isUserLogged) {
+    SpeakEazyAppState(navController, isUserLogged)
 }
 
 @Stable
 class SpeakEazyAppState(
-    val navController: NavHostController
+    val navController: NavHostController,
+    val isUserLogged: Boolean,
+    var animateCreateButton: Boolean = true
 ) {
     private val previousDestination = mutableStateOf<NavDestination?>(null)
 
@@ -45,8 +49,8 @@ class SpeakEazyAppState(
         }
 
     val currentBottomBarDestination: BottomBarDestination?
-        @Composable get(){
-            return BottomBarDestination.entries.firstOrNull { destination ->
+        @Composable get() {
+            return bottomBarDestinations.firstOrNull { destination ->
                 currentDestination?.hasRoute(destination.route) == true
             }
         }
@@ -54,21 +58,26 @@ class SpeakEazyAppState(
     fun navigateToBottomBarDestination(destination: BottomBarDestination) {
         val navOptions = navOptions { }
         when (destination) {
-            BottomBarDestination.HOME ->
+            is BottomBarDestination.Home ->
                 navController.navigateToMain(navOptions)
 
-            BottomBarDestination.SEARCH -> {
+            is BottomBarDestination.Search -> {
                 navController.navigateToSearch(navOptions)
             }
-            BottomBarDestination.FAVORITES -> {
+
+            is BottomBarDestination.Favorites -> {
                 navController.navigateToFavorites(navOptions)
+            }
+
+            is BottomBarDestination.CreateCocktail -> {
+                navController.navigateToMain(navOptions)
             }
         }
     }
 
     fun navigateToTopBarDestination(destination: TopBarDestination) {
         val navOptions = navOptions { }
-        when(destination) {
+        when (destination) {
             TopBarDestination.USER_SETTINGS -> {
                 navController.navigateToUser(navOptions)
             }

@@ -15,22 +15,58 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.zioanacleto.buffa.compose.coloredEdgeToEdge
+import com.zioanacleto.buffa.logging.AnacletoLogger
 import com.zioanacleto.speakeazy.navigation.SpeakEazyNavHost
 import com.zioanacleto.speakeazy.ui.presentation.components.BottomBar
 import com.zioanacleto.speakeazy.ui.presentation.components.TopBar
 import com.zioanacleto.speakeazy.ui.presentation.components.speakEazyGradientBackground
+import com.zioanacleto.speakeazy.ui.presentation.user.presentation.UserUiState
 import com.zioanacleto.speakeazy.ui.theme.SpeakEazyTheme
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 class MainActivity : ComponentActivity() {
+
+    private val viewModel: MainActivityViewModel by viewModel()
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
+
+        var userState: UserUiState = UserUiState.Loading
+
+        lifecycleScope.launch {
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.userUiState
+                    .map { it }
+                    .distinctUntilChanged()
+                    .collect { isUserLogged ->
+                        userState = isUserLogged
+                    }
+            }
+        }
+
+        splashScreen.setKeepOnScreenCondition {
+            AnacletoLogger.mumbling(
+                "User state for splash screen: ${viewModel.userUiState.value}"
+            )
+            viewModel.userUiState.value is UserUiState.Loading
+        }
 
         coloredEdgeToEdge()
 
         setContent {
-            val appState = rememberSpeakEazyAppState()
+            val appState = rememberSpeakEazyAppState(
+                isUserLogged = userState is UserUiState.Success
+            )
             val showTopBar = appState.currentBottomBarDestination != null
 
             SpeakEazyTheme {

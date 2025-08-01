@@ -52,7 +52,8 @@ fun TopBar(
 fun TopBarPreview() {
     TopBar(
         appState = SpeakEazyAppState(
-            navController = rememberNavController()
+            navController = rememberNavController(),
+            isUserLogged = false
         )
     )
 }
