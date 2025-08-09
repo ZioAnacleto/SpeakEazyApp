@@ -1,19 +1,18 @@
 package com.zioanacleto.speakeazy.ui.presentation.user.presentation
 
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.flow.Flow
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.Firebase
 import com.google.firebase.auth.ActionCodeSettings
 import com.google.firebase.auth.actionCodeSettings
 import com.google.firebase.auth.auth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.buffa.default
 import com.zioanacleto.buffa.logging.AnacletoLogger
 import com.zioanacleto.speakeazy.ui.presentation.user.domain.UserRepository
 import com.zioanacleto.speakeazy.ui.presentation.user.domain.model.UserModel
 import com.zioanacleto.speakeazy.ui.presentation.user.navigation.USER_DEEPLINK_URI
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch

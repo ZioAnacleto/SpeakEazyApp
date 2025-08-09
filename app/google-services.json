@@ -12,7 +12,20 @@
           "package_name": "com.zioanacleto.speakeazy"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "570177001449-9013f889iftsb8nqpooukt63jktnk32c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.zioanacleto.speakeazy",
+            "certificate_hash": "340122c4b8b2524c47c08a6c9b2ea018bc28a5d0"
+          }
+        },
+        {
+          "client_id": "570177001449-np55lg3opgb6cb4uc1nnnmg2emd8s4f7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDjDH5dUIIeT8FqMKwT_hxLvmHJ-QYtLpc"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "570177001449-np55lg3opgb6cb4uc1nnnmg2emd8s4f7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
