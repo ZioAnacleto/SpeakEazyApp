@@ -41,7 +41,10 @@ class UserViewModel(
                 initialValue = UserUiState.Loading
             )
 
-    fun sendEmail(userEmail: String) {
+    fun sendEmail(
+        userEmail: String,
+        onEmailSent: (Boolean) -> Unit
+    ) {
         viewModelScope.launch(dispatcherProvider.io()) {
             repository.saveUser(
                 UserModel(
@@ -56,10 +59,12 @@ class UserViewModel(
                     AnacletoLogger.mumbling(
                         mumble = "Email sent successfully."
                     )
+                    onEmailSent(true)
                 } else {
                     AnacletoLogger.mumbling(
                         mumble = "Email not sent, something went wrong."
                     )
+                    onEmailSent(false)
                 }
             }
     }
