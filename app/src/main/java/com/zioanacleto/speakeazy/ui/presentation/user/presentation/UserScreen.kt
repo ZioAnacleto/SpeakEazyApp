@@ -53,6 +53,7 @@ import com.zioanacleto.speakeazy.ui.presentation.components.BackFloatingButton
 import com.zioanacleto.speakeazy.ui.presentation.components.CocktailLoadingAnimation
 import com.zioanacleto.speakeazy.ui.presentation.components.SafeClickableGenericButton
 import com.zioanacleto.speakeazy.ui.presentation.user.domain.model.UserModel
+import com.zioanacleto.speakeazy.ui.theme.LocalSnackBarHostState
 import com.zioanacleto.speakeazy.ui.theme.YellowFFE271
 import kotlinx.coroutines.flow.Flow
 import org.koin.androidx.compose.getViewModel
@@ -73,6 +74,8 @@ private fun UserScreenContent(
     val viewModel: UserViewModel = getViewModel()
     var emailLink: String? by remember { mutableStateOf(null) }
     var registrationSuccessful by remember { mutableStateOf(false) }
+    val snackbarHostState = LocalSnackBarHostState.current
+    var snackbarMessage by remember { mutableStateOf("") }
 
     // retrieving email link from intent
     val context = LocalContext.current
@@ -103,7 +106,7 @@ private fun UserScreenContent(
             } else {
                 // complete user registration asking for name
                 AnimatedVisibility(
-                    visible = registrationSuccessful,
+                    visible = true,
                     enter = fadeIn()
                 ) {
                     if (registrationSuccessful) {
@@ -112,7 +115,15 @@ private fun UserScreenContent(
                             onBackButton = onBackButton
                         )
                     } else {
-                        // todo: what case here?
+                        UserWithoutLinkScreen(
+                            onBackButton = onBackButton,
+                            onSendAgainButton = {
+                                viewModel.sendEmail(state.user.email) {
+                                    snackbarMessage =
+                                        if (it) "Email successfully sent." else "Email not sent, something went wrong."
+                                }
+                            }
+                        )
                     }
                 }
 
@@ -142,6 +153,11 @@ private fun UserScreenContent(
             )
         }
     }
+
+    LaunchedEffect(snackbarMessage) {
+        if (snackbarMessage.isNotEmpty())
+            snackbarHostState.showSnackbar(snackbarMessage)
+    }
 }
 
 @Composable
@@ -149,6 +165,9 @@ private fun RegisterUserScreen(
     viewModel: UserViewModel,
     onBackButton: () -> Unit
 ) {
+    val snackbarHostState = LocalSnackBarHostState.current
+    var snackbarMessage by remember { mutableStateOf("") }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -226,7 +245,10 @@ private fun RegisterUserScreen(
                 enabled = mailTextState.text.isValidEmail(),
                 onClick = {
                     if (mailTextState.text.isNotEmpty()) {
-                        viewModel.sendEmail(mailTextState.text)
+                        viewModel.sendEmail(mailTextState.text) {
+                            snackbarMessage =
+                                if (it) "Email successfully sent." else "Email not sent, something went wrong."
+                        }
                     }
                 }
             ) {
@@ -242,6 +264,11 @@ private fun RegisterUserScreen(
                 )
             }
         }
+    }
+
+    LaunchedEffect(snackbarMessage) {
+        if (snackbarMessage.isNotEmpty())
+            snackbarHostState.showSnackbar(snackbarMessage)
     }
 }
 
@@ -410,6 +437,55 @@ private fun UserDetailScreen(
     }
 }
 
+@Composable
+fun UserWithoutLinkScreen(
+    modifier: Modifier = Modifier,
+    onBackButton: () -> Unit,
+    onSendAgainButton: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top
+    ) {
+        BackFloatingButton(
+            modifier = Modifier
+                .align(Alignment.Start),
+            onBackButton = onBackButton
+        )
+
+        Text(
+            modifier = Modifier
+                .padding(horizontal = 20.dp, vertical = 16.dp),
+            text = "Abbiamo mandato il link alla mail che ci hai fornito, controlla la tua posta.",
+            fontSize = TextUnit(32f, TextUnitType.Sp),
+            color = Color.White,
+            fontWeight = FontWeight.SemiBold,
+            lineHeight = TextUnit(38f, TextUnitType.Sp)
+        )
+
+        SafeClickableGenericButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 20.dp, start = 24.dp, end = 24.dp),
+            enabled = true,
+            onClick = onSendAgainButton
+        ) {
+            Image(
+                imageVector = Icons.Filled.Email,
+                contentDescription = ""
+            )
+
+            Text(
+                text = "Send again",
+                modifier = Modifier
+                    .padding(start = 16.dp)
+            )
+        }
+    }
+}
+
 private fun Context.getEmailLink() = (this as? Activity)?.intent?.data?.toString()
 
 private fun String.isValidEmail() = android.util.Patterns.EMAIL_ADDRESS.matcher(this).matches()
@@ -430,4 +506,13 @@ private fun UserDetailScreenPreview() {
         ),
         onBackButton = { }
     ) { }
+}
+
+@Preview
+@Composable
+private fun UserWithoutLinkScreenPreview() {
+    UserWithoutLinkScreen(
+        onBackButton = { },
+        onSendAgainButton = {}
+    )
 }

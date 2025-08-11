@@ -2,10 +2,10 @@ package com.zioanacleto.speakeazy.ui.presentation.user.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.Firebase
 import com.google.firebase.auth.ActionCodeSettings
 import com.google.firebase.auth.actionCodeSettings
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.auth.auth
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.buffa.default
 import com.zioanacleto.buffa.logging.AnacletoLogger
@@ -41,7 +41,10 @@ class UserViewModel(
                 initialValue = UserUiState.Loading
             )
 
-    fun sendEmail(userEmail: String) {
+    fun sendEmail(
+        userEmail: String,
+        onEmailSent: (Boolean) -> Unit
+    ) {
         viewModelScope.launch(dispatcherProvider.io()) {
             repository.saveUser(
                 UserModel(
@@ -56,10 +59,12 @@ class UserViewModel(
                     AnacletoLogger.mumbling(
                         mumble = "Email sent successfully."
                     )
+                    onEmailSent(true)
                 } else {
                     AnacletoLogger.mumbling(
                         mumble = "Email not sent, something went wrong."
                     )
+                    onEmailSent(false)
                 }
             }
     }

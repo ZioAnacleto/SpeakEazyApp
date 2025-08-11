@@ -23,7 +23,7 @@ lottie = "4.0.0"
 room = "2.7.0"
 ksp = "2.0.0-1.0.24"
 kotlinx-serialization-json = "1.8.0"
-firebase = "33.16.0"
+firebase = "34.1.0"
 play-services-auth = "21.3.0"
 
 [libraries]
