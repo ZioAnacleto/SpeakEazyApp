@@ -27,7 +27,8 @@ import com.zioanacleto.buffa.compose.coloredEdgeToEdge
 import com.zioanacleto.buffa.logging.AnacletoLogger
 import com.zioanacleto.speakeazy.navigation.SpeakEazyNavHost
 import com.zioanacleto.speakeazy.ui.presentation.components.BottomBar
-import com.zioanacleto.speakeazy.ui.presentation.components.TopBar
+import com.zioanacleto.speakeazy.ui.presentation.components.CreateCocktailTopBar
+import com.zioanacleto.speakeazy.ui.presentation.components.MainTopBar
 import com.zioanacleto.speakeazy.ui.presentation.components.speakEazyGradientBackground
 import com.zioanacleto.speakeazy.ui.presentation.user.presentation.UserUiState
 import com.zioanacleto.speakeazy.ui.theme.LocalSnackBarHostState
@@ -73,6 +74,7 @@ class MainActivity : ComponentActivity() {
                 isUserLogged = userState is UserUiState.Success
             )
             val showTopBar = appState.currentBottomBarDestination != null
+            val showBottomBar = appState.showBottomBar
 
             val snackbarHostState = remember { SnackbarHostState() }
 
@@ -92,21 +94,34 @@ class MainActivity : ComponentActivity() {
                                 enter = fadeIn(),
                                 exit = fadeOut()
                             ) {
-                                TopBar(
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(top = 30.dp),
-                                    appState = appState
-                                )
+                                if(showBottomBar){
+                                    MainTopBar(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(top = 30.dp),
+                                        appState = appState
+                                    )
+                                } else {
+                                    CreateCocktailTopBar(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(top = 30.dp),
+                                        appState = appState
+                                    )
+                                }
                             }
                         },
                         bottomBar = {
-                            BottomBar(
-                                modifier = Modifier
-                                    .padding(horizontal = 50.dp)
-                                    .windowInsetsPadding(WindowInsets.navigationBars),
-                                appState = appState
-                            )
+                            AnimatedVisibility(
+                                visible = showBottomBar
+                            ) {
+                                BottomBar(
+                                    modifier = Modifier
+                                        .padding(horizontal = 50.dp)
+                                        .windowInsetsPadding(WindowInsets.navigationBars),
+                                    appState = appState
+                                )
+                            }
                         }
                     ) { _ ->
                         SpeakEazyNavHost(

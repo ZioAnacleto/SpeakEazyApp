@@ -8,6 +8,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -51,7 +52,9 @@ import com.zioanacleto.buffa.logging.AnacletoLogger
 import com.zioanacleto.speakeazy.R
 import com.zioanacleto.speakeazy.ui.presentation.components.BackFloatingButton
 import com.zioanacleto.speakeazy.ui.presentation.components.CocktailLoadingAnimation
+import com.zioanacleto.speakeazy.ui.presentation.components.CustomSwitchButton
 import com.zioanacleto.speakeazy.ui.presentation.components.SafeClickableGenericButton
+import com.zioanacleto.speakeazy.ui.presentation.user.domain.model.Language
 import com.zioanacleto.speakeazy.ui.presentation.user.domain.model.UserModel
 import com.zioanacleto.speakeazy.ui.theme.LocalSnackBarHostState
 import com.zioanacleto.speakeazy.ui.theme.YellowFFE271
@@ -380,6 +383,8 @@ private fun UserDetailScreen(
     onBackButton: () -> Unit,
     onLogoutClick: () -> Unit
 ) {
+    val viewModel: UserViewModel = getViewModel()
+
     Column(
         modifier = Modifier
             .fillMaxSize(),
@@ -415,6 +420,42 @@ private fun UserDetailScreen(
             fontWeight = FontWeight.SemiBold,
             lineHeight = TextUnit(38f, TextUnitType.Sp)
         )
+
+        Row(
+            modifier = Modifier
+                .padding(vertical = 20.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Selected language:",
+                color = Color.White,
+                fontSize = TextUnit(16f, TextUnitType.Sp)
+            )
+
+            CustomSwitchButton(
+                modifier = Modifier
+                    .padding(start = 16.dp),
+                buttonHeight = 36.dp,
+                firstValue = user.selectedLanguage == Language.ITALIAN,
+                onContent = {
+                    Text(
+                        text = "IT",
+                        color = Color.Black
+                    )
+                },
+                offContent = {
+                    Text(
+                        text = "EN",
+                        color = Color.Black
+                    )
+                }
+            ) {
+                val currentUser = user.copy(
+                    selectedLanguage = if (it) Language.ITALIAN else Language.ENGLISH
+                )
+                viewModel.updateUserWithLanguage(currentUser)
+            }
+        }
 
         SafeClickableGenericButton(
             modifier = Modifier

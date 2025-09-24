@@ -10,8 +10,8 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.sharp.Search
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.zioanacleto.speakeazy.ui.presentation.create.CreateBaseRoute
-import com.zioanacleto.speakeazy.ui.presentation.create.CreateRoute
+import com.zioanacleto.speakeazy.ui.presentation.create.navigation.CreateBaseRoute
+import com.zioanacleto.speakeazy.ui.presentation.create.navigation.CreateRoute
 import com.zioanacleto.speakeazy.ui.presentation.favorites.navigation.FavoritesBaseRoute
 import com.zioanacleto.speakeazy.ui.presentation.favorites.navigation.FavoritesRoute
 import com.zioanacleto.speakeazy.ui.presentation.main.navigation.MainBaseRoute
@@ -67,6 +67,9 @@ sealed class BottomBarDestination(
         baseRoute = CreateBaseRoute::class
     )
 }
+
+val bottomBarAllDestinations = BottomBarDestination::class.sealedSubclasses
+    .mapNotNull { it.objectInstance }
 
 val bottomBarDestinations = listOf(
     BottomBarDestination.Home,

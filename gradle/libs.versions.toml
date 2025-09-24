@@ -6,14 +6,14 @@ junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 androidxCoreSplashscreen = "1.0.1"
-lifecycleRuntimeKtx = "2.9.1"
+lifecycleRuntimeKtx = "2.9.2"
 activityCompose = "1.10.1"
 composeBom = "2024.04.01"
 compose = "1.7.8"
 navigation = "2.9.1"
 koin-core = "3.5.0"
 koin-android = "3.4.0"
-buffa = "1.0.8"
+buffa = "1.0.9"
 featurefromtemplate-plugin = "1.1.0"
 timber = "5.0.1"
 ktor = "3.1.1"
@@ -24,7 +24,8 @@ room = "2.7.0"
 ksp = "2.0.0-1.0.24"
 kotlinx-serialization-json = "1.8.0"
 firebase = "34.1.0"
-play-services-auth = "21.3.0"
+play-services-auth = "21.4.0"
+gson = "2.13.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -53,6 +54,7 @@ compose-material = { module = "androidx.compose.material:material", version.ref 
 lottie = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil-network = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 
 # Firebase
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }

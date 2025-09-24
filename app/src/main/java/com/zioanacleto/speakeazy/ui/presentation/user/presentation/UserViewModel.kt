@@ -9,7 +9,9 @@ import com.google.firebase.auth.auth
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.buffa.default
 import com.zioanacleto.buffa.logging.AnacletoLogger
+import com.zioanacleto.speakeazy.domain.APP_PACKAGE
 import com.zioanacleto.speakeazy.ui.presentation.user.domain.UserRepository
+import com.zioanacleto.speakeazy.ui.presentation.user.domain.model.Language
 import com.zioanacleto.speakeazy.ui.presentation.user.domain.model.UserModel
 import com.zioanacleto.speakeazy.ui.presentation.user.navigation.USER_DEEPLINK_URI
 import kotlinx.coroutines.flow.Flow
@@ -20,12 +22,12 @@ import kotlinx.coroutines.launch
 class UserViewModel(
     private val repository: UserRepository,
     private val dispatcherProvider: DispatcherProvider
-): ViewModel() {
+) : ViewModel() {
 
     private val actionCodeSettings: ActionCodeSettings = actionCodeSettings {
         url = USER_DEEPLINK_URI
         setAndroidPackageName(
-            "com.zioanacleto.speakeazy",
+            APP_PACKAGE,
             true,
             "24"
         )
@@ -55,7 +57,7 @@ class UserViewModel(
         // sending email to user
         Firebase.auth.sendSignInLinkToEmail(userEmail, actionCodeSettings)
             .addOnCompleteListener { task ->
-                if(task.isSuccessful) {
+                if (task.isSuccessful) {
                     AnacletoLogger.mumbling(
                         mumble = "Email sent successfully."
                     )
@@ -83,6 +85,11 @@ class UserViewModel(
         }
     }
 
+    fun updateUserWithLanguage(userModel: UserModel) =
+        viewModelScope.launch(dispatcherProvider.io()) {
+            repository.updateUser(userModel)
+        }
+
     fun finishUserLogin(
         emailLink: String,
         email: String,
@@ -91,13 +98,13 @@ class UserViewModel(
         if (Firebase.auth.isSignInWithEmailLink(emailLink)) {
             Firebase.auth.signInWithEmailLink(email, emailLink)
                 .addOnCompleteListener { task ->
-                    if(task.isSuccessful) {
+                    if (task.isSuccessful) {
                         AnacletoLogger.mumbling(
-                            mumble = "Email sent successfully."
+                            mumble = "Email verified successfully."
                         )
                     } else {
                         AnacletoLogger.mumbling(
-                            mumble = "Email not sent, something went wrong."
+                            mumble = "Email not verified, something went wrong."
                         )
                     }
 

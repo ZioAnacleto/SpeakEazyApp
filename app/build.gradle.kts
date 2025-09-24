@@ -99,8 +99,10 @@ dependencies {
     implementation(libs.room.runtime)
     ksp(libs.room.compiler)
     implementation(libs.room.ktx)
+    implementation(libs.gson)
 
     implementation(libs.kotlinx.serialization.json)
+    implementation(kotlin("reflect"))
 
     // Firebase
     implementation(platform(libs.firebase.bom))
