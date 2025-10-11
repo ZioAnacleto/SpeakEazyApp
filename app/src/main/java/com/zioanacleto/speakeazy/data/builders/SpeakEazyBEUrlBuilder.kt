@@ -10,6 +10,7 @@ object SpeakEazyBEUrlBuilder {
     private const val FILTER_URI = "filter"
     private const val INGREDIENT_QUERY_PARAM = "ingredient="
     private const val FILTER_QUERY_PARAM = "filter="
+    private const val ADD_URI = "add"
 
     fun buildUrl(endpoint: Endpoint): String = "$BASE_URL/${endpoint.url}"
 
@@ -24,6 +25,10 @@ object SpeakEazyBEUrlBuilder {
             val id: String
         ) : Endpoint() {
             override val url: String = "$COCKTAILS_URI/$id"
+        }
+
+        data object CreateCocktail : Endpoint() {
+            override val url: String = "$COCKTAILS_URI/$ADD_URI"
         }
 
         data object Ingredients : Endpoint() {

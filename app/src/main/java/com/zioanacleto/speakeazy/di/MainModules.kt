@@ -6,6 +6,16 @@ import com.zioanacleto.buffa.datamappers.DataMapper
 import com.zioanacleto.speakeazy.MainActivityViewModel
 import com.zioanacleto.speakeazy.data.api.ApiClientImpl
 import com.zioanacleto.speakeazy.domain.models.DataContext
+import com.zioanacleto.speakeazy.ui.presentation.create.data.datamappers.CreateCocktailDataMapper
+import com.zioanacleto.speakeazy.ui.presentation.create.data.datasources.CreateCocktailDataSource
+import com.zioanacleto.speakeazy.ui.presentation.create.data.datasources.CreateCocktailLocalDataSource
+import com.zioanacleto.speakeazy.ui.presentation.create.data.datasources.CreateCocktailNetworkUploadDataSource
+import com.zioanacleto.speakeazy.ui.presentation.create.data.datasources.CreateCocktailUploadDataSource
+import com.zioanacleto.speakeazy.ui.presentation.create.data.dto.CreateCocktailRequestDTO
+import com.zioanacleto.speakeazy.ui.presentation.create.data.repositories.CreateCocktailRepositoryImpl
+import com.zioanacleto.speakeazy.ui.presentation.create.domain.CreateCocktailRepository
+import com.zioanacleto.speakeazy.ui.presentation.create.domain.model.CreateCocktailModel
+import com.zioanacleto.speakeazy.ui.presentation.create.presentation.CreateCocktailViewModel
 import com.zioanacleto.speakeazy.ui.presentation.detail.data.datamappers.IngredientsDataMapper
 import com.zioanacleto.speakeazy.ui.presentation.detail.data.datasources.IngredientDataSource
 import com.zioanacleto.speakeazy.ui.presentation.detail.data.datasources.IngredientLocalDataSource
@@ -81,6 +91,7 @@ val viewModelModule = module {
     factory { UserViewModel(get(), get()) }
     factory { FavoritesViewModel(get()) }
     factory { MainActivityViewModel(get(), get()) }
+    factory { CreateCocktailViewModel(get(), get(), get()) }
 }
 
 // DataSource
@@ -157,6 +168,17 @@ val dataSourceModule = module {
             mainDataMapper = get(named("MainSpeakEazyBEListDataMapper"))
         )
     }
+    factory<CreateCocktailDataSource> {
+        CreateCocktailLocalDataSource(
+            context = androidContext()
+        )
+    }
+    factory<CreateCocktailUploadDataSource> {
+        CreateCocktailNetworkUploadDataSource(
+            apiClient = get(),
+            requestDataMapper = get(named("CreateCocktailDataMapper"))
+        )
+    }
 }
 
 // DataMappers
@@ -191,6 +213,9 @@ val dataMapperModule = module {
     factory<DataMapper<TagsResponseDTO, TagsModel>>(
         named("TagsResponseDataMapper")
     ) { TagsDataMapper() }
+    factory<DataMapper<CreateCocktailModel, CreateCocktailRequestDTO>>(
+        named("CreateCocktailDataMapper")
+    ) { CreateCocktailDataMapper() }
 }
 
 // Repositories
@@ -231,6 +256,14 @@ val repositoryModule = module {
     factory<SearchRepository> {
         SearchRepositoryImpl(
             searchDataSource = get(named(DataContext.NETWORK.name)),
+            ingredientDataSource = get(named(DataContext.NETWORK.name)),
+            dispatcherProvider = get()
+        )
+    }
+    factory<CreateCocktailRepository> {
+        CreateCocktailRepositoryImpl(
+            localDataSource = get(),
+            networkDataSource = get(),
             ingredientDataSource = get(named(DataContext.NETWORK.name)),
             dispatcherProvider = get()
         )

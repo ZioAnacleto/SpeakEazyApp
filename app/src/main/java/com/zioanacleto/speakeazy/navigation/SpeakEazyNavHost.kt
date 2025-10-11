@@ -7,7 +7,7 @@ import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
 import com.zioanacleto.speakeazy.SpeakEazyAppState
-import com.zioanacleto.speakeazy.ui.presentation.create.createSection
+import com.zioanacleto.speakeazy.ui.presentation.create.navigation.createSection
 import com.zioanacleto.speakeazy.ui.presentation.detail.navigation.detailSection
 import com.zioanacleto.speakeazy.ui.presentation.detail.navigation.navigateToDetail
 import com.zioanacleto.speakeazy.ui.presentation.favorites.navigation.favoritesSection

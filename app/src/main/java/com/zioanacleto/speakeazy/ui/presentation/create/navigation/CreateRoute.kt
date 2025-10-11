@@ -1,10 +1,11 @@
-package com.zioanacleto.speakeazy.ui.presentation.create
+package com.zioanacleto.speakeazy.ui.presentation.create.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
+import com.zioanacleto.speakeazy.ui.presentation.create.presentation.CreateCocktailScreen
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -22,7 +23,7 @@ fun NavGraphBuilder.createSection(
 ) {
     navigation<CreateBaseRoute>(startDestination = CreateRoute) {
         composable<CreateRoute> {
-            // todo add create screen
+            CreateCocktailScreen(onCloseButtonClick = onBackButtonClick)
         }
     }
 }
