@@ -3,9 +3,11 @@ package com.zioanacleto.speakeazy.ui.presentation.create.data.datamappers
 import com.zioanacleto.buffa.datamappers.DataMapper
 import com.zioanacleto.buffa.default
 import com.zioanacleto.speakeazy.ui.presentation.create.data.dto.CreateCocktailRequestDTO
+import com.zioanacleto.speakeazy.ui.presentation.create.data.dto.TagsRequestDTO
 import com.zioanacleto.speakeazy.ui.presentation.create.domain.model.CreateCocktailModel
 import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.MainSpeakEazyBEIngredientDTO
 import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.MainSpeakEazyBEIngredientsListDTO
+import kotlinx.serialization.json.Json
 
 class CreateCocktailDataMapper : DataMapper<CreateCocktailModel, CreateCocktailRequestDTO> {
     override fun mapInto(input: CreateCocktailModel): CreateCocktailRequestDTO {
@@ -34,7 +36,7 @@ class CreateCocktailDataMapper : DataMapper<CreateCocktailModel, CreateCocktailR
                 }
             ),
             visualizations = 1,
-            tags = """{"tags":[]"}""",
+            tags = TagsRequestDTO(listOf()),
             userId = input.userId,
             username = input.username
         )

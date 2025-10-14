@@ -17,8 +17,13 @@ data class CreateCocktailRequestDTO(
     @SerialName("type") val type: String,
     @SerialName("method") val method: String,
     @SerialName("ingredients") val ingredients: MainSpeakEazyBEIngredientsListDTO,
-    @SerialName("visualizations") val visualizations: Long = 1,
-    @SerialName("tags") val tags: String, // todo: create dedicated class
+    @SerialName("visualizations") val visualizations: Long,
+    @SerialName("tags") val tags: TagsRequestDTO,
     @SerialName("userId") val userId: String,
     @SerialName("username") val username: String
+)
+
+@Serializable
+data class TagsRequestDTO(
+    @SerialName("tags") val tags: List<String>
 )
