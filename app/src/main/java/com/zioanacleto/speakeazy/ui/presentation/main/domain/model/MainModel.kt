@@ -17,7 +17,9 @@ data class DrinkModel(
     val type: String = "",
     val method: String = "",
     val favorite: Boolean = false,
-    val visualizations: Long = 0
+    val visualizations: Long = 0,
+    val username: String = "",
+    val userId: String = "1"
 )
 
 data class IngredientModel(

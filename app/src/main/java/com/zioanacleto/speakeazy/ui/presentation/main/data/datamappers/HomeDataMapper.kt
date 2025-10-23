@@ -37,7 +37,9 @@ class HomeDataMapper : DataMapper<HomeSectionResponseDTO, HomeModel> {
                                     measureSpecial = it.quantitySpecial.default()
                                 )
                             } ?: listOf(),
-                            visualizations = cocktail.visualizations.default()
+                            visualizations = cocktail.visualizations.default(),
+                            username = cocktail.username.default(),
+                            userId = cocktail.userId.default()
                         )
                     }
                 )

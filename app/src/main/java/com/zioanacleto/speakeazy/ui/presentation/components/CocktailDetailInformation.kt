@@ -25,6 +25,9 @@ import com.zioanacleto.speakeazy.ui.theme.YellowFFE271
 @Composable
 fun CocktailDetailInformation(
     modifier: Modifier = Modifier,
+    glassTitle: String = "GLASS",
+    cocktailTypeTitle: String = "TYPE",
+    methodTitle: String = "METHOD",
     glassType: String,
     cocktailType: String,
     method: String
@@ -42,7 +45,7 @@ fun CocktailDetailInformation(
         ) {
             Text(
                 color = Color.White,
-                text = "GLASS",
+                text = glassTitle,
                 fontSize = TextUnit(12f, TextUnitType.Sp)
             )
             Text(
@@ -70,7 +73,7 @@ fun CocktailDetailInformation(
         ) {
             Text(
                 color = Color.White,
-                text = "TYPE",
+                text = cocktailTypeTitle,
                 fontSize = TextUnit(12f, TextUnitType.Sp)
             )
             Text(
@@ -98,7 +101,7 @@ fun CocktailDetailInformation(
         ) {
             Text(
                 color = Color.White,
-                text = "METHOD",
+                text = methodTitle,
                 fontSize = TextUnit(12f, TextUnitType.Sp)
             )
             Text(

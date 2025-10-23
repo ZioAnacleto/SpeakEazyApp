@@ -19,19 +19,20 @@ class CreateCocktailDataMapper : DataMapper<CreateCocktailModel, CreateCocktailR
             instructionsIt = input.instructionsIt.default(),
             glass = input.glass.default(),
             isAlcoholic = input.isAlcoholic,
-            imageLink = input.imageUrl.default(),
+            // todo: upload a default image for now
+            imageLink = input.imageUrl.default("https://res.cloudinary.com/dyhi3yudn/image/upload/v1743712987/mojito.png"),
             type = input.type.default(),
             method = input.method.default(),
             ingredients = MainSpeakEazyBEIngredientsListDTO(
                 ingredients = input.ingredients.map { entry ->
-                    val (measureValue , measure)  = entry.value.split(" ").also {
+                    val (measureValue, measure) = entry.value.split(" ").also {
                         it.first() to it.last()
                     }
                     MainSpeakEazyBEIngredientDTO(
                         id = entry.key,
-                        quantityCl = if(measure == "cl") measureValue else "",
-                        quantityOz = if(measure == "oz") measureValue else "",
-                        quantitySpecial = if(measure != "cl" && measure != "oz") measureValue else ""
+                        quantityCl = if (measure == "cl") measureValue else "-",
+                        quantityOz = if (measure == "oz") measureValue else "-",
+                        quantitySpecial = if (measure != "cl" && measure != "oz") entry.value else null
                     )
                 }
             ),

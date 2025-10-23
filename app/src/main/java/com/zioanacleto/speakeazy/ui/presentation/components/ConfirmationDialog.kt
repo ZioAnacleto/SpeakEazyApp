@@ -12,6 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.window.DialogProperties
+import com.zioanacleto.speakeazy.ui.theme.BottomBarBackground
 import com.zioanacleto.speakeazy.ui.theme.YellowFFE271
 
 @Composable
@@ -26,7 +27,7 @@ fun ConfirmationDialog(
 ) {
     AlertDialog(
         modifier = modifier,
-        backgroundColor = Color(41, 20, 51, 200),
+        backgroundColor = BottomBarBackground.withAlpha(0.92f),
         onDismissRequest = onDismissButtonClick,
         confirmButton = {
             TextButton(

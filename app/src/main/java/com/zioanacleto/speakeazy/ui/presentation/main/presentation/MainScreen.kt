@@ -119,18 +119,21 @@ fun MainScreenHomeSuccessView(
             )
 
             LazyRow {
-                items(section.cocktails, key = { it.id }) {
-                    MainDrinkCard(
-                        modifier = Modifier
-                            .padding(6.dp)
-                            .animateItem(),
-                        id = it.id,
-                        name = it.name,
-                        category = it.category,
-                        imageString = it.imageUrl,
-                        isFavorite = it.favorite,
-                        onClick = onCocktailClick
-                    )
+                items(section.cocktails, key = { it.id }) { drink ->
+                    with(drink) {
+                        MainDrinkCard(
+                            modifier = Modifier
+                                .padding(6.dp)
+                                .animateItem(),
+                            id = id,
+                            name = name,
+                            category = category,
+                            imageString = imageUrl,
+                            isFavorite = favorite,
+                            userName = username,
+                            onClick = onCocktailClick
+                        )
+                    }
                 }
             }
         }
