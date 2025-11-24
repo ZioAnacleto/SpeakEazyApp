@@ -7,20 +7,19 @@ import com.zioanacleto.speakeazy.ui.presentation.create.data.dto.TagsRequestDTO
 import com.zioanacleto.speakeazy.ui.presentation.create.domain.model.CreateCocktailModel
 import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.MainSpeakEazyBEIngredientDTO
 import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.MainSpeakEazyBEIngredientsListDTO
-import kotlinx.serialization.json.Json
 
 class CreateCocktailDataMapper : DataMapper<CreateCocktailModel, CreateCocktailRequestDTO> {
     override fun mapInto(input: CreateCocktailModel): CreateCocktailRequestDTO {
         return CreateCocktailRequestDTO(
             id = "1000", // BE will autoincrement it correctly
             name = input.cocktailName.default(),
-            category = "SpeakEazy Original", // using dedicated value
+            category = SPEAKEAZY_CATEGORY, // using dedicated value
             instructions = input.instructions.default(),
             instructionsIt = input.instructionsIt.default(),
             glass = input.glass.default(),
             isAlcoholic = input.isAlcoholic,
             // todo: upload a default image for now
-            imageLink = input.imageUrl.default("https://res.cloudinary.com/dyhi3yudn/image/upload/v1743712987/mojito.png"),
+            imageLink = input.imageUrl.default(DEFAULT_IMAGE_LINK),
             type = input.type.default(),
             method = input.method.default(),
             ingredients = MainSpeakEazyBEIngredientsListDTO(
@@ -41,5 +40,11 @@ class CreateCocktailDataMapper : DataMapper<CreateCocktailModel, CreateCocktailR
             userId = input.userId,
             username = input.username
         )
+    }
+
+    companion object {
+        private const val SPEAKEAZY_CATEGORY = "SpeakEazy Original"
+        private const val DEFAULT_IMAGE_LINK =
+            "https://res.cloudinary.com/dyhi3yudn/image/upload/v1743712987/mojito.png"
     }
 }

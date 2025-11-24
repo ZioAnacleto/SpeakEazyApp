@@ -17,16 +17,16 @@ import androidx.compose.ui.unit.dp
 import com.zioanacleto.buffa.default
 import com.zioanacleto.speakeazy.ui.presentation.components.CocktailLoadingAnimation
 import com.zioanacleto.speakeazy.ui.presentation.components.ConfirmationDialog
+import com.zioanacleto.speakeazy.ui.presentation.components.CreateWizardLinearStepBar
 import com.zioanacleto.speakeazy.ui.presentation.components.CreateWizardStepData
 import com.zioanacleto.speakeazy.ui.presentation.components.CrossSlide
-import com.zioanacleto.speakeazy.ui.presentation.components.CreateWizardLinearStepBar
 import com.zioanacleto.speakeazy.ui.presentation.create.presentation.steps.CreateCocktailDisambiguationScreen
 import com.zioanacleto.speakeazy.ui.presentation.create.presentation.steps.CreateCocktailFifthStepScreen
 import com.zioanacleto.speakeazy.ui.presentation.create.presentation.steps.CreateCocktailFirstStepScreen
 import com.zioanacleto.speakeazy.ui.presentation.create.presentation.steps.CreateCocktailFourthStepScreen
 import com.zioanacleto.speakeazy.ui.presentation.create.presentation.steps.CreateCocktailSecondStepScreen
 import com.zioanacleto.speakeazy.ui.presentation.create.presentation.steps.CreateCocktailSuccessStepScreen
-import com.zioanacleto.speakeazy.ui.presentation.create.presentation.steps.CreateCocktailThirdStepScreen
+import com.zioanacleto.speakeazy.ui.presentation.create.presentation.steps.CreateCocktailThirdStep
 import com.zioanacleto.speakeazy.ui.theme.LocalSnackBarHostState
 import org.koin.androidx.compose.getViewModel
 
@@ -84,13 +84,14 @@ private fun CreateCocktailScreenContent(
         }
 
         LaunchedEffect(currentUiState) {
-            if((currentUiState as? CreateCocktailUiState.SuccessSingle)
-                    ?.createCocktail?.currentStep == CreateWizardStepData.Uploading)
+            if ((currentUiState as? CreateCocktailUiState.SuccessSingle)
+                    ?.createCocktail?.currentStep == CreateWizardStepData.Uploading
+            )
                 viewModel.uploadCurrentCocktail()
         }
 
         LaunchedEffect(isCreateCocktailUploaded) {
-            if(isCreateCocktailUploaded)
+            if (isCreateCocktailUploaded)
                 viewModel.saveSuccessStep()
         }
 
@@ -162,7 +163,7 @@ private fun CreateCocktailScreenContent(
                         }
 
                         CreateWizardStepData.Third -> {
-                            CreateCocktailThirdStepScreen(
+                            CreateCocktailThirdStep(
                                 modifier = Modifier
                                     .padding(top = 20.dp),
                                 ingredients = currentState.createCocktail.ingredients.toMutableMap(),
@@ -216,7 +217,9 @@ private fun CreateCocktailScreenContent(
 
                         CreateWizardStepData.Success -> {
                             CreateCocktailSuccessStepScreen(
-                                modifier = Modifier.padding(top = 20.dp),
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(top = 20.dp),
                                 onButtonClick = {
                                     viewModel.deleteCreateCocktail()
                                     onCloseButtonClick()
