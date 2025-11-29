@@ -45,8 +45,7 @@ fun MainDrinkCard(
     ) {
         Card(
             modifier = Modifier
-                .height(220.dp)
-                .safeClickable { onClick(id) },
+                .height(220.dp),
             shape = RoundedCornerShape(16.dp),
             backgroundColor = Color.DarkGray,
             elevation = 6.dp
@@ -56,6 +55,7 @@ fun MainDrinkCard(
             )
             Box(
                 modifier = Modifier
+                    .safeClickable { onClick(id) }
                     .paint(
                         painter = painter,
                         contentScale = ContentScale.Crop

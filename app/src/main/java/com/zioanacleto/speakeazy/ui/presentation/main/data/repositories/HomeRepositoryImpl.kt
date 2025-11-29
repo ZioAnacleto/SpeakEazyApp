@@ -34,7 +34,8 @@ class HomeRepositoryImpl(
                                     )
                                 }
                             )
-                        }
+                        },
+                        banner = network.data.banner
                     )
                 )
             } else network

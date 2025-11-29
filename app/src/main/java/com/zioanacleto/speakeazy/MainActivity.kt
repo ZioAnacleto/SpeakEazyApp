@@ -12,12 +12,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material.Snackbar
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Lifecycle
@@ -30,6 +32,7 @@ import com.zioanacleto.speakeazy.ui.presentation.components.BottomBar
 import com.zioanacleto.speakeazy.ui.presentation.components.CreateCocktailTopBar
 import com.zioanacleto.speakeazy.ui.presentation.components.MainTopBar
 import com.zioanacleto.speakeazy.ui.presentation.components.speakEazyGradientBackground
+import com.zioanacleto.speakeazy.ui.presentation.components.withAlpha
 import com.zioanacleto.speakeazy.ui.presentation.user.presentation.UserUiState
 import com.zioanacleto.speakeazy.ui.theme.LocalSnackBarHostState
 import com.zioanacleto.speakeazy.ui.theme.SpeakEazyTheme
@@ -86,7 +89,13 @@ class MainActivity : ComponentActivity() {
                 ) {
                     Scaffold(
                         snackbarHost = {
-                            SnackbarHost(hostState = snackbarHostState)
+                            SnackbarHost(hostState = snackbarHostState) {
+                                Snackbar(
+                                    snackbarData = it,
+                                    backgroundColor = Color.White.withAlpha(0.85f),
+                                    contentColor = Color.Black
+                                )
+                            }
                         },
                         topBar = {
                             AnimatedVisibility(
@@ -94,7 +103,7 @@ class MainActivity : ComponentActivity() {
                                 enter = fadeIn(),
                                 exit = fadeOut()
                             ) {
-                                if(showBottomBar){
+                                if (showBottomBar) {
                                     MainTopBar(
                                         modifier = Modifier
                                             .fillMaxWidth()
