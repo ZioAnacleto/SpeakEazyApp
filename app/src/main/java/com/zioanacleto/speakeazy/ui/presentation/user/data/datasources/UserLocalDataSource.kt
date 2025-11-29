@@ -55,12 +55,29 @@ class UserLocalDataSource(
             database.userDao().updateUser(userModel.toUserEntity())
 
             AnacletoLogger.mumbling(
-                mumble = "Success in udpating local user.",
+                mumble = "Success in updating local user.",
                 level = AnacletoLevel.INFO
             )
         } catch(exception: Exception) {
             AnacletoLogger.mumbling(
                 mumble = "Error while updating user",
+                error = exception,
+                level = AnacletoLevel.WARNING
+            )
+        }
+    }
+
+    override suspend fun deleteUser(userModel: UserModel) {
+        try {
+            database.userDao().deleteUser(userModel.email)
+
+            AnacletoLogger.mumbling(
+                mumble = "Success in deleting local user.",
+                level = AnacletoLevel.INFO
+            )
+        } catch(exception: Exception) {
+            AnacletoLogger.mumbling(
+                mumble = "Error while deleting user",
                 error = exception,
                 level = AnacletoLevel.WARNING
             )

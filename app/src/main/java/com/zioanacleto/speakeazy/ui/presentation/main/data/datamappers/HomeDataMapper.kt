@@ -3,6 +3,8 @@ package com.zioanacleto.speakeazy.ui.presentation.main.data.datamappers
 import com.zioanacleto.buffa.datamappers.DataMapper
 import com.zioanacleto.buffa.default
 import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.HomeSectionResponseDTO
+import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.MainSpeakEazyBEResponseDTO
+import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.BannerModel
 import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.DrinkModel
 import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.HomeModel
 import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.HomeSectionModel
@@ -16,35 +18,50 @@ class HomeDataMapper : DataMapper<HomeSectionResponseDTO, HomeModel> {
                     id = section.id,
                     name = section.name,
                     cocktails = section.cocktails.map { cocktail ->
-                        DrinkModel(
-                            id = cocktail.id.default(),
-                            name = cocktail.name.default(),
-                            category = cocktail.category.default(),
-                            instructions = cocktail.instructionsIt.default(),
-                            glass = cocktail.glass.default(),
-                            isAlcoholic = cocktail.isAlcoholic.default(false),
-                            imageUrl = cocktail.imageLink.default(),
-                            type = cocktail.type.default(),
-                            method = cocktail.method.toMethod(),
-                            ingredients = cocktail.ingredients?.ingredients?.map {
-                                // todo: add logic to handle cl-oz
-                                IngredientModel(
-                                    id = it.id.default(),
-                                    name = it.name.default(),
-                                    imageUrl = it.imageUrl.default(),
-                                    measureCl = it.quantityCl.toClMeasure(),
-                                    measureOz = it.quantityOz.toOzMeasure(),
-                                    measureSpecial = it.quantitySpecial.default()
-                                )
-                            } ?: listOf(),
-                            visualizations = cocktail.visualizations.default()
-                        )
+                        cocktail.toDrinkModel()
                     }
+                )
+            },
+            banner = input.banner?.let {
+                BannerModel(
+                    name = it.name.default(),
+                    position = it.position.default(),
+                    cta = it.cta.default(),
+                    cocktail = it.cocktailInfo.toDrinkModel()
                 )
             }
         )
 
+    private fun MainSpeakEazyBEResponseDTO.toDrinkModel() = DrinkModel(
+        id = id.default(),
+        name = name.default(),
+        category = category.default(),
+        instructions = instructionsIt.default(),
+        glass = glass.default(),
+        isAlcoholic = isAlcoholic.default(false),
+        imageUrl = imageLink.default(),
+        type = type.default(),
+        method = method.toMethod(),
+        ingredients = ingredients?.ingredients?.map {
+            // todo: add logic to handle cl-oz
+            IngredientModel(
+                id = it.id.default(),
+                name = it.name.default(),
+                imageUrl = it.imageUrl.default(),
+                measureCl = it.quantityCl.toClMeasure(),
+                measureOz = it.quantityOz.toOzMeasure(),
+                measureSpecial = it.quantitySpecial.default()
+            )
+        } ?: listOf(),
+        visualizations = visualizations.default(),
+        username = username.default(),
+        userId = userId.default()
+    )
+
     private fun String?.toMethod(): String = this?.replace(" and ", " & ").default()
-    private fun String?.toClMeasure(): String? = this?.let { if(it.contains("-")) null else it.plus("cl") }
-    private fun String?.toOzMeasure(): String? = this?.let { if(it.contains("-")) null else it.plus("oz") }
+    private fun String?.toClMeasure(): String? =
+        this?.let { if (it.contains("-")) null else it.plus("cl") }
+
+    private fun String?.toOzMeasure(): String? =
+        this?.let { if (it.contains("-")) null else it.plus("oz") }
 }

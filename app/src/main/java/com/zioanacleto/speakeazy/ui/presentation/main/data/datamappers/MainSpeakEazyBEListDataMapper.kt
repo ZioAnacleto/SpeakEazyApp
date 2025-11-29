@@ -17,7 +17,8 @@ class MainSpeakEazyBEListDataMapper: DataMapper<MainSpeakEazyBEListResponseDTO, 
                     imageUrl = it.imageLink.default(),
                     isAlcoholic = it.isAlcoholic.default(false),
                     type = it.type.default(),
-                    method = it.method.toMethod()
+                    method = it.method.toMethod(),
+                    username = it.username.default()
                 )
             }
         )

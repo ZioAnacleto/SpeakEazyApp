@@ -31,7 +31,10 @@ class MainSpeakEazyBEDataMapper: DataMapper<MainSpeakEazyBEResponseDTO, MainMode
                             measureOz = it.quantityOz.toOzMeasure(),
                             measureSpecial = it.quantitySpecial.default()
                         )
-                    } ?: listOf()
+                    } ?: listOf(),
+                    visualizations = input.visualizations.default(),
+                    username = input.username.default(),
+                    userId = input.userId.default()
                 )
             )
         )

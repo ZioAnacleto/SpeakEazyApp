@@ -8,6 +8,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -51,8 +52,11 @@ import com.zioanacleto.buffa.logging.AnacletoLogger
 import com.zioanacleto.speakeazy.R
 import com.zioanacleto.speakeazy.ui.presentation.components.BackFloatingButton
 import com.zioanacleto.speakeazy.ui.presentation.components.CocktailLoadingAnimation
+import com.zioanacleto.speakeazy.ui.presentation.components.CustomSwitchButton
 import com.zioanacleto.speakeazy.ui.presentation.components.SafeClickableGenericButton
+import com.zioanacleto.speakeazy.ui.presentation.user.domain.model.Language
 import com.zioanacleto.speakeazy.ui.presentation.user.domain.model.UserModel
+import com.zioanacleto.speakeazy.ui.theme.LocalSnackBarHostState
 import com.zioanacleto.speakeazy.ui.theme.YellowFFE271
 import kotlinx.coroutines.flow.Flow
 import org.koin.androidx.compose.getViewModel
@@ -73,6 +77,8 @@ private fun UserScreenContent(
     val viewModel: UserViewModel = getViewModel()
     var emailLink: String? by remember { mutableStateOf(null) }
     var registrationSuccessful by remember { mutableStateOf(false) }
+    val snackbarHostState = LocalSnackBarHostState.current
+    var snackbarMessage by remember { mutableStateOf("") }
 
     // retrieving email link from intent
     val context = LocalContext.current
@@ -103,7 +109,7 @@ private fun UserScreenContent(
             } else {
                 // complete user registration asking for name
                 AnimatedVisibility(
-                    visible = registrationSuccessful,
+                    visible = true,
                     enter = fadeIn()
                 ) {
                     if (registrationSuccessful) {
@@ -112,7 +118,15 @@ private fun UserScreenContent(
                             onBackButton = onBackButton
                         )
                     } else {
-                        // todo: what case here?
+                        UserWithoutLinkScreen(
+                            onBackButton = onBackButton,
+                            onSendAgainButton = {
+                                viewModel.sendEmail(state.user.email) {
+                                    snackbarMessage =
+                                        if (it) "Email successfully sent." else "Email not sent, something went wrong."
+                                }
+                            }
+                        )
                     }
                 }
 
@@ -142,6 +156,11 @@ private fun UserScreenContent(
             )
         }
     }
+
+    LaunchedEffect(snackbarMessage) {
+        if (snackbarMessage.isNotEmpty())
+            snackbarHostState.showSnackbar(snackbarMessage)
+    }
 }
 
 @Composable
@@ -149,6 +168,9 @@ private fun RegisterUserScreen(
     viewModel: UserViewModel,
     onBackButton: () -> Unit
 ) {
+    val snackbarHostState = LocalSnackBarHostState.current
+    var snackbarMessage by remember { mutableStateOf("") }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -226,7 +248,10 @@ private fun RegisterUserScreen(
                 enabled = mailTextState.text.isValidEmail(),
                 onClick = {
                     if (mailTextState.text.isNotEmpty()) {
-                        viewModel.sendEmail(mailTextState.text)
+                        viewModel.sendEmail(mailTextState.text) {
+                            snackbarMessage =
+                                if (it) "Email successfully sent." else "Email not sent, something went wrong."
+                        }
                     }
                 }
             ) {
@@ -242,6 +267,11 @@ private fun RegisterUserScreen(
                 )
             }
         }
+    }
+
+    LaunchedEffect(snackbarMessage) {
+        if (snackbarMessage.isNotEmpty())
+            snackbarHostState.showSnackbar(snackbarMessage)
     }
 }
 
@@ -353,6 +383,8 @@ private fun UserDetailScreen(
     onBackButton: () -> Unit,
     onLogoutClick: () -> Unit
 ) {
+    val viewModel: UserViewModel = getViewModel()
+
     Column(
         modifier = Modifier
             .fillMaxSize(),
@@ -389,6 +421,42 @@ private fun UserDetailScreen(
             lineHeight = TextUnit(38f, TextUnitType.Sp)
         )
 
+        Row(
+            modifier = Modifier
+                .padding(vertical = 20.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Selected language:",
+                color = Color.White,
+                fontSize = TextUnit(16f, TextUnitType.Sp)
+            )
+
+            CustomSwitchButton(
+                modifier = Modifier
+                    .padding(start = 16.dp),
+                buttonHeight = 36.dp,
+                firstValue = user.selectedLanguage == Language.ITALIAN,
+                onContent = {
+                    Text(
+                        text = "IT",
+                        color = Color.Black
+                    )
+                },
+                offContent = {
+                    Text(
+                        text = "EN",
+                        color = Color.Black
+                    )
+                }
+            ) {
+                val currentUser = user.copy(
+                    selectedLanguage = if (it) Language.ITALIAN else Language.ENGLISH
+                )
+                viewModel.updateUserWithLanguage(currentUser)
+            }
+        }
+
         SafeClickableGenericButton(
             modifier = Modifier
                 .fillMaxWidth()
@@ -403,6 +471,55 @@ private fun UserDetailScreen(
 
             Text(
                 text = "Logout",
+                modifier = Modifier
+                    .padding(start = 16.dp)
+            )
+        }
+    }
+}
+
+@Composable
+fun UserWithoutLinkScreen(
+    modifier: Modifier = Modifier,
+    onBackButton: () -> Unit,
+    onSendAgainButton: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top
+    ) {
+        BackFloatingButton(
+            modifier = Modifier
+                .align(Alignment.Start),
+            onBackButton = onBackButton
+        )
+
+        Text(
+            modifier = Modifier
+                .padding(horizontal = 20.dp, vertical = 16.dp),
+            text = "Abbiamo mandato il link alla mail che ci hai fornito, controlla la tua posta.",
+            fontSize = TextUnit(32f, TextUnitType.Sp),
+            color = Color.White,
+            fontWeight = FontWeight.SemiBold,
+            lineHeight = TextUnit(38f, TextUnitType.Sp)
+        )
+
+        SafeClickableGenericButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 20.dp, start = 24.dp, end = 24.dp),
+            enabled = true,
+            onClick = onSendAgainButton
+        ) {
+            Image(
+                imageVector = Icons.Filled.Email,
+                contentDescription = ""
+            )
+
+            Text(
+                text = "Send again",
                 modifier = Modifier
                     .padding(start = 16.dp)
             )
@@ -430,4 +547,13 @@ private fun UserDetailScreenPreview() {
         ),
         onBackButton = { }
     ) { }
+}
+
+@Preview
+@Composable
+private fun UserWithoutLinkScreenPreview() {
+    UserWithoutLinkScreen(
+        onBackButton = { },
+        onSendAgainButton = {}
+    )
 }

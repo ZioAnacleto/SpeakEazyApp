@@ -1,8 +1,11 @@
 package com.zioanacleto.speakeazy.ui.presentation.components
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
@@ -48,6 +51,8 @@ fun SafeClickableGenericButton(
     enabled: Boolean,
     delayTime: Long = 200L,
     onClick: () -> Unit,
+    colors: ButtonColors = ButtonDefaults.buttonColors(),
+    border: BorderStroke? = null,
     content: @Composable () -> Unit
 ) {
     var buttonEnabled = rememberEnabledForButton(delayTime)
@@ -55,6 +60,8 @@ fun SafeClickableGenericButton(
     Button(
         modifier = modifier,
         enabled = enabled,
+        colors = colors,
+        border = border,
         onClick = {
             if (buttonEnabled) onClick()
             buttonEnabled = !buttonEnabled

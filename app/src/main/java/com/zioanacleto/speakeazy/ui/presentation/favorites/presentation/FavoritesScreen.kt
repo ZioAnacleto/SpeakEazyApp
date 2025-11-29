@@ -49,7 +49,8 @@ fun FavoritesScreen(
     ) {
         val viewModel: FavoritesViewModel = getViewModel()
 
-        when (val state = viewModel.favoritesUiState.collectAsState(FavoritesUiState.Loading).value) {
+        when (val state =
+            viewModel.favoritesUiState.collectAsState(FavoritesUiState.Loading).value) {
             is FavoritesUiState.Success -> {
                 FavoritesScreenSuccessView(
                     favorites = state.favorites.favorites,
@@ -116,18 +117,21 @@ private fun FavoritesScreenSuccessView(
                     filterList = MainFilterItem.entries
                 )
             }
-            items(favorites, key = { it.id }) {
-                MainDrinkCard(
-                    modifier = Modifier
-                        .padding(6.dp)
-                        .animateItem(),
-                    id = it.id,
-                    name = it.name,
-                    category = it.category,
-                    imageString = it.imageUrl,
-                    isFavorite = it.favorite,
-                    onClick = onCocktailClick
-                )
+            items(favorites, key = { it.id }) { drink ->
+                with(drink) {
+                    MainDrinkCard(
+                        modifier = Modifier
+                            .padding(6.dp)
+                            .animateItem(),
+                        id = id,
+                        name = name,
+                        category = category,
+                        imageString = imageUrl,
+                        isFavorite = favorite,
+                        userName = username,
+                        onClick = onCocktailClick
+                    )
+                }
             }
 
             item(span = { GridItemSpan(maxLineSpan) }) {

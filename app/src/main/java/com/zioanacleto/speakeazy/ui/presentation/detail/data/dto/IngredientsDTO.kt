@@ -3,7 +3,6 @@ package com.zioanacleto.speakeazy.ui.presentation.detail.data.dto
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-
 @Serializable
 data class IngredientsListDTO(
     @SerialName("ingredients") val ingredients: List<IngredientDTO>?

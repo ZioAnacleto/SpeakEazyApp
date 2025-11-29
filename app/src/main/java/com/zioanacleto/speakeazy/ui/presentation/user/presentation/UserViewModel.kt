@@ -1,14 +1,20 @@
 package com.zioanacleto.speakeazy.ui.presentation.user.presentation
 
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.google.firebase.Firebase
 import com.google.firebase.auth.ActionCodeSettings
 import com.google.firebase.auth.actionCodeSettings
+import com.google.firebase.auth.auth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.zioanacleto.buffa.base.BaseViewModel
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.buffa.default
 import com.zioanacleto.buffa.logging.AnacletoLogger
+import com.zioanacleto.speakeazy.domain.APP_PACKAGE
 import com.zioanacleto.speakeazy.ui.presentation.user.domain.UserRepository
+import com.zioanacleto.speakeazy.ui.presentation.user.domain.model.Language
 import com.zioanacleto.speakeazy.ui.presentation.user.domain.model.UserModel
 import com.zioanacleto.speakeazy.ui.presentation.user.navigation.USER_DEEPLINK_URI
 import kotlinx.coroutines.flow.Flow
@@ -24,7 +30,7 @@ class UserViewModel(
     private val actionCodeSettings: ActionCodeSettings = actionCodeSettings {
         url = USER_DEEPLINK_URI
         setAndroidPackageName(
-            "com.zioanacleto.speakeazy",
+            APP_PACKAGE,
             true,
             "24"
         )
@@ -40,7 +46,10 @@ class UserViewModel(
                 initialValue = UserUiState.Loading
             )
 
-    fun sendEmail(userEmail: String) {
+    fun sendEmail(
+        userEmail: String,
+        onEmailSent: (Boolean) -> Unit
+    ) {
         coroutineScope.launch(dispatcherProvider.io()) {
             repository.saveUser(
                 UserModel(
@@ -51,14 +60,16 @@ class UserViewModel(
         // sending email to user
         Firebase.auth.sendSignInLinkToEmail(userEmail, actionCodeSettings)
             .addOnCompleteListener { task ->
-                if(task.isSuccessful) {
+                if (task.isSuccessful) {
                     AnacletoLogger.mumbling(
                         mumble = "Email sent successfully."
                     )
+                    onEmailSent(true)
                 } else {
                     AnacletoLogger.mumbling(
                         mumble = "Email not sent, something went wrong."
                     )
+                    onEmailSent(false)
                 }
             }
     }
@@ -77,6 +88,11 @@ class UserViewModel(
         }
     }
 
+    fun updateUserWithLanguage(userModel: UserModel) =
+        viewModelScope.launch(dispatcherProvider.io()) {
+            repository.updateUser(userModel)
+        }
+
     fun finishUserLogin(
         emailLink: String,
         email: String,
@@ -85,13 +101,13 @@ class UserViewModel(
         if (Firebase.auth.isSignInWithEmailLink(emailLink)) {
             Firebase.auth.signInWithEmailLink(email, emailLink)
                 .addOnCompleteListener { task ->
-                    if(task.isSuccessful) {
+                    if (task.isSuccessful) {
                         AnacletoLogger.mumbling(
-                            mumble = "Email sent successfully."
+                            mumble = "Email verified successfully."
                         )
                     } else {
                         AnacletoLogger.mumbling(
-                            mumble = "Email not sent, something went wrong."
+                            mumble = "Email not verified, something went wrong."
                         )
                     }
 
@@ -101,6 +117,14 @@ class UserViewModel(
     }
 
     fun logoutUser() {
+        viewModelScope.launch(dispatcherProvider.io()) {
+            repository.deleteUser(
+                UserModel(
+                    email = Firebase.auth.currentUser?.email.default()
+                )
+            )
+        }
+
         Firebase.auth.signOut()
     }
 }

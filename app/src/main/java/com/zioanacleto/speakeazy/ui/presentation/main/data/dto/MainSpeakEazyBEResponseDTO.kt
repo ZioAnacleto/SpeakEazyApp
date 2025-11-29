@@ -2,6 +2,7 @@ package com.zioanacleto.speakeazy.ui.presentation.main.data.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import java.io.Serial
 
 @Serializable
 data class MainSpeakEazyBEListResponseDTO(
@@ -21,7 +22,9 @@ data class MainSpeakEazyBEResponseDTO(
     @SerialName("type") val type: String?,
     @SerialName("method") val method: String?,
     @SerialName("ingredients") val ingredients: MainSpeakEazyBEIngredientsListDTO?,
-    @SerialName("visualizations") val visualizations: Long?
+    @SerialName("visualizations") val visualizations: Long?,
+    @SerialName("username") val username: String?,
+    @SerialName("userId") val userId: String?
 )
 
 @Serializable
