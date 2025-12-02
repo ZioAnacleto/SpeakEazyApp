@@ -95,6 +95,37 @@ jobs:
       - name: Generate JaCoCo report
         run: ./gradlew jacocoTestReport
 
+      # Calculate a code coverage percentage to be shown to developer on PR
+      - name: Extract coverage percentage
+        id: coverage
+        run: |
+          REPORT_FILE="app/build/reports/jacoco/jacocoTestReport/xml/report.xml"
+
+          if [ ! -f "$REPORT_FILE" ]; then
+            echo "Report XML not found!"
+            exit 1
+          fi
+
+          MISSED=$(xmllint --xpath "string(//counter[@type='INSTRUCTION']/@missed)" $REPORT_FILE)
+          COVERED=$(xmllint --xpath "string(//counter[@type='INSTRUCTION']/@covered)" $REPORT_FILE)
+          TOTAL=$((MISSED + COVERED))
+
+          if [ "$TOTAL" -eq 0 ]; then 
+            COVERAGE=0
+          else
+            COVERAGE=$(( 100 * COVERED / TOTAL ))
+          fi
+
+          echo "Coverage: $COVERAGE%"
+          echo "coverage=$COVERAGE" >> $GITHUB_OUTPUT
+
+      - name: Comment coverage on PR
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            ## 📊 Code Coverage Report
+            **Coverage:** ${{ steps.coverage.outputs.coverage }}%
+
       # Upload a code coverage report to build folder
       - name: Upload Coverage Report
         uses: actions/upload-artifact@v4
