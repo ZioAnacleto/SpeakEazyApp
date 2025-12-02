@@ -89,6 +89,9 @@ jobs:
       # Generate Jacoco Report for code coverage
       - name: Generate JaCoCo report
         run: ./gradlew jacocoTestReport
+        env:
+          CODEARTIFACT_TOKEN: ${{ steps.codeartifact.outputs.token }}
+          CODEARTIFACT_URL: ${{ steps.codeartifact.outputs.url }}
 
       # Upload a code coverage report to build folder
       - name: Upload Coverage Report
