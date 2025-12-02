@@ -27,6 +27,7 @@ firebase = "34.1.0"
 play-services-auth = "21.4.0"
 gson = "2.13.1"
 mockk = "1.13.16"
+jacoco = "0.8.12"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }

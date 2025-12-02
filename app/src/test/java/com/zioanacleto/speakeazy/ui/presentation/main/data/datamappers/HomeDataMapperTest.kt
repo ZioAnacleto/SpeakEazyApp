@@ -142,7 +142,9 @@ class HomeDataMapperTest {
                         type = "testType",
                         method = method,
                         ingredients = ingredients,
-                        visualizations = 1
+                        visualizations = 1,
+                        userId = "",
+                        username = ""
                     )
                 )
             )

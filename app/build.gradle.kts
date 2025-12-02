@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.zioanacleto.featurefromtemplate.plugin)
     id("com.google.gms.google-services")
     alias(libs.plugins.devtools.ksp)
+    jacoco
 }
 
 android {
@@ -53,6 +54,14 @@ android {
         compose = true
         buildConfig = true
     }
+
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+    }
+}
+
+jacoco {
+    toolVersion = libs.versions.jacoco.get()
 }
 
 dependencies {
@@ -120,6 +129,36 @@ dependencies {
     testImplementation(libs.ktor.client.mock)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+}
+
+tasks.register<JacocoReport>("jacocoTestReport") {
+    dependsOn("testDebugUnitTest")
+
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+
+    val fileTree = fileTree("${project.buildDir}/intermediates/javac/debug/classes") {
+        exclude(
+            "**/R.class",
+            "**/R$*.class",
+            "**/BuildConfig.*",
+            "**/AndroidManifest.*",
+            "**/*Activity.*",
+            "**/*Screen.*",
+            "**/di/**",
+            "**/components/**",
+            "**/theme/**"
+        )
+    }
+
+    classDirectories.setFrom(fileTree)
+
+    sourceDirectories.setFrom(files("$projectDir/src/main/java"))
+    executionData.setFrom(
+        file("$buildDir/jacoco/testDebugUnitTest.exec")
+    )
 }
 
 private fun getLocalPropertiesVariable(variableName: String): String {

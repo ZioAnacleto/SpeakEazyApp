@@ -2,11 +2,9 @@ package com.zioanacleto.speakeazy.ui.presentation.main.data.datamappers
 
 import com.zioanacleto.speakeazy.assertAllTrue
 import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.MainListResponseDTO
-import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.MainResponseDTO
 import io.mockk.clearAllMocks
-import org.junit.Assert.*
-
 import org.junit.After
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class MainListDataMapperTest {

@@ -1,13 +1,14 @@
-package com.zioanacleto.speakeazy.ui.presentation.favorites.data.datamappers
+package com.zioanacleto.speakeazy.ui.presentation.search.data.datamappers
 
 import com.zioanacleto.speakeazy.assertAllTrue
-import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.MainSpeakEazyBEListResponseDTO
 import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.MainSpeakEazyBEResponseDTO
+import com.zioanacleto.speakeazy.ui.presentation.search.data.dto.SearchResponseDTO
+import com.zioanacleto.speakeazy.ui.presentation.search.domain.model.SearchItem
 import io.mockk.clearAllMocks
 import org.junit.After
 import org.junit.Test
 
-class FavoritesDataMapperTest {
+class SearchResponseDataMapperTest {
 
     @After
     fun tearDown() {
@@ -15,9 +16,24 @@ class FavoritesDataMapperTest {
     }
 
     @Test
-    fun test_mapInto() {
+    fun test_mapInto_whenInputCocktailIsEmpty_resultsIsEmpty() {
         // given
-        val input = MainSpeakEazyBEListResponseDTO(
+        val input = SearchResponseDTO(
+            cocktails = listOf()
+        )
+
+        // when
+        val sut = createSut()
+        val response = sut.mapInto(input)
+
+        // then
+        assert(response.results.isEmpty())
+    }
+
+    @Test
+    fun test_mapInto_whenInputCocktailIsNotEmpty_resultsIsNotEmpty() {
+        // given
+        val input = SearchResponseDTO(
             cocktails = listOf(
                 MainSpeakEazyBEResponseDTO(
                     id = "1",
@@ -37,24 +53,17 @@ class FavoritesDataMapperTest {
                 )
             )
         )
-        val sut = createSut()
 
         // when
+        val sut = createSut()
         val result = sut.mapInto(input)
 
         // then
         assertAllTrue(
-            result.favorites.size == 1,
-            result.favorites.first().id == "1",
-            result.favorites.first().name == "testName",
-            result.favorites.first().category == "testCategory",
-            result.favorites.first().isAlcoholic,
-            result.favorites.first().imageUrl == "testImageLink",
-            result.favorites.first().type == "testType",
-            result.favorites.first().method == "testMethod & test"
+            result.results.size == 1,
+            result.results.first() is SearchItem.Cocktail
         )
-
     }
 
-    private fun createSut() = FavoritesDataMapper()
+    private fun createSut() = SearchResponseDataMapper()
 }
