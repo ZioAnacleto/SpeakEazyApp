@@ -37,17 +37,17 @@ jobs:
         run: |
           export CODEARTIFACT_AUTH_TOKEN=$(aws codeartifact get-authorization-token \
             --domain ${{ vars.DOMAIN }} \
-            --domain-owner ${{ vars.DOMAIN_OWNER }} \
-            --region ${{ vars.AWS_REGION }} \
+            --domain-owner ${{ vars.OWNER }} \
+            --region ${{ vars.REGION }} \
             --query authorizationToken \
             --output text)
 
           export CODEARTIFACT_REPO_URL=$(aws codeartifact get-repository-endpoint \
             --domain ${{ vars.DOMAIN }} \
-            --domain-owner ${{ vars.DOMAIN_OWNER }} \
+            --domain-owner ${{ vars.OWNER }} \
             --repository ${{ vars.REPOSITORY }} \
             --format maven \
-            --region ${{ vars.AWS_REGION }} \
+            --region ${{ vars.REGION }} \
             --query repositoryEndpoint \
             --output text)
 
