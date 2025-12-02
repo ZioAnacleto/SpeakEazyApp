@@ -99,7 +99,7 @@ jobs:
       - name: Extract coverage percentage
         id: coverage
         run: |
-          REPORT_FILE="app/build/reports/jacoco/jacocoTestReport/xml/report.xml"
+          REPORT_FILE="app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
 
           if [ ! -f "$REPORT_FILE" ]; then
             echo "Report XML not found!"
