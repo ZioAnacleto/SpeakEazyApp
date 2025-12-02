@@ -25,8 +25,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         val apiToken = getLocalPropertiesVariable("apiToken")
-        if (apiToken != "")
-            buildConfigField("String", "API_KEY", apiToken)
+        buildConfigField("String", "API_KEY", apiToken)
 
         ksp {
             arg("room.schemaLocation", "$projectDir/schemas")
