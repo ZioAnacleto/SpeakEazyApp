@@ -36,7 +36,7 @@ jobs:
       - name: Rebuild private gradle file and create temporary codeartifact file
         run: |
           mkdir -p ~/.gradle
-          echo "${{ secrets.PRIVATE_GRADLE_FILE }}" > ~/.gradle/init.gradle.kts
+          echo "${{ secrets.CODEARTIFACT_GRADLE_FILE }}" > ~/.gradle/init.gradle.kts
           echo "Creating temporary file..."
           touch .use-codeartifact
           ls -la
