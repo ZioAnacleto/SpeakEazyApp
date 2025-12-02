@@ -125,5 +125,5 @@ private fun getLocalPropertiesVariable(variableName: String): String {
             properties.load(it)
         }
         properties.getProperty(variableName)
-    } else ""
+    } else " "
 }
