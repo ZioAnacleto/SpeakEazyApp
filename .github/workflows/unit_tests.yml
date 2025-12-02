@@ -32,6 +32,28 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Configure CodeArtifact
+        id: codeartifact
+        run: |
+          export CODEARTIFACT_AUTH_TOKEN=$(aws codeartifact get-authorization-token \
+            --domain ${{ vars.DOMAIN }} \
+            --domain-owner ${{ vars.OWNER }} \
+            --region ${{ vars.REGION }} \
+            --query authorizationToken \
+            --output text)
+
+          export CODEARTIFACT_REPO_URL=$(aws codeartifact get-repository-endpoint \
+            --domain ${{ vars.DOMAIN }} \
+            --domain-owner ${{ vars.OWNER }} \
+            --repository ${{ vars.REPOSITORY }} \
+            --format maven \
+            --region ${{ vars.REGION }} \
+            --query repositoryEndpoint \
+            --output text)
+
+          echo "token=$CODEARTIFACT_AUTH_TOKEN" >> $GITHUB_OUTPUT
+          echo "url=$CODEARTIFACT_REPO_URL" >> $GITHUB_OUTPUT
+
       # Create environment files to download dependencies from AWS CodeArtifact
       - name: Rebuild private gradle file and create temporary codeartifact file
         env:
@@ -53,6 +75,9 @@ jobs:
       # Run all unit tests
       - name: Run unit tests
         run: ./gradlew testDebugUnitTest
+        env:
+          CODEARTIFACT_TOKEN: ${{ steps.codeartifact.outputs.token }}
+          CODEARTIFACT_URL: ${{ steps.codeartifact.outputs.url }}
 
       # Generate Jacoco Report for code coverage
       - name: Generate JaCoCo report
