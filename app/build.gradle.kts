@@ -118,6 +118,7 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.google.play.services.auth)
 
+    // Unit tests
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
     androidTestImplementation(libs.androidx.junit)
@@ -138,21 +139,30 @@ tasks.register<JacocoReport>("jacocoTestReport") {
         html.required.set(true)
     }
 
-    val fileTree = fileTree("${project.buildDir}/intermediates/javac/debug/classes") {
-        exclude(
-            "**/R.class",
-            "**/R$*.class",
-            "**/BuildConfig.*",
-            "**/AndroidManifest.*",
-            "**/*Activity.*",
-            "**/*Screen.*",
-            "**/di/**",
-            "**/components/**",
-            "**/theme/**"
-        )
+    val excludes = listOf(
+        "**/R.class",
+        "**/R$*.class",
+        "**/BuildConfig.*",
+        "**/AndroidManifest.*",
+        "**/*Activity.kt",
+        "**/*Screen.kt",
+        "**/di/**",
+        "**/theme/**",
+        "**/components/**",
+        "**/navigation/**",
+        "**/ApiClientImpl.**",
+        "**/database/**"
+    )
+
+    val javaClasses = fileTree("${buildDir}/intermediates/javac/debug/classes") {
+        exclude(excludes)
     }
 
-    classDirectories.setFrom(fileTree)
+    val kotlinClasses = fileTree("${buildDir}/tmp/kotlin-classes/debug") {
+        exclude(excludes)
+    }
+
+    classDirectories.setFrom(files(javaClasses, kotlinClasses))
 
     sourceDirectories.setFrom(files("$projectDir/src/main/java"))
     executionData.setFrom(
