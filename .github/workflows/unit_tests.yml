@@ -37,7 +37,7 @@ jobs:
 
       # Run all unit tests
       - name: Run unit tests
-        run: ./gradlew test
+        run: ./gradlew testDebugUnitTest
 
       # Generate Jacoco Report for code coverage
       - name: Generate JaCoCo report
