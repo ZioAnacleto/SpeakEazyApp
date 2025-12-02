@@ -32,6 +32,12 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Create temporary file
+        run: |
+          echo "Creating temporary file..."
+          touch .use-codeartifact
+          ls -la
+
       - name: Grant execute permission to Gradle
         run: chmod +x ./gradlew
 
@@ -49,3 +55,10 @@ jobs:
         with:
           name: coverage-report
           path: app/build/reports/jacoco/jacocoTestReport/html
+
+      - name: Remove temporary file
+        if: always()    # eseguito anche se i test falliscono
+        run: |
+          echo "Deleting temporary file..."
+          rm -f .use-codeartifact
+          ls -la
