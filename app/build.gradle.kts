@@ -168,5 +168,5 @@ private fun getLocalPropertiesVariable(variableName: String): String {
             properties.load(it)
         }
         properties.getProperty(variableName)
-    } else "1"
+    } else "testKey"
 }
