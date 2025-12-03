@@ -12,18 +12,8 @@ import io.mockk.clearAllMocks
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.any
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.take
-import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.*
-
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -47,7 +37,7 @@ class DetailViewModelTest {
     }
 
     @Test
-    fun test_detailUiState() = runBlocking {
+    fun test_detailUiState_whenRepositoryReturnsSuccess_uiStateIsLoadingThenSuccess() = runBlocking {
         // given
         val cocktailId = "1"
         every { mainRepository.getMainById(any()) } returns flowOf(
@@ -65,6 +55,28 @@ class DetailViewModelTest {
         assertAllTrue(
             resultLoading is DetailUiState.Loading,
             result is DetailUiState.Success
+        )
+    }
+
+    @Test
+    fun test_detailUiState_whenRepositoryReturnsError_uiStateIsLoadingThenError() = runBlocking {
+        // given
+        val cocktailId = "1"
+        every { mainRepository.getMainById(any()) } returns flowOf(
+            Resource.Error(
+                Exception("testException")
+            )
+        )
+
+        val sut = createSut()
+
+        // when
+        val (resultLoading, result) = sut.detailUiState(cocktailId).testResourceFlow()
+
+        // then
+        assertAllTrue(
+            resultLoading is DetailUiState.Loading,
+            result is DetailUiState.Error
         )
     }
 

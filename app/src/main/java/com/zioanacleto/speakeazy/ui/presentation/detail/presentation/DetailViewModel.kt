@@ -1,6 +1,5 @@
 package com.zioanacleto.speakeazy.ui.presentation.detail.presentation
 
-import androidx.lifecycle.viewModelScope
 import com.zioanacleto.buffa.base.BaseViewModel
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.speakeazy.ui.presentation.detail.domain.DetailRepository
@@ -27,13 +26,13 @@ class DetailViewModel(
     }
 
     fun setFavoriteCocktail(cocktailId: String, cocktailName: String) {
-        viewModelScope.launch(dispatcherProvider.io()) {
+        coroutineScope.launch(dispatcherProvider.io()) {
             mainRepository.setFavoriteCocktail(cocktailId, cocktailName)
         }
     }
 
     fun deleteFavoriteCocktail(cocktailId: String) {
-        viewModelScope.launch(dispatcherProvider.io()) {
+        coroutineScope.launch(dispatcherProvider.io()) {
             mainRepository.deleteFavoriteCocktail(cocktailId)
         }
     }
@@ -41,7 +40,7 @@ class DetailViewModel(
     fun updateVisualizations(
         cocktailId: String
     ) {
-        viewModelScope.launch(dispatcherProvider.io()) {
+        coroutineScope.launch(dispatcherProvider.io()) {
             mainRepository.updateVisualizations(cocktailId)
         }
     }

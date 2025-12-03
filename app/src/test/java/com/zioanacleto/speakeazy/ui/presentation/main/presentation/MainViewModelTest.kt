@@ -1,12 +1,12 @@
-package com.zioanacleto.speakeazy.ui.presentation.favorites.presentation
+package com.zioanacleto.speakeazy.ui.presentation.main.presentation
 
 import com.zioanacleto.buffa.coroutines.DefaultDispatcherProvider
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.buffa.events.Resource
 import com.zioanacleto.speakeazy.assertAllTrue
 import com.zioanacleto.speakeazy.testResourceFlow
-import com.zioanacleto.speakeazy.ui.presentation.favorites.domain.FavoritesRepository
-import com.zioanacleto.speakeazy.ui.presentation.favorites.domain.model.FavoritesModel
+import com.zioanacleto.speakeazy.ui.presentation.main.domain.HomeRepository
+import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.HomeModel
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
@@ -16,9 +16,9 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
-class FavoritesViewModelTest {
+class MainViewModelTest {
 
-    private lateinit var repository: FavoritesRepository
+    private lateinit var repository: HomeRepository
     private lateinit var dispatcherProvider: DispatcherProvider
 
     @Before
@@ -33,31 +33,29 @@ class FavoritesViewModelTest {
     }
 
     @Test
-    fun test_favoritesUiState_whenRepositorySuccess_returnSuccess() = runBlocking {
+    fun test_homeUiState_whenRepositoryReturnsSuccess_uiStateIsSuccess() = runBlocking {
         // given
-        every { repository.getFavoriteCocktails() } returns flowOf(
+        every { repository.getHome() } returns flowOf(
             Resource.Success(
-                FavoritesModel(
-                    listOf()
-                )
+                HomeModel(listOf())
             )
         )
 
         // when
         val sut = createSut()
-        val (resultLoading, result) = sut.favoritesUiState.testResourceFlow()
+        val (resultLoading, result) = sut.homeUiState.testResourceFlow()
 
         // then
         assertAllTrue(
-            resultLoading is FavoritesUiState.Loading,
-            result is FavoritesUiState.Success
+            resultLoading is HomeUiState.Loading,
+            result is HomeUiState.Success
         )
     }
 
     @Test
-    fun test_favoritesUiState_whenRepositoryError_returnError() = runBlocking {
+    fun test_homeUiState_whenRepositoryReturnsError_uiStateIsError() = runBlocking {
         // given
-        every { repository.getFavoriteCocktails() } returns flowOf(
+        every { repository.getHome() } returns flowOf(
             Resource.Error(
                 Exception("testException")
             )
@@ -65,14 +63,14 @@ class FavoritesViewModelTest {
 
         // when
         val sut = createSut()
-        val (resultLoading, result) = sut.favoritesUiState.testResourceFlow()
+        val (resultLoading, result) = sut.homeUiState.testResourceFlow()
 
         // then
         assertAllTrue(
-            resultLoading is FavoritesUiState.Loading,
-            result is FavoritesUiState.Error
+            resultLoading is HomeUiState.Loading,
+            result is HomeUiState.Error
         )
     }
 
-    private fun createSut() = FavoritesViewModel(repository, dispatcherProvider)
+    private fun createSut() = MainViewModel(repository, dispatcherProvider)
 }

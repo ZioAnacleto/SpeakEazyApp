@@ -129,6 +129,7 @@ dependencies {
     testImplementation(libs.ktor.client.mock)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    testImplementation(libs.kotlinx.coroutines.test)
 }
 
 tasks.register<JacocoReport>("jacocoTestReport") {
@@ -144,8 +145,8 @@ tasks.register<JacocoReport>("jacocoTestReport") {
         "**/R$*.class",
         "**/BuildConfig.*",
         "**/AndroidManifest.*",
-        "**/*Activity.kt",
-        "**/*Screen.kt",
+        "**/*Activity.**",
+        "**/*Screen**.**",
         "**/di/**",
         "**/theme/**",
         "**/components/**",

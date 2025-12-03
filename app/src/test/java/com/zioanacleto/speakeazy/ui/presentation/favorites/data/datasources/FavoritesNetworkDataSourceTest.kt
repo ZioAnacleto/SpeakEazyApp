@@ -2,21 +2,17 @@ package com.zioanacleto.speakeazy.ui.presentation.favorites.data.datasources
 
 import com.zioanacleto.buffa.datamappers.DataMapper
 import com.zioanacleto.buffa.events.Resource
+import com.zioanacleto.speakeazy.createApiClientWithResponse
 import com.zioanacleto.speakeazy.data.api.ApiClientImpl
 import com.zioanacleto.speakeazy.ui.presentation.favorites.domain.model.FavoritesModel
 import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.MainSpeakEazyBEListResponseDTO
-import io.ktor.client.engine.mock.MockEngine
-import io.ktor.client.engine.mock.respond
-import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
-import io.ktor.http.headersOf
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.*
-
 import org.junit.After
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 
@@ -82,18 +78,4 @@ class FavoritesNetworkDataSourceTest {
         apiClient,
         dataMapper
     )
-
-    private fun createApiClientWithResponse(
-        status: HttpStatusCode,
-        response: String
-    ) =
-        ApiClientImpl(
-            MockEngine { _ ->
-                respond(
-                    status = status,
-                    content = response,
-                    headers = headersOf(HttpHeaders.ContentType, "application/json")
-                )
-            }
-        )
 }
