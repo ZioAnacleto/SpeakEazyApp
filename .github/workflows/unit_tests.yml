@@ -110,6 +110,8 @@ jobs:
             exit 1
           fi
 
+          echo "=== DEBUG: LINE COUNTERS ==="
+          xmllint --xpath "//counter[@type='LINE']" $REPORT_FILE || echo "No line counters found"
           MISSED=$(xmllint --xpath "string(//counter[@type='LINE']/@missed)" $REPORT_FILE)
           COVERED=$(xmllint --xpath "string(//counter[@type='LINE']/@covered)" $REPORT_FILE)
           TOTAL=$((MISSED + COVERED))
