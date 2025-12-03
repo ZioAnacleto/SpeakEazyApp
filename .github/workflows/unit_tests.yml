@@ -110,8 +110,8 @@ jobs:
             exit 1
           fi
 
-          MISSED=$(xmllint --xpath "string(//counter[@type='INSTRUCTION']/@missed)" $REPORT_FILE)
-          COVERED=$(xmllint --xpath "string(//counter[@type='INSTRUCTION']/@covered)" $REPORT_FILE)
+          MISSED=$(xmllint --xpath "string(//counter[@type='LINE']/@missed)" $REPORT_FILE)
+          COVERED=$(xmllint --xpath "string(//counter[@type='LINE']/@covered)" $REPORT_FILE)
           TOTAL=$((MISSED + COVERED))
 
           if [ "$TOTAL" -eq 0 ]; then 
@@ -124,6 +124,7 @@ jobs:
           echo "coverage=$COVERAGE" >> $GITHUB_OUTPUT
 
       - name: Comment coverage on PR
+        if: ${{ github.event_name == 'pull_request' }}
         uses: thollander/actions-comment-pull-request@v2
         with:
           message: |
