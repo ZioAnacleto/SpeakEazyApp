@@ -95,6 +95,10 @@ jobs:
       - name: Generate JaCoCo report
         run: ./gradlew jacocoTestReport
 
+      # installin xmllint to read coverage file
+      - name: Install xmllint
+        run: sudo apt-get update && sudo apt-get install -y libxml2-utils
+
       # Calculate a code coverage percentage to be shown to developer on PR
       - name: Extract coverage percentage
         id: coverage
