@@ -110,9 +110,6 @@ jobs:
             exit 1
           fi
 
-          echo "=== DEBUG: Dump counters ==="
-          xmllint --xpath "//counter" $REPORT_FILE || echo "No counters!"
-
           MISSED=$(xmllint --xpath "string(//counter[@type='LINE']/@missed)" $REPORT_FILE)
           COVERED=$(xmllint --xpath "string(//counter[@type='LINE']/@covered)" $REPORT_FILE)
 
