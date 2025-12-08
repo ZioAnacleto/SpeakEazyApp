@@ -89,7 +89,7 @@ val viewModelModule = module {
     factory { DetailViewModel(get(), get(), get()) }
     factory { SearchViewModel(get(), get()) }
     factory { UserViewModel(get(), get()) }
-    factory { FavoritesViewModel(get()) }
+    factory { FavoritesViewModel(get(), get()) }
     factory { MainActivityViewModel(get(), get()) }
     factory { CreateCocktailViewModel(get(), get(), get()) }
 }
@@ -101,8 +101,8 @@ val dataSourceModule = module {
     ) {
         MainNetworkDataSource(
             apiClient = get(),
-            dataMapper = get(named("MainSpeakEazyBEDataMapper")),
-            listDataMapper = get(named("MainSpeakEazyBEListDataMapper"))
+            dataMapper = get(getNamedClass<MainSpeakEazyBEDataMapper>()),
+            listDataMapper = get(getNamedClass<MainSpeakEazyBEListDataMapper>())
         )
     }
     factory<MainDataSource>(
@@ -117,7 +117,7 @@ val dataSourceModule = module {
     ) {
         IngredientNetworkDataSource(
             apiClient = get(),
-            dataMapper = get(named("IngredientsDataMapper"))
+            dataMapper = get(getNamedClass<IngredientsDataMapper>())
         )
     }
     factory<IngredientDataSource>(
@@ -132,7 +132,7 @@ val dataSourceModule = module {
     ) {
         HomeNetworkDataSource(
             apiClient = get(),
-            dataMapper = get(named("HomeDataMapper"))
+            dataMapper = get(getNamedClass<HomeDataMapper>())
         )
     }
     factory<UserDataSource>(
@@ -147,7 +147,7 @@ val dataSourceModule = module {
     ) {
         FavoritesNetworkDataSource(
             apiClient = get(),
-            dataMapper = get(named("FavoritesDataMapper"))
+            dataMapper = get(getNamedClass<FavoritesDataMapper>())
         )
     }
     factory<FavoritesDataSource>(
@@ -162,10 +162,10 @@ val dataSourceModule = module {
     ) {
         NetworkSearchDataSource(
             apiClient = get(),
-            requestDataMapper = get(named("SearchRequestDataMapper")),
-            responseDataMapper = get(named("SearchResponseDataMapper")),
-            tagsDataMapper = get(named("TagsResponseDataMapper")),
-            mainDataMapper = get(named("MainSpeakEazyBEListDataMapper"))
+            requestDataMapper = get(getNamedClass<SearchRequestDataMapper>()),
+            responseDataMapper = get(getNamedClass<SearchResponseDataMapper>()),
+            tagsDataMapper = get(getNamedClass<TagsDataMapper>()),
+            mainDataMapper = get(getNamedClass<MainSpeakEazyBEListDataMapper>())
         )
     }
     factory<CreateCocktailDataSource> {
@@ -176,46 +176,24 @@ val dataSourceModule = module {
     factory<CreateCocktailUploadDataSource> {
         CreateCocktailNetworkUploadDataSource(
             apiClient = get(),
-            requestDataMapper = get(named("CreateCocktailDataMapper"))
+            requestDataMapper = get(getNamedClass<CreateCocktailDataMapper>())
         )
     }
 }
 
 // DataMappers
 val dataMapperModule = module {
-    factory<DataMapper<MainResponseDTO, MainModel>>(
-        named("MainDataMapper")
-    ) { MainDataMapper() }
-    factory<DataMapper<MainListResponseDTO, MainModel>>(
-        named("MainListDataMapper")
-    ) { MainListDataMapper() }
-    factory<DataMapper<MainSpeakEazyBEResponseDTO, MainModel>>(
-        named("MainSpeakEazyBEDataMapper")
-    ) { MainSpeakEazyBEDataMapper() }
-    factory<DataMapper<MainSpeakEazyBEListResponseDTO, MainModel>>(
-        named("MainSpeakEazyBEListDataMapper")
-    ) { MainSpeakEazyBEListDataMapper() }
-    factory<DataMapper<IngredientsListDTO, IngredientsModel>>(
-        named("IngredientsDataMapper")
-    ) { IngredientsDataMapper() }
-    factory<DataMapper<HomeSectionResponseDTO, HomeModel>>(
-        named("HomeDataMapper")
-    ) { HomeDataMapper() }
-    factory<DataMapper<MainSpeakEazyBEListResponseDTO, FavoritesModel>>(
-        named("FavoritesDataMapper")
-    ) { FavoritesDataMapper() }
-    factory<DataMapper<String, SearchRequestDTO>>(
-        named("SearchRequestDataMapper")
-    ) { SearchRequestDataMapper() }
-    factory<DataMapper<SearchResponseDTO, SearchModel>>(
-        named("SearchResponseDataMapper")
-    ) { SearchResponseDataMapper() }
-    factory<DataMapper<TagsResponseDTO, TagsModel>>(
-        named("TagsResponseDataMapper")
-    ) { TagsDataMapper() }
-    factory<DataMapper<CreateCocktailModel, CreateCocktailRequestDTO>>(
-        named("CreateCocktailDataMapper")
-    ) { CreateCocktailDataMapper() }
+    factoryNamedClass<DataMapper<MainResponseDTO, MainModel>, MainDataMapper>()
+    factoryNamedClass<DataMapper<MainListResponseDTO, MainModel>, MainListDataMapper>()
+    factoryNamedClass<DataMapper<MainSpeakEazyBEResponseDTO, MainModel>, MainSpeakEazyBEDataMapper>()
+    factoryNamedClass<DataMapper<MainSpeakEazyBEListResponseDTO, MainModel>, MainSpeakEazyBEListDataMapper>()
+    factoryNamedClass<DataMapper<IngredientsListDTO, IngredientsModel>, IngredientsDataMapper>()
+    factoryNamedClass<DataMapper<HomeSectionResponseDTO, HomeModel>, HomeDataMapper>()
+    factoryNamedClass<DataMapper<MainSpeakEazyBEListResponseDTO, FavoritesModel>, FavoritesDataMapper>()
+    factoryNamedClass<DataMapper<String, SearchRequestDTO>, SearchRequestDataMapper>()
+    factoryNamedClass<DataMapper<SearchResponseDTO, SearchModel>, SearchResponseDataMapper>()
+    factoryNamedClass<DataMapper<TagsResponseDTO, TagsModel>, TagsDataMapper>()
+    factoryNamedClass<DataMapper<CreateCocktailModel, CreateCocktailRequestDTO>, CreateCocktailDataMapper>()
 }
 
 // Repositories

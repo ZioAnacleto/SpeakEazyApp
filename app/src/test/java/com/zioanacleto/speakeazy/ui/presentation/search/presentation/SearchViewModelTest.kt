@@ -1,0 +1,169 @@
+package com.zioanacleto.speakeazy.ui.presentation.search.presentation
+
+import com.zioanacleto.buffa.coroutines.DefaultDispatcherProvider
+import com.zioanacleto.buffa.coroutines.DispatcherProvider
+import com.zioanacleto.buffa.events.Resource
+import com.zioanacleto.speakeazy.TestDispatcherProvider
+import com.zioanacleto.speakeazy.assertAllTrue
+import com.zioanacleto.speakeazy.testResourceFlow
+import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.MainModel
+import com.zioanacleto.speakeazy.ui.presentation.search.domain.SearchFilterItem
+import com.zioanacleto.speakeazy.ui.presentation.search.domain.SearchRepository
+import com.zioanacleto.speakeazy.ui.presentation.search.domain.model.SearchLandingModel
+import com.zioanacleto.speakeazy.ui.presentation.search.domain.model.SearchModel
+import io.mockk.clearAllMocks
+import io.mockk.every
+import io.mockk.mockk
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
+import org.junit.After
+import org.junit.Before
+import org.junit.Test
+
+class SearchViewModelTest {
+
+    private lateinit var repository: SearchRepository
+    private lateinit var dispatcherProvider: DispatcherProvider
+
+    @Before
+    fun setUp() {
+        repository = mockk(relaxed = true)
+        dispatcherProvider = DefaultDispatcherProvider()
+    }
+
+    @After
+    fun tearDown() {
+        clearAllMocks()
+    }
+
+    @Test
+    fun test_landingUiState_whenRepositoryIsSuccess_uiStateIsSuccess() = runBlocking {
+        // given
+        every { repository.getSearchLandingData() } returns flowOf(
+            Resource.Success(
+                SearchLandingModel(
+                    ingredients = listOf(),
+                    tags = listOf()
+                )
+            )
+        )
+
+        // when
+        val sut = createSut()
+        val (resultLoading, result) = sut.landingUiState.testResourceFlow()
+
+        // then
+        assertAllTrue(
+            resultLoading is SearchLandingUiState.Loading,
+            result is SearchLandingUiState.Success
+        )
+    }
+
+    @Test
+    fun test_landingUiState_whenRepositoryIsError_uiStateIsError() = runBlocking {
+        // given
+        every { repository.getSearchLandingData() } returns flowOf(
+            Resource.Error(
+                Exception("testException")
+            )
+        )
+
+        // when
+        val sut = createSut()
+        val (resultLoading, result) = sut.landingUiState.testResourceFlow()
+
+        // then
+        assertAllTrue(
+            resultLoading is SearchLandingUiState.Loading,
+            result is SearchLandingUiState.Error
+        )
+    }
+
+    @Test
+    fun test_search_whenRepositoryIsSuccess_queryUiStateIsSuccess() = runTest {
+        // given
+        dispatcherProvider = TestDispatcherProvider(StandardTestDispatcher(testScheduler))
+        val query = "test"
+        every { repository.submitQuery(query) } returns flowOf(
+            Resource.Success(
+                SearchModel()
+            )
+        )
+
+        // when
+        val sut = createSut()
+        sut.search(query)
+        advanceUntilIdle()
+
+        // then
+        val result = sut.queryUiState.first()
+        assert(result is SearchUiState.Success)
+    }
+
+    @Test
+    fun test_search_whenRepositoryIsError_queryUiStateIsError() = runTest {
+        // given
+        dispatcherProvider = TestDispatcherProvider(StandardTestDispatcher(testScheduler))
+        val query = "test"
+        every { repository.submitQuery(query) } returns flowOf(
+            Resource.Error(
+                Exception("testException")
+            )
+        )
+
+        // when
+        val sut = createSut()
+        sut.search(query)
+        advanceUntilIdle()
+
+        // then
+        val result = sut.queryUiState.first()
+        assert(result is SearchUiState.Error)
+    }
+
+    @Test
+    fun test_filter_whenRepositoryIsSuccess_filterUiStateIsSuccess() = runTest {
+        // given
+        dispatcherProvider = TestDispatcherProvider(StandardTestDispatcher(testScheduler))
+        every { repository.submitFilter(any(), any()) } returns flowOf(
+            Resource.Success(
+                MainModel(listOf())
+            )
+        )
+
+        // when
+        val sut = createSut()
+        sut.filter(SearchFilterItem.INGREDIENTS, listOf())
+        advanceUntilIdle()
+
+        // then
+        val result = sut.filterUiState.first()
+        assert(result is FilterUiState.Success)
+    }
+
+    @Test
+    fun test_filter_whenRepositoryIsError_filterUiStateIsError() = runTest {
+        // given
+        dispatcherProvider = TestDispatcherProvider(StandardTestDispatcher(testScheduler))
+        every { repository.submitFilter(any(), any()) } returns flowOf(
+            Resource.Error(
+                Exception("testException")
+            )
+        )
+
+        // when
+        val sut = createSut()
+        sut.filter(SearchFilterItem.INGREDIENTS, listOf())
+        advanceUntilIdle()
+
+        // then
+        val result = sut.filterUiState.first()
+        assert(result is FilterUiState.Error)
+    }
+
+    private fun createSut() = SearchViewModel(repository, dispatcherProvider)
+}

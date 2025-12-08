@@ -3,6 +3,8 @@ package com.zioanacleto.speakeazy.data.api
 import com.zioanacleto.speakeazy.BuildConfig
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.engine.HttpClientEngine
+import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.cache.HttpCache
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -24,9 +26,11 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import java.security.MessageDigest
 
-class ApiClientImpl {
+class ApiClientImpl(
+    engine: HttpClientEngine = CIO.create()
+) {
 
-    private val _httpClient = HttpClient {
+    private val _httpClient = HttpClient(engine) {
         install(ContentNegotiation) {
             json(
                 Json {
@@ -51,10 +55,13 @@ class ApiClientImpl {
         isCached: Boolean = false
     ): T {
         return httpClient
-            .get(url){
+            .get(url) {
                 headers {
-                    if(isCached)
-                        append(HttpHeaders.CacheControl, CacheControl.MaxAge(3600).toString())
+                    if (isCached)
+                        append(
+                            HttpHeaders.CacheControl,
+                            CacheControl.MaxAge(CACHE_MAX_AGE).toString()
+                        )
                     append(HttpHeaders.Authorization, createAuthorizationHeader())
                 }
             }.body()
@@ -81,7 +88,7 @@ class ApiClientImpl {
             contentType(ContentType.Application.Json)
             setBody(Json.encodeToString(body))
             timeout {
-                requestTimeoutMillis = 45*1000
+                requestTimeoutMillis = REQUEST_TIMEOUT
             }
         }.body()
     }
@@ -94,5 +101,10 @@ class ApiClientImpl {
     private fun String.hashToken(): String {
         val bytes = MessageDigest.getInstance("SHA-256").digest(this.toByteArray())
         return bytes.joinToString("") { "%02x".format(it) }
+    }
+
+    companion object {
+        const val CACHE_MAX_AGE = 3600
+        const val REQUEST_TIMEOUT = 45_000L
     }
 }
