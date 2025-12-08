@@ -1,6 +1,5 @@
 package com.zioanacleto.speakeazy.ui.presentation.user.presentation
 
-import androidx.lifecycle.viewModelScope
 import com.google.firebase.Firebase
 import com.google.firebase.auth.ActionCodeSettings
 import com.google.firebase.auth.actionCodeSettings
@@ -85,7 +84,7 @@ class UserViewModel(
     }
 
     fun updateUserWithLanguage(userModel: UserModel) =
-        viewModelScope.launch(dispatcherProvider.io()) {
+        coroutineScope.launch(dispatcherProvider.io()) {
             repository.updateUser(userModel)
         }
 
@@ -113,7 +112,7 @@ class UserViewModel(
     }
 
     fun logoutUser() {
-        viewModelScope.launch(dispatcherProvider.io()) {
+        coroutineScope.launch(dispatcherProvider.io()) {
             repository.deleteUser(
                 UserModel(
                     email = Firebase.auth.currentUser?.email.default()

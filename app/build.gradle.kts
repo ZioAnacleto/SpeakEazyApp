@@ -1,5 +1,9 @@
+import org.w3c.dom.Document
+import org.xml.sax.InputSource
 import java.io.FileInputStream
+import java.io.StringReader
 import java.util.Properties
+import javax.xml.parsers.DocumentBuilderFactory
 
 plugins {
     kotlin("plugin.serialization").version(libs.versions.kotlin.serialization.get())
@@ -132,6 +136,7 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
 }
 
+// generating JaCoCo report for code coverage
 tasks.register<JacocoReport>("jacocoTestReport") {
     dependsOn("testDebugUnitTest")
 
@@ -144,32 +149,94 @@ tasks.register<JacocoReport>("jacocoTestReport") {
         "**/R.class",
         "**/R$*.class",
         "**/BuildConfig.*",
-        "**/AndroidManifest.*",
-        "**/*Activity.**",
-        "**/**Screen**.**",
+        "**/Manifest*.*",
+        "**/*Activity.*",
+        "**/*Screen*.*",
         "**/di/**",
         "**/theme/**",
         "**/components/**",
         "**/navigation/**",
-        "**/ApiClientImpl.**",
+        "**/ApiClientImpl.kt",
         "**/database/**",
         "**/domain/**"
     )
 
-    val javaClasses = fileTree("${buildDir}/intermediates/javac/debug/classes") {
+    val classDirectoriesTree = fileTree("$buildDir") {
+        include(
+            "intermediates/javac/debug/classes/**",
+            "tmp/kotlin-classes/debug/**"
+        )
         exclude(excludes)
     }
 
-    val kotlinClasses = fileTree("${buildDir}/tmp/kotlin-classes/debug") {
-        exclude(excludes)
-    }
+    classDirectories.setFrom(classDirectoriesTree)
 
-    classDirectories.setFrom(files(javaClasses, kotlinClasses))
-
-    sourceDirectories.setFrom(files("$projectDir/src/main/java"))
-    executionData.setFrom(
-        file("$buildDir/jacoco/testDebugUnitTest.exec")
+    sourceDirectories.setFrom(
+        files(
+            "$projectDir/src/main/java"
+        )
     )
+
+    executionData.setFrom(file("$buildDir/jacoco/testDebugUnitTest.exec"))
+}
+
+// calculates code coverage in percentage
+// useful when interested in code coverage percentage locally
+tasks.register("computeCoverage") {
+    group = "verification"
+    description = "Computes code coverage reading XML report from JaCoCo"
+
+    val coverageType = "LINE" // in case we need to change it
+
+    doLast {
+        val reportFile = file("build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml")
+
+        require(reportFile.exists()) {
+            "Report not found: $reportFile"
+        }
+
+        // Parser XML
+        val factory = DocumentBuilderFactory.newInstance().apply {
+            isValidating = false
+            setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false)
+        }
+
+        val builder = factory.newDocumentBuilder().apply {
+            setEntityResolver { _, _ ->
+                InputSource(StringReader(""))
+            }
+        }
+
+        val doc: Document = builder.parse(reportFile)
+
+        // Estrae i counter globali (si trovano alla fine)
+        val counters = doc.getElementsByTagName("counter")
+
+        var missedLines = 0
+        var coveredLines = 0
+
+        for (i in 0 until counters.length) {
+            val node = counters.item(i)
+            val type = node.attributes.getNamedItem("type")?.nodeValue
+            if (type == coverageType) {
+                val covered = node.attributes.getNamedItem("covered").nodeValue.toInt()
+                val missed = node.attributes.getNamedItem("missed").nodeValue.toInt()
+
+                coveredLines = covered
+                missedLines = missed
+            }
+        }
+
+        val total = coveredLines + missedLines
+        val coverage = if (total == 0) 0 else (100 * coveredLines / total)
+
+        println("------ CODE COVERAGE ------")
+        println("Lines covered: $coveredLines")
+        println("Lines missed : $missedLines")
+        println("Total lines  : $total")
+        println("Coverage     : $coverage%")
+        println("---------------------------")
+    }
 }
 
 private fun getLocalPropertiesVariable(variableName: String): String {

@@ -1,6 +1,7 @@
 package com.zioanacleto.speakeazy.ui.presentation.main.data.datamappers
 
 import com.zioanacleto.speakeazy.assertAllTrue
+import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.BannerDTO
 import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.HomeSectionDTO
 import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.HomeSectionResponseDTO
 import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.MainSpeakEazyBEIngredientDTO
@@ -8,13 +9,9 @@ import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.MainSpeakEazyBEIn
 import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.MainSpeakEazyBEResponseDTO
 import io.mockk.clearAllMocks
 import org.junit.After
-import org.junit.Before
 import org.junit.Test
 
 class HomeDataMapperTest {
-
-    @Before
-    fun setUp() {}
 
     @After
     fun tearDown() {
@@ -147,6 +144,27 @@ class HomeDataMapperTest {
                         username = ""
                     )
                 )
+            )
+        ),
+        banner = BannerDTO(
+            position = "1",
+            name = "testBannerName",
+            cta = "testCta",
+            cocktailInfo = MainSpeakEazyBEResponseDTO(
+                id = "1",
+                name = "testCocktailName",
+                category = "testCategory",
+                instructions = "testInstructions",
+                instructionsIt = "testInstructionsIt",
+                glass = "testGlass",
+                isAlcoholic = true,
+                imageLink = "testImageLink",
+                type = "testType",
+                method = method,
+                ingredients = ingredients,
+                visualizations = 1,
+                userId = "",
+                username = ""
             )
         )
     )

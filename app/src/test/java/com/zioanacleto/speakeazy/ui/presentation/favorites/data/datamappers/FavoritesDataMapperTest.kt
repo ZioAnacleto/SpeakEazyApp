@@ -53,7 +53,6 @@ class FavoritesDataMapperTest {
             result.favorites.first().type == "testType",
             result.favorites.first().method == "testMethod & test"
         )
-
     }
 
     private fun createSut() = FavoritesDataMapper()
