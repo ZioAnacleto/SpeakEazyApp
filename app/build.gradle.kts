@@ -32,6 +32,7 @@ android {
         val apiToken = getLocalPropertiesVariable("apiToken")
         buildConfigField("String", "API_KEY", apiToken)
 
+        //noinspection WrongGradleMethod
         ksp {
             arg("room.schemaLocation", "$projectDir/schemas")
         }
@@ -60,6 +61,12 @@ android {
 
     testOptions {
         unitTests.isIncludeAndroidResources = true
+    }
+
+    configurations {
+        testImplementation {
+            exclude(group = "io.github.sceneview")
+        }
     }
 }
 
@@ -162,7 +169,9 @@ tasks.register<JacocoReport>("jacocoTestReport") {
         "**/ApiClientImpl.kt",
         "**/database/**",
         "**/domain/**",
-        "**/steps/**"
+        "**/steps/**",
+        "**/Cocktail3DScene.kt",
+        "**/Cocktail3DSceneControllerImpl.kt"
     )
 
     val classDirectoriesTree = fileTree("$buildDir") {
