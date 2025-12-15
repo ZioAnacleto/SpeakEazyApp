@@ -6,6 +6,7 @@ import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.HomeSectionDTO
 import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.HomeSectionResponseDTO
 import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.MainSpeakEazyBEIngredientDTO
 import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.MainSpeakEazyBEIngredientsListDTO
+import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.MainSpeakEazyBEInstructionDTO
 import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.MainSpeakEazyBEResponseDTO
 import io.mockk.clearAllMocks
 import org.junit.After
@@ -35,7 +36,7 @@ class HomeDataMapperTest {
             result.sections.first().cocktails.first().id == "1",
             result.sections.first().cocktails.first().name == "testCocktailName",
             result.sections.first().cocktails.first().category == "testCategory",
-            result.sections.first().cocktails.first().instructions == "testInstructionsIt",
+            result.sections.first().cocktails.first().instructions.first().instruction == "testInstructionsIt",
             result.sections.first().cocktails.first().glass == "testGlass",
             result.sections.first().cocktails.first().isAlcoholic,
             result.sections.first().cocktails.first().imageUrl == "testImageLink",
@@ -131,8 +132,18 @@ class HomeDataMapperTest {
                         id = "1",
                         name = "testCocktailName",
                         category = "testCategory",
-                        instructions = "testInstructions",
-                        instructionsIt = "testInstructionsIt",
+                        instructions = listOf(
+                            MainSpeakEazyBEInstructionDTO(
+                                type = "testType",
+                                instruction = "testInstructions"
+                            )
+                        ),
+                        instructionsIt = listOf(
+                            MainSpeakEazyBEInstructionDTO(
+                                type = "testType",
+                                instruction = "testInstructionsIt"
+                            )
+                        ),
                         glass = "testGlass",
                         isAlcoholic = true,
                         imageLink = "testImageLink",
@@ -154,8 +165,18 @@ class HomeDataMapperTest {
                 id = "1",
                 name = "testCocktailName",
                 category = "testCategory",
-                instructions = "testInstructions",
-                instructionsIt = "testInstructionsIt",
+                instructions = listOf(
+                    MainSpeakEazyBEInstructionDTO(
+                        type = "testType",
+                        instruction = "testInstructions"
+                    )
+                ),
+                instructionsIt = listOf(
+                    MainSpeakEazyBEInstructionDTO(
+                        type = "testType",
+                        instruction = "testInstructionsIt"
+                    )
+                ),
                 glass = "testGlass",
                 isAlcoholic = true,
                 imageLink = "testImageLink",

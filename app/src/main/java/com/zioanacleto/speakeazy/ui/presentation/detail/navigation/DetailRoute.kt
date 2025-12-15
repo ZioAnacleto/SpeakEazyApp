@@ -6,6 +6,7 @@ import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.zioanacleto.speakeazy.ui.presentation.detail.presentation.DetailScreen
+import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.InstructionModel
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -22,12 +23,14 @@ fun NavController.navigateToDetail(
 
 fun NavGraphBuilder.detailSection(
     showTopBar: Boolean,
-    onBackButtonClick: () -> Unit
+    onBackButtonClick: () -> Unit,
+    onInstructionsClick: (List<InstructionModel>) -> Unit
 ) {
     composable<DetailRoute> { entry ->
         val cocktailId = entry.toRoute<DetailRoute>().id
         DetailScreen(
             cocktailId = cocktailId,
+            onInstructionsClick = onInstructionsClick,
             onBackButtonClick = onBackButtonClick
         )
     }

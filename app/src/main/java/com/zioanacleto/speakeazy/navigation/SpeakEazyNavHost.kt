@@ -11,6 +11,8 @@ import com.zioanacleto.speakeazy.ui.presentation.create.navigation.createSection
 import com.zioanacleto.speakeazy.ui.presentation.detail.navigation.detailSection
 import com.zioanacleto.speakeazy.ui.presentation.detail.navigation.navigateToDetail
 import com.zioanacleto.speakeazy.ui.presentation.favorites.navigation.favoritesSection
+import com.zioanacleto.speakeazy.ui.presentation.instructions.navigation.instructionsSection
+import com.zioanacleto.speakeazy.ui.presentation.instructions.navigation.navigateToInstructions
 import com.zioanacleto.speakeazy.ui.presentation.main.navigation.MainBaseRoute
 import com.zioanacleto.speakeazy.ui.presentation.main.navigation.mainSection
 import com.zioanacleto.speakeazy.ui.presentation.search.navigation.searchSection
@@ -30,20 +32,19 @@ fun SpeakEazyNavHost(
     ) {
         mainSection(
             onCocktailClick = navController::navigateToDetail
-        ) {
-            detailSection(
-                showTopBar = false,
-                onBackButtonClick = navController::popBackStack
-            )
-        }
+        )
+        detailSection(
+            showTopBar = false,
+            onInstructionsClick = navController::navigateToInstructions,
+            onBackButtonClick = navController::popBackStack
+        )
+        instructionsSection(
+            navController = navController,
+            onBackButtonClick = navController::popBackStack
+        )
         favoritesSection(
             onCocktailClick = navController::navigateToDetail
-        ) {
-            detailSection(
-                showTopBar = false,
-                onBackButtonClick = navController::popBackStack
-            )
-        }
+        )
         searchSection()
         userSection(
             onBackButton = navController::popBackStack

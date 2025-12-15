@@ -2,6 +2,7 @@ package com.zioanacleto.speakeazy.ui.presentation.main.data.datamappers
 
 import com.zioanacleto.speakeazy.assertAllTrue
 import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.MainSpeakEazyBEIngredientsListDTO
+import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.MainSpeakEazyBEInstructionDTO
 import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.MainSpeakEazyBEListResponseDTO
 import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.MainSpeakEazyBEResponseDTO
 import io.mockk.clearAllMocks
@@ -64,8 +65,18 @@ class MainSpeakEazyBEListDataMapperTest {
                     id = "1",
                     name = "testName",
                     category = "testCategory",
-                    instructions = "testInstructions",
-                    instructionsIt = "testInstructionsIt",
+                    instructions = listOf(
+                        MainSpeakEazyBEInstructionDTO(
+                            type = "testType",
+                            instruction = "testInstructions"
+                        )
+                    ),
+                    instructionsIt = listOf(
+                        MainSpeakEazyBEInstructionDTO(
+                            type = "testType",
+                            instruction = "testInstructionsIt"
+                        )
+                    ),
                     glass = "testGlass",
                     isAlcoholic = true,
                     imageLink = "testImageLink",

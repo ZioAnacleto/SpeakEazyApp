@@ -2,16 +2,16 @@ package com.zioanacleto.speakeazy.ui.presentation.detail.presentation
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -30,19 +29,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.BottomSheetScaffold
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.FloatingActionButtonDefaults
 import androidx.compose.material.Icon
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -51,15 +45,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
-import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
-import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInWindow
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
@@ -71,26 +64,32 @@ import com.zioanacleto.speakeazy.ui.presentation.components.CocktailDetailInform
 import com.zioanacleto.speakeazy.ui.presentation.components.CocktailLoadingAnimation
 import com.zioanacleto.speakeazy.ui.presentation.components.GradientCircularShadowBox
 import com.zioanacleto.speakeazy.ui.presentation.components.IngredientView
+import com.zioanacleto.speakeazy.ui.presentation.components.bottomSheetStyle
 import com.zioanacleto.speakeazy.ui.presentation.components.parallaxLayoutModifier
 import com.zioanacleto.speakeazy.ui.presentation.components.speakEazyGradientBackground
 import com.zioanacleto.speakeazy.ui.presentation.components.withAlpha
 import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.DrinkModel
 import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.IngredientModel
+import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.InstructionModel
+import com.zioanacleto.speakeazy.ui.theme.BottomBarBackground
+import com.zioanacleto.speakeazy.ui.theme.YellowFFE271
 import org.koin.androidx.compose.getViewModel
 
 @Composable
 fun DetailScreen(
     modifier: Modifier = Modifier,
     cocktailId: String,
+    onInstructionsClick: (List<InstructionModel>) -> Unit,
     onBackButtonClick: () -> Unit
 ) {
-    DetailScreenContent(modifier, cocktailId, onBackButtonClick)
+    DetailScreenContent(modifier, cocktailId, onInstructionsClick, onBackButtonClick)
 }
 
 @Composable
 private fun DetailScreenContent(
     modifier: Modifier = Modifier,
     cocktailId: String,
+    onInstructionsClick: (List<InstructionModel>) -> Unit,
     onBackButton: () -> Unit
 ) {
     var startAnimation by remember { mutableStateOf(false) }
@@ -113,6 +112,7 @@ private fun DetailScreenContent(
                 startAnimation = startAnimation,
                 fadeIn = fadeIn,
                 onBackButton = onBackButton,
+                onInstructionsClick = onInstructionsClick,
                 onAddFavoriteClick = viewModel::setFavoriteCocktail,
                 onDeleteFavoriteClick = viewModel::deleteFavoriteCocktail
             )
@@ -149,11 +149,20 @@ private fun DetailScreenSuccessView(
     startAnimation: Boolean,
     fadeIn: Float,
     onBackButton: () -> Unit,
+    onInstructionsClick: (List<InstructionModel>) -> Unit,
     onAddFavoriteClick: (String, String) -> Unit,
     onDeleteFavoriteClick: (String) -> Unit
 ) {
     val isFavorite = remember { mutableStateOf(cocktail.favorite) }
     val scrollState = rememberScrollState()
+    var titleY by remember { mutableFloatStateOf(0f) }
+    var showCollapsedToolbar by remember { mutableStateOf(false) }
+    val toolbarHeightPx = with(LocalDensity.current) { 60.dp.toPx() }
+
+    LaunchedEffect(scrollState.value, titleY) {
+        showCollapsedToolbar = titleY <= toolbarHeightPx
+    }
+
 
     Box(
         modifier = Modifier
@@ -181,18 +190,16 @@ private fun DetailScreenSuccessView(
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .graphicsLayer {
-                            translationY = (-16).dp.toPx()
-                        }
-                        .clip(
-                            RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
-                        )
+                        .bottomSheetStyle()
                         .speakEazyGradientBackground(),
                     horizontalAlignment = Alignment.Start
                 ) {
                     Text(
                         modifier = Modifier
-                            .padding(top = 26.dp, start = 16.dp),
+                            .padding(top = 26.dp, start = 16.dp)
+                            .onGloballyPositioned { coords ->
+                                titleY = coords.positionInWindow().y
+                            },
                         fontSize = TextUnit(32f, TextUnitType.Sp),
                         color = Color.White,
                         text = cocktail.name
@@ -237,25 +244,65 @@ private fun DetailScreenSuccessView(
                         IngredientView(ingredient)
                     }
 
+                    // todo: think about something else
+                    Text(
+                        modifier = Modifier
+                            .padding(start = 16.dp, top = 30.dp)
+                            .border(2.dp, YellowFFE271, RoundedCornerShape(8.dp))
+                            .padding(8.dp)
+                            .clickable { onInstructionsClick(cocktail.instructions) },
+                        text = "Go to instructions",
+                        color = YellowFFE271,
+                        fontSize = TextUnit(18f, TextUnitType.Sp)
+                    )
+
                     Spacer(modifier = Modifier.height(80.dp))
                 }
             }
         }
 
-        DetailScreenTopBar(
-            modifier = Modifier
-                .align(Alignment.TopCenter),
-            onBackButton = onBackButton,
-            isFavorite = isFavorite.value,
-            onFavoriteClicked = {
-                if (it)
-                    onDeleteFavoriteClick(cocktail.id)
-                else
-                    onAddFavoriteClick(cocktail.id, cocktail.name)
+        AnimatedVisibility(
+            visible = !showCollapsedToolbar,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            DetailScreenTopBar(
+                modifier = Modifier
+                    .align(Alignment.TopCenter),
+                onBackButton = onBackButton,
+                isFavorite = isFavorite.value,
+                onFavoriteClicked = {
+                    if (it)
+                        onDeleteFavoriteClick(cocktail.id)
+                    else
+                        onAddFavoriteClick(cocktail.id, cocktail.name)
 
-                isFavorite.value = !isFavorite.value
-            }
-        )
+                    isFavorite.value = !isFavorite.value
+                }
+            )
+        }
+
+        AnimatedVisibility(
+            visible = showCollapsedToolbar,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            DetailScreenCollapsedTopBar(
+                modifier = Modifier
+                    .align(Alignment.TopCenter),
+                title = cocktail.name,
+                onBackButton = onBackButton,
+                isFavorite = isFavorite.value,
+                onFavoriteClicked = {
+                    if (it)
+                        onDeleteFavoriteClick(cocktail.id)
+                    else
+                        onAddFavoriteClick(cocktail.id, cocktail.name)
+
+                    isFavorite.value = !isFavorite.value
+                }
+            )
+        }
     }
 }
 
@@ -341,31 +388,61 @@ private fun DetailScreenTopBar(
                 colorFilter = ColorFilter.tint(Color.White)
             )
         }
+    }
+}
 
-        /*FloatingActionButton(
+@Composable
+private fun DetailScreenCollapsedTopBar(
+    modifier: Modifier = Modifier,
+    title: String,
+    onBackButton: () -> Unit,
+    isFavorite: Boolean,
+    onFavoriteClicked: (Boolean) -> Unit
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(80.dp)
+            .clip(RoundedCornerShape(bottomEnd = 10.dp, bottomStart = 10.dp))
+            .background(BottomBarBackground), // todo: do you like it?
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        // buttons
+        Icon(
             modifier = Modifier
-                .padding(end = 16.dp, top = 40.dp)
-                .size(50.dp)
-                .clip(CircleShape),
-            backgroundColor = Color.Black.withAlpha(),
-            contentColor = Color.White,
-            onClick = onBackButton
-        ) {
-            val icon =
-                if (isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder
-            Image(
-                modifier = Modifier
-                    .clickable(
-                        interactionSource = interactionSource,
-                        indication = null
-                    ) {
-                        onFavoriteClicked(isFavorite)
-                    },
-                painter = rememberVectorPainter(icon),
-                contentDescription = "Favorite Button",
-                colorFilter = ColorFilter.tint(Color.White)
-            )
-        }*/
+                .padding(start = 16.dp, top = 45.dp)
+                .clickable { onBackButton() },
+            painter = rememberVectorPainter(Icons.AutoMirrored.Filled.ArrowBack),
+            contentDescription = "Back Button",
+            tint = Color.White
+        )
+
+        Text(
+            modifier = Modifier
+                .align(Alignment.Bottom)
+                .padding(bottom = 10.dp),
+            text = title,
+            color = Color.White,
+            fontSize = TextUnit(16f, TextUnitType.Sp)
+        )
+
+        val icon =
+            if (isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder
+        Image(
+            modifier = Modifier
+                .padding(end = 16.dp, top = 45.dp)
+                .clickable(
+                    interactionSource = interactionSource,
+                    indication = null
+                ) {
+                    onFavoriteClicked(isFavorite)
+                },
+            painter = rememberVectorPainter(icon),
+            contentDescription = "Favorite Button",
+            colorFilter = ColorFilter.tint(Color.White)
+        )
     }
 }
 
@@ -378,7 +455,12 @@ fun DetailScreen() {
             name = "Test Cocktail",
             category = "Test Category",
             imageUrl = "",
-            instructions = "Test Instructions",
+            instructions = listOf(
+                InstructionModel(
+                    type = "test",
+                    instruction = "Test Instructions"
+                )
+            ),
             glass = "Test Glass",
             type = "Test Type",
             method = "Test Method",
@@ -402,6 +484,7 @@ fun DetailScreen() {
         startAnimation = true,
         fadeIn = 1f,
         onBackButton = {},
+        onInstructionsClick = {},
         onAddFavoriteClick = { _, _ -> },
         onDeleteFavoriteClick = {}
     )

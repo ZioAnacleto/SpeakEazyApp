@@ -1,11 +1,12 @@
 package com.zioanacleto.speakeazy.ui.presentation.main.data.datamappers
 
-import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.MainModel
 import com.zioanacleto.buffa.datamappers.DataMapper
 import com.zioanacleto.buffa.default
 import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.MainResponseDTO
 import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.DrinkModel
 import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.IngredientModel
+import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.InstructionModel
+import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.MainModel
 
 class MainDataMapper : DataMapper<MainResponseDTO, MainModel> {
     override fun mapInto(input: MainResponseDTO): MainModel = MainModel(
@@ -14,7 +15,12 @@ class MainDataMapper : DataMapper<MainResponseDTO, MainModel> {
                 id = it?.idDrink.default(),
                 name = it?.strDrink.default(),
                 category = it?.strCategory.default(),
-                instructions = it?.strInstructionsIT.default(),
+                instructions = listOf(
+                    InstructionModel(
+                        type = "ingredient",
+                        instruction = it?.strInstructionsIT.default()
+                    )
+                ),
                 glass = it?.strGlass.default(),
                 imageUrl = it?.strImageSource.default(),
                 ingredients = it?.gatherAllIngredients()?.map { (ingredient, measure) ->
