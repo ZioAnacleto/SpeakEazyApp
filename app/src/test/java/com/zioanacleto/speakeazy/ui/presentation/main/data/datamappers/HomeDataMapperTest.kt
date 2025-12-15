@@ -36,7 +36,7 @@ class HomeDataMapperTest {
             result.sections.first().cocktails.first().id == "1",
             result.sections.first().cocktails.first().name == "testCocktailName",
             result.sections.first().cocktails.first().category == "testCategory",
-            result.sections.first().cocktails.first().instructions.first().instruction == "testInstructionsIt",
+            result.sections.first().cocktails.first().instructions.first().instruction == "testInstructions",
             result.sections.first().cocktails.first().glass == "testGlass",
             result.sections.first().cocktails.first().isAlcoholic,
             result.sections.first().cocktails.first().imageUrl == "testImageLink",

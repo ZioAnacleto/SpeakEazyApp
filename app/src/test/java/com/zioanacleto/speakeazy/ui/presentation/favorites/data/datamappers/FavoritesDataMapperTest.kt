@@ -1,6 +1,7 @@
 package com.zioanacleto.speakeazy.ui.presentation.favorites.data.datamappers
 
 import com.zioanacleto.speakeazy.assertAllTrue
+import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.MainSpeakEazyBEInstructionDTO
 import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.MainSpeakEazyBEListResponseDTO
 import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.MainSpeakEazyBEResponseDTO
 import io.mockk.clearAllMocks
@@ -23,8 +24,12 @@ class FavoritesDataMapperTest {
                     id = "1",
                     name = "testName",
                     category = "testCategory",
-                    instructions = listOf("testInstructions"),
-                    instructionsIt = listOf("testInstructionsIt"),
+                    instructions = listOf(
+                        MainSpeakEazyBEInstructionDTO(type = "testType", "testInstructions")
+                    ),
+                    instructionsIt = listOf(
+                        MainSpeakEazyBEInstructionDTO(type = "testType", "testInstructionsIt")
+                    ),
                     glass = "testGlass",
                     isAlcoholic = true,
                     imageLink = "testImageLink",
