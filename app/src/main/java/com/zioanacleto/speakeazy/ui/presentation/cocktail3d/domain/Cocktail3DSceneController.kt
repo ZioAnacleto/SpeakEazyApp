@@ -1,6 +1,6 @@
-package com.zioanacleto.speakeazy.ui.presentation.cocktail3d
+package com.zioanacleto.speakeazy.ui.presentation.cocktail3d.domain
 
-import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.model.CocktailScene
+import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.domain.model.CocktailScene
 import kotlinx.coroutines.flow.StateFlow
 
 interface Cocktail3DSceneController {

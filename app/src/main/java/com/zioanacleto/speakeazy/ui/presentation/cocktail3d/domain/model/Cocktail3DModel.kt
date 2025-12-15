@@ -1,4 +1,4 @@
-package com.zioanacleto.speakeazy.ui.presentation.cocktail3d.model
+package com.zioanacleto.speakeazy.ui.presentation.cocktail3d.domain.model
 
 enum class GlassType {
     HIGHBALL,

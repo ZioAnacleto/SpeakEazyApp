@@ -6,10 +6,10 @@ import com.zioanacleto.buffa.datamappers.DataMapper
 import com.zioanacleto.speakeazy.MainActivityViewModel
 import com.zioanacleto.speakeazy.data.api.ApiClientImpl
 import com.zioanacleto.speakeazy.domain.models.DataContext
-import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.Cocktail3DSceneController
 import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.Cocktail3DSceneControllerImpl
-import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.CocktailSceneDataMapper
-import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.model.CocktailScene
+import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.data.CocktailSceneDataMapper
+import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.domain.model.Cocktail3DSceneController
+import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.domain.model.CocktailScene
 import com.zioanacleto.speakeazy.ui.presentation.create.data.datamappers.CreateCocktailDataMapper
 import com.zioanacleto.speakeazy.ui.presentation.create.data.datasources.CreateCocktailDataSource
 import com.zioanacleto.speakeazy.ui.presentation.create.data.datasources.CreateCocktailLocalDataSource

@@ -17,7 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.zioanacleto.buffa.logging.AnacletoLogger
-import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.model.CocktailScene
+import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.domain.Cocktail3DSceneController
+import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.domain.model.CocktailScene
 import io.github.sceneview.Scene
 import io.github.sceneview.animation.Transition.animateRotation
 import io.github.sceneview.math.Position
