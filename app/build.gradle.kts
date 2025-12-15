@@ -166,12 +166,12 @@ tasks.register<JacocoReport>("jacocoTestReport") {
         "**/theme/**",
         "**/components/**",
         "**/navigation/**",
-        "**/ApiClientImpl.kt",
+        "**/ApiClientImpl",
         "**/database/**",
         "**/domain/**",
         "**/steps/**",
-        "**/Cocktail3DScene.kt",
-        "**/Cocktail3DSceneControllerImpl.kt"
+        "**/Cocktail3DScene**",
+        "**/Cocktail3DSceneControllerImpl"
     )
 
     val classDirectoriesTree = fileTree("$buildDir") {
