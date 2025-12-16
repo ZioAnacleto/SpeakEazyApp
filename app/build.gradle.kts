@@ -170,7 +170,7 @@ tasks.register<JacocoReport>("jacocoTestReport") {
         "**/database/**",
         "**/domain/**",
         "**/steps/**",
-        "**/Cocktail3DScene**",
+        "**/Cocktail3DSceneKt",
         "**/Cocktail3DSceneControllerImpl"
     )
 
