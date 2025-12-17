@@ -3,10 +3,17 @@ package com.zioanacleto.speakeazy.ui.presentation.create.data.datamappers
 import com.zioanacleto.speakeazy.assertAllTrue
 import com.zioanacleto.speakeazy.ui.presentation.components.CreateWizardStepData
 import com.zioanacleto.speakeazy.ui.presentation.create.domain.model.CreateCocktailModel
+import io.mockk.clearAllMocks
+import org.junit.After
 import org.junit.Test
 import java.util.Date
 
 class CreateCocktailDataMapperTest {
+
+    @After
+    fun tearDown() {
+        clearAllMocks()
+    }
 
     @Test
     fun test_mapInto() {
