@@ -6,11 +6,7 @@ import com.zioanacleto.speakeazy.createApiClientWithResponse
 import com.zioanacleto.speakeazy.data.api.ApiClientImpl
 import com.zioanacleto.speakeazy.ui.presentation.detail.data.dto.IngredientsListDTO
 import com.zioanacleto.speakeazy.ui.presentation.detail.domain.model.IngredientsModel
-import io.ktor.client.engine.mock.MockEngine
-import io.ktor.client.engine.mock.respond
-import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
-import io.ktor.http.headersOf
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
@@ -40,7 +36,7 @@ class IngredientNetworkDataSourceTest {
         // given
         apiClient = createApiClientWithResponse(
             status = HttpStatusCode.OK,
-            response = """{"ingredients": []}"""
+            response = "{\"ingredients\": []}"
         )
 
         every {
@@ -81,7 +77,7 @@ class IngredientNetworkDataSourceTest {
         // given
         apiClient = createApiClientWithResponse(
             status = HttpStatusCode.OK,
-            response = """{"ingredients": []}"""
+            response = "{\"ingredients\": []}"
         )
 
         every {
