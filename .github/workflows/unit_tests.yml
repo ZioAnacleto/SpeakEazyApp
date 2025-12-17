@@ -93,7 +93,15 @@ jobs:
 
       # Run all unit tests
       - name: Run unit tests
-        run: ./gradlew testDebugUnitTest
+        run: |
+          ( while sleep 30; do echo "⏳ Tests running..."; done ) &
+          KEEPALIVE_PID=$!
+          ./gradlew testDebugUnitTest \
+            --info \
+            --stacktrace \
+            --no-daemon \
+            --max-workers=1
+          kill $KEEPALIVE_PID
 
       # Generate Jacoco Report for code coverage
       - name: Generate JaCoCo report
