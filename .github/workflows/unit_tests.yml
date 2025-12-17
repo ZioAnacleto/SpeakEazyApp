@@ -97,7 +97,6 @@ jobs:
           ( while sleep 30; do echo "⏳ Tests running..."; done ) &
           KEEPALIVE_PID=$!
           ./gradlew testDebugUnitTest \
-            --info \
             --stacktrace \
             --no-daemon \
             --max-workers=1
