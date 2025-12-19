@@ -6,20 +6,27 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.composable
+import com.zioanacleto.buffa.default
 import com.zioanacleto.speakeazy.ui.presentation.instructions.InstructionsScreen
 import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.InstructionModel
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
+private const val KEY_GLASS_TYPE = "glassType"
 private const val KEY_INSTRUCTIONS = "instructions"
 
 @Serializable
 data object InstructionsRoute
 
 fun NavController.navigateToInstructions(
+    glassType: String,
     instructions: List<InstructionModel>,
     navOptions: NavOptionsBuilder.() -> Unit = {}
 ) {
+    currentBackStackEntry?.savedStateHandle?.set(
+        KEY_GLASS_TYPE,
+        glassType
+    )
     // Convert the list of InstructionModel to a JSON string to be passed as parameter
     val json = Json.encodeToString(instructions)
     currentBackStackEntry?.savedStateHandle?.set(
@@ -39,11 +46,14 @@ fun NavGraphBuilder.instructionsSection(
         enterTransition = { fadeIn() },
         exitTransition = { fadeOut() }
     ) {
+        val glassType =
+            navController.previousBackStackEntry?.savedStateHandle?.get<String>(KEY_GLASS_TYPE)
         val instructions =
             navController.previousBackStackEntry?.savedStateHandle?.get<String>(KEY_INSTRUCTIONS)
         instructions?.let {
             val parsedInstructions = Json.decodeFromString<List<InstructionModel>>(it)
             InstructionsScreen(
+                glassType = glassType.default(),
                 instructions = parsedInstructions,
                 onBackButton = onBackButtonClick
             )

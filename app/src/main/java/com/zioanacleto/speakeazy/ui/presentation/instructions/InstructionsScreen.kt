@@ -15,7 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -38,20 +38,24 @@ import org.koin.androidx.compose.get
 @Composable
 fun InstructionsScreen(
     modifier: Modifier = Modifier,
+    glassType: String,
     instructions: List<InstructionModel>,
     onBackButton: () -> Unit
 ) {
-    InstructionsScreenContent(modifier, instructions, onBackButton = onBackButton)
+    InstructionsScreenContent(modifier, glassType, instructions, onBackButton = onBackButton)
 }
 
 @Composable
 private fun InstructionsScreenContent(
     modifier: Modifier = Modifier,
+    glassType: String,
     instructions: List<InstructionModel>,
     controller: Cocktail3DSceneController = get(),
     onBackButton: () -> Unit
 ) {
     var startAnimation by remember { mutableStateOf(false) }
+
+    controller.updateCurrentModel(glassType to "red")
 
     Box(
         modifier = Modifier

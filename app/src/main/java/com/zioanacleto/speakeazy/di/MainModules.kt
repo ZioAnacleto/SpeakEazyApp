@@ -7,8 +7,11 @@ import com.zioanacleto.speakeazy.MainActivityViewModel
 import com.zioanacleto.speakeazy.data.api.ApiClientImpl
 import com.zioanacleto.speakeazy.domain.models.DataContext
 import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.Cocktail3DSceneControllerImpl
+import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.data.Cocktail3DModelDataMapper
+import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.data.CocktailInfo
 import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.data.CocktailSceneDataMapper
 import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.domain.Cocktail3DSceneController
+import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.domain.model.Cocktail3DModel
 import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.domain.model.CocktailScene
 import com.zioanacleto.speakeazy.ui.presentation.create.data.datamappers.CreateCocktailDataMapper
 import com.zioanacleto.speakeazy.ui.presentation.create.data.datasources.CreateCocktailDataSource
@@ -88,6 +91,7 @@ val singletonModule = module {
     single<Cocktail3DSceneController> {
         Cocktail3DSceneControllerImpl(
             get(),
+            get(getNamedClass<Cocktail3DModelDataMapper>()),
             get(getNamedClass<CocktailSceneDataMapper>())
         )
     }
@@ -205,6 +209,7 @@ val dataMapperModule = module {
     factoryNamedClass<DataMapper<TagsResponseDTO, TagsModel>, TagsDataMapper>()
     factoryNamedClass<DataMapper<CreateCocktailModel, CreateCocktailRequestDTO>, CreateCocktailDataMapper>()
     factoryNamedClass<DataMapper<String, CocktailScene>, CocktailSceneDataMapper>()
+    factoryNamedClass<DataMapper<CocktailInfo, Cocktail3DModel>, Cocktail3DModelDataMapper>()
 }
 
 // Repositories

@@ -79,7 +79,7 @@ import org.koin.androidx.compose.getViewModel
 fun DetailScreen(
     modifier: Modifier = Modifier,
     cocktailId: String,
-    onInstructionsClick: (List<InstructionModel>) -> Unit,
+    onInstructionsClick: (String, List<InstructionModel>) -> Unit,
     onBackButtonClick: () -> Unit
 ) {
     DetailScreenContent(modifier, cocktailId, onInstructionsClick, onBackButtonClick)
@@ -89,7 +89,7 @@ fun DetailScreen(
 private fun DetailScreenContent(
     modifier: Modifier = Modifier,
     cocktailId: String,
-    onInstructionsClick: (List<InstructionModel>) -> Unit,
+    onInstructionsClick: (String, List<InstructionModel>) -> Unit,
     onBackButton: () -> Unit
 ) {
     var startAnimation by remember { mutableStateOf(false) }
@@ -149,7 +149,7 @@ private fun DetailScreenSuccessView(
     startAnimation: Boolean,
     fadeIn: Float,
     onBackButton: () -> Unit,
-    onInstructionsClick: (List<InstructionModel>) -> Unit,
+    onInstructionsClick: (String, List<InstructionModel>) -> Unit,
     onAddFavoriteClick: (String, String) -> Unit,
     onDeleteFavoriteClick: (String) -> Unit
 ) {
@@ -250,7 +250,7 @@ private fun DetailScreenSuccessView(
                             .padding(start = 16.dp, top = 30.dp)
                             .border(2.dp, YellowFFE271, RoundedCornerShape(8.dp))
                             .padding(8.dp)
-                            .clickable { onInstructionsClick(cocktail.instructions) },
+                            .clickable { onInstructionsClick(cocktail.glass, cocktail.instructions) },
                         text = "Go to instructions",
                         color = YellowFFE271,
                         fontSize = TextUnit(18f, TextUnitType.Sp)
@@ -484,7 +484,7 @@ fun DetailScreen() {
         startAnimation = true,
         fadeIn = 1f,
         onBackButton = {},
-        onInstructionsClick = {},
+        onInstructionsClick = { _, _, -> },
         onAddFavoriteClick = { _, _ -> },
         onDeleteFavoriteClick = {}
     )

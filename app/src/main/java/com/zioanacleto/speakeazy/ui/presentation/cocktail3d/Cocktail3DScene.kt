@@ -76,6 +76,7 @@ fun Cocktail3DScene(
             )
         )
 
+        val currentModel by controller.currentModel.collectAsState()
         val currentScene by controller.currentScene.collectAsState()
 
         // Serve un side effect quando cambia currentScene
@@ -96,7 +97,7 @@ fun Cocktail3DScene(
                 rememberNode {
                     ModelNode(
                         modelInstance = modelLoader.createModelInstance(
-                            assetFileLocation = "models/cocktail_scene.glb"
+                            assetFileLocation = "models/${currentModel.sceneModelName}"
                         ),
                         scaleToUnits = 0.85f
                     )
