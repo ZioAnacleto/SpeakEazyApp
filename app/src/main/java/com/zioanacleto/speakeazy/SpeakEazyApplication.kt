@@ -5,6 +5,7 @@ import android.content.Context
 import com.zioanacleto.buffa.logging.AnacletoLogger
 import com.zioanacleto.speakeazy.di.dataMapperModule
 import com.zioanacleto.speakeazy.di.dataSourceModule
+import com.zioanacleto.speakeazy.di.databaseModule
 import com.zioanacleto.speakeazy.di.repositoryModule
 import com.zioanacleto.speakeazy.di.singletonModule
 import com.zioanacleto.speakeazy.di.viewModelModule
@@ -14,7 +15,7 @@ import org.koin.core.context.startKoin
 import org.koin.dsl.binds
 import org.koin.dsl.module
 
-class SpeakEazyApplication: Application() {
+class SpeakEazyApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
@@ -25,12 +26,16 @@ class SpeakEazyApplication: Application() {
             modules(
                 listOf(
                     singletonModule,
+                    databaseModule,
                     viewModelModule,
                     dataMapperModule,
                     dataSourceModule,
                     repositoryModule,
                     module {
-                        single { this@SpeakEazyApplication } binds arrayOf(Context::class,Application::class)
+                        single { this@SpeakEazyApplication } binds arrayOf(
+                            Context::class,
+                            Application::class
+                        )
                     }
                 )
             )

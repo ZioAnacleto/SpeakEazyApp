@@ -1,20 +1,17 @@
 package com.zioanacleto.speakeazy.ui.presentation.main.data.datasources
 
-import android.content.Context
 import com.zioanacleto.buffa.events.Resource
-import com.zioanacleto.speakeazy.database.SpeakEazyRoomDatabase
+import com.zioanacleto.speakeazy.database.dao.FavoritesDao
 import com.zioanacleto.speakeazy.database.entities.FavoriteEntity
 import com.zioanacleto.speakeazy.database.entities.toDrinkModel
 import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.MainModel
 
 class MainLocalDataSource(
-    context: Context
+    private val favoritesDao: FavoritesDao
 ) : MainDataSource {
-    private val database: SpeakEazyRoomDatabase = SpeakEazyRoomDatabase.getDatabase(context)
-
     override suspend fun getMainList(): Resource<MainModel> {
         return try {
-            val list = database.favoritesDao().getAll().map { it.toDrinkModel() }
+            val list = favoritesDao.getAll().map { it.toDrinkModel() }
 
             Resource.Success(
                 MainModel(list)
@@ -26,7 +23,7 @@ class MainLocalDataSource(
 
     override suspend fun getMainById(id: String): Resource<MainModel> {
         return try {
-            val list = database.favoritesDao().loadAllByIds(intArrayOf(id.toInt())).map {
+            val list = favoritesDao.loadAllByIds(intArrayOf(id.toInt())).map {
                 it.toDrinkModel()
             }
             Resource.Success(
@@ -38,16 +35,17 @@ class MainLocalDataSource(
     }
 
     override suspend fun setFavoriteCocktail(cocktailId: String, cocktailName: String) {
-        database.favoritesDao().insert(
+        favoritesDao.insert(
             FavoriteEntity(cocktailId.toInt(), cocktailName)
         )
     }
 
     override suspend fun deleteFavoriteCocktail(cocktailId: String) {
-        database.favoritesDao().delete(cocktailId.toInt())
+        favoritesDao.delete(cocktailId.toInt())
     }
 
     override suspend fun updateVisualizations(
         cocktailId: String
-    ) { /*do nothing here*/ }
+    ) { /*do nothing here*/
+    }
 }

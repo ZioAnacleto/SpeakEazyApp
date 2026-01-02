@@ -1,10 +1,12 @@
 package com.zioanacleto.speakeazy.di
 
+import androidx.room.Room
 import com.zioanacleto.buffa.coroutines.DefaultDispatcherProvider
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.buffa.datamappers.DataMapper
 import com.zioanacleto.speakeazy.MainActivityViewModel
 import com.zioanacleto.speakeazy.data.api.ApiClientImpl
+import com.zioanacleto.speakeazy.database.SpeakEazyRoomDatabase
 import com.zioanacleto.speakeazy.domain.models.DataContext
 import com.zioanacleto.speakeazy.ui.presentation.create.data.datamappers.CreateCocktailDataMapper
 import com.zioanacleto.speakeazy.ui.presentation.create.data.datasources.CreateCocktailDataSource
@@ -83,6 +85,21 @@ val singletonModule = module {
     single<DispatcherProvider> { DefaultDispatcherProvider() }
 }
 
+// Database
+val databaseModule = module {
+    single {
+        Room.databaseBuilder(
+            androidContext(),
+            SpeakEazyRoomDatabase::class.java,
+            SpeakEazyRoomDatabase::class.java.simpleName
+        ).build()
+    }
+    factory { get<SpeakEazyRoomDatabase>().ingredientDao() }
+    factory { get<SpeakEazyRoomDatabase>().favoritesDao() }
+    factory { get<SpeakEazyRoomDatabase>().userDao() }
+    factory { get<SpeakEazyRoomDatabase>().createCocktailDao() }
+}
+
 // ViewModels
 val viewModelModule = module {
     factory { MainViewModel(get(), get()) }
@@ -109,7 +126,7 @@ val dataSourceModule = module {
         named(DataContext.LOCAL.name)
     ) {
         MainLocalDataSource(
-            context = androidContext()
+            favoritesDao = get()
         )
     }
     factory<IngredientDataSource>(
@@ -124,7 +141,7 @@ val dataSourceModule = module {
         named(DataContext.LOCAL.name)
     ) {
         IngredientLocalDataSource(
-            context = androidContext()
+            ingredientDao = get()
         )
     }
     factory<HomeDataSource>(
@@ -139,7 +156,7 @@ val dataSourceModule = module {
         named(DataContext.LOCAL.name)
     ) {
         UserLocalDataSource(
-            context = androidContext()
+            userDao = get()
         )
     }
     factory<FavoritesDataSource>(
@@ -154,7 +171,7 @@ val dataSourceModule = module {
         named(DataContext.LOCAL.name)
     ) {
         FavoritesLocalDataSource(
-            context = androidContext()
+            favoritesDao = get()
         )
     }
     factory<SearchDataSource>(
@@ -170,7 +187,7 @@ val dataSourceModule = module {
     }
     factory<CreateCocktailDataSource> {
         CreateCocktailLocalDataSource(
-            context = androidContext()
+            createCocktailDao = get()
         )
     }
     factory<CreateCocktailUploadDataSource> {
