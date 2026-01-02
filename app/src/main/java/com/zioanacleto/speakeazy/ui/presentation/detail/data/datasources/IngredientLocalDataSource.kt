@@ -1,19 +1,16 @@
 package com.zioanacleto.speakeazy.ui.presentation.detail.data.datasources
 
-import android.content.Context
 import com.zioanacleto.buffa.events.Resource
-import com.zioanacleto.speakeazy.database.SpeakEazyRoomDatabase
+import com.zioanacleto.speakeazy.database.dao.IngredientDao
 import com.zioanacleto.speakeazy.database.entities.toIngredientModel
 import com.zioanacleto.speakeazy.ui.presentation.detail.domain.model.IngredientsModel
 
 class IngredientLocalDataSource(
-    context: Context
+    private val ingredientDao: IngredientDao
 ) : IngredientDataSource {
-    private val database: SpeakEazyRoomDatabase = SpeakEazyRoomDatabase.getDatabase(context)
-
     override suspend fun getIngredientsList(): Resource<IngredientsModel> {
         return try {
-            val list = database.ingredientDao().getAll().map { it.toIngredientModel() }
+            val list = ingredientDao.getAll().map { it.toIngredientModel() }
             Resource.Success(
                 IngredientsModel(list)
             )
@@ -24,7 +21,7 @@ class IngredientLocalDataSource(
 
     override suspend fun getIngredientById(id: String): Resource<IngredientsModel> {
         return try {
-            val ingredient = database.ingredientDao().loadAllByIds(intArrayOf(id.toInt()))
+            val ingredient = ingredientDao.loadAllByIds(intArrayOf(id.toInt()))
                 .map { it.toIngredientModel() }
             Resource.Success(
                 IngredientsModel(ingredient)

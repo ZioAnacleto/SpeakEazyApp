@@ -1,9 +1,7 @@
 package com.zioanacleto.speakeazy.database
 
-import android.content.Context
 import androidx.room.AutoMigration
 import androidx.room.Database
-import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.zioanacleto.speakeazy.database.converters.CreateWizardStepConverter
@@ -46,21 +44,4 @@ abstract class SpeakEazyRoomDatabase : RoomDatabase() {
     abstract fun favoritesDao(): FavoritesDao
     abstract fun userDao(): UserDao
     abstract fun createCocktailDao(): CreateCocktailDao
-
-    companion object {
-        @Volatile
-        private var INSTANCE: SpeakEazyRoomDatabase? = null
-
-        fun getDatabase(context: Context): SpeakEazyRoomDatabase {
-            return INSTANCE ?: synchronized(this) {
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    SpeakEazyRoomDatabase::class.java,
-                    SpeakEazyRoomDatabase::class.java.simpleName
-                ).build()
-                INSTANCE = instance
-                instance
-            }
-        }
-    }
 }
