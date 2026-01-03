@@ -6,7 +6,6 @@ import com.zioanacleto.buffa.events.Resource
 import com.zioanacleto.speakeazy.ui.presentation.detail.data.datasources.IngredientDataSource
 import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.MainModel
 import com.zioanacleto.speakeazy.ui.presentation.search.data.datasources.SearchDataSource
-import com.zioanacleto.speakeazy.ui.presentation.search.domain.SearchFilterItem
 import com.zioanacleto.speakeazy.ui.presentation.search.domain.model.SearchModel
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
@@ -53,17 +52,18 @@ class SearchRepositoryImplTest {
     @Test
     fun test_submitFilter() = runBlocking {
         // given
-        coEvery { searchDataSource.queryFilter(any(),any()) } returns Resource.Success(
+        coEvery { searchDataSource.queryFilter(any()) } returns Resource.Success(
             MainModel(drinks = listOf())
         )
 
         // when
         val sut = createSut()
-        val response = sut.submitFilter(SearchFilterItem.INGREDIENTS, listOf()).first()
+        val response = sut.submitFilter(mapOf()).first()
 
         // then
         assert(response is Resource.Success<MainModel>)
     }
 
-    private fun createSut() = SearchRepositoryImpl(searchDataSource, ingredientDataSource, dispatcherProvider)
+    private fun createSut() =
+        SearchRepositoryImpl(searchDataSource, ingredientDataSource, dispatcherProvider)
 }

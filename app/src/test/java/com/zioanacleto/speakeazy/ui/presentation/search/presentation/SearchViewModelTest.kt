@@ -7,13 +7,13 @@ import com.zioanacleto.speakeazy.TestDispatcherProvider
 import com.zioanacleto.speakeazy.assertAllTrue
 import com.zioanacleto.speakeazy.testResourceFlow
 import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.MainModel
-import com.zioanacleto.speakeazy.ui.presentation.search.domain.SearchFilterItem
 import com.zioanacleto.speakeazy.ui.presentation.search.domain.SearchRepository
 import com.zioanacleto.speakeazy.ui.presentation.search.domain.model.SearchLandingModel
 import com.zioanacleto.speakeazy.ui.presentation.search.domain.model.SearchModel
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
@@ -24,6 +24,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class SearchViewModelTest {
 
     private lateinit var repository: SearchRepository
@@ -129,7 +130,7 @@ class SearchViewModelTest {
     fun test_filter_whenRepositoryIsSuccess_filterUiStateIsSuccess() = runTest {
         // given
         dispatcherProvider = TestDispatcherProvider(StandardTestDispatcher(testScheduler))
-        every { repository.submitFilter(any(), any()) } returns flowOf(
+        every { repository.submitFilter(any()) } returns flowOf(
             Resource.Success(
                 MainModel(listOf())
             )
@@ -137,7 +138,7 @@ class SearchViewModelTest {
 
         // when
         val sut = createSut()
-        sut.filter(SearchFilterItem.INGREDIENTS, listOf())
+        sut.filter(mapOf())
         advanceUntilIdle()
 
         // then
@@ -149,7 +150,7 @@ class SearchViewModelTest {
     fun test_filter_whenRepositoryIsError_filterUiStateIsError() = runTest {
         // given
         dispatcherProvider = TestDispatcherProvider(StandardTestDispatcher(testScheduler))
-        every { repository.submitFilter(any(), any()) } returns flowOf(
+        every { repository.submitFilter(any()) } returns flowOf(
             Resource.Error(
                 Exception("testException")
             )
@@ -157,7 +158,7 @@ class SearchViewModelTest {
 
         // when
         val sut = createSut()
-        sut.filter(SearchFilterItem.INGREDIENTS, listOf())
+        sut.filter(mapOf())
         advanceUntilIdle()
 
         // then

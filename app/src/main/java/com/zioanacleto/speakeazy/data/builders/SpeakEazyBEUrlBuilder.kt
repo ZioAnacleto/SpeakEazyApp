@@ -1,5 +1,8 @@
 package com.zioanacleto.speakeazy.data.builders
 
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
+
 object SpeakEazyBEUrlBuilder {
     private const val BASE_URL = "https://speakeazybackend-production.up.railway.app"
     private const val COCKTAILS_URI = "cocktails"
@@ -9,7 +12,7 @@ object SpeakEazyBEUrlBuilder {
     private const val TAGS_URI = "tags"
     private const val FILTER_URI = "filter"
     private const val INGREDIENT_QUERY_PARAM = "ingredient="
-    private const val FILTER_QUERY_PARAM = "filter="
+    private const val TAG_QUERY_PARAM = "tag="
     private const val ADD_URI = "add"
 
     fun buildUrl(endpoint: Endpoint): String = "$BASE_URL/${endpoint.url}"
@@ -62,14 +65,17 @@ object SpeakEazyBEUrlBuilder {
                     val builder = StringBuilder("$SEARCH_URI/$FILTER_URI?")
                     ingredients?.forEachIndexed { index, ingredient ->
                         if (index != 0) builder.append("&")
-                        builder.append("$INGREDIENT_QUERY_PARAM$ingredient")
+                        builder.append("$INGREDIENT_QUERY_PARAM${ingredient.encode()}")
+                        if(index == ingredients.lastIndex) builder.append("&")
                     }
                     tags?.forEachIndexed { index, tag ->
                         if (index != 0) builder.append("&")
-                        builder.append("$FILTER_QUERY_PARAM$tag")
+                        builder.append("$TAG_QUERY_PARAM${tag.encode()}")
                     }
                     builder.toString()
                 }
+
+            private fun String.encode() = URLEncoder.encode(this, StandardCharsets.UTF_8.toString())
         }
     }
 }

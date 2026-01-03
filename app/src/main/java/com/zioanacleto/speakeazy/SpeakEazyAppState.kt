@@ -14,7 +14,6 @@ import androidx.navigation.navOptions
 import com.zioanacleto.speakeazy.navigation.BottomBarDestination
 import com.zioanacleto.speakeazy.navigation.TopBarDestination
 import com.zioanacleto.speakeazy.navigation.bottomBarAllDestinations
-import com.zioanacleto.speakeazy.navigation.bottomBarDestinations
 import com.zioanacleto.speakeazy.ui.presentation.create.navigation.navigateToCreate
 import com.zioanacleto.speakeazy.ui.presentation.favorites.navigation.navigateToFavorites
 import com.zioanacleto.speakeazy.ui.presentation.main.navigation.navigateToMain

@@ -11,7 +11,7 @@ enum class SearchFilterItem(
     val selectedColor: Color
 ) {
     INGREDIENTS(
-        label = "Item",
+        label = "Ingredients",
         icon = R.drawable.ingredients_filter_icon,
         selectedColor = YellowFFE271
     ),
