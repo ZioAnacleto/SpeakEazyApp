@@ -1,6 +1,4 @@
-# This is a basic workflow to help you get started with Actions
-
-name: CI
+name: Tests
 
 # Controls when the workflow will run
 on:
@@ -104,9 +102,9 @@ jobs:
 
       # Generate Jacoco Report for code coverage
       - name: Generate JaCoCo report
-        run: ./gradlew jacocoTestReport
+        run: ./gradlew jacocoAggregateReport
 
-      # installin xmllint to read coverage file
+      # installing xmllint to read coverage file
       - name: Install xmllint
         run: sudo apt-get update && sudo apt-get install -y libxml2-utils
 
@@ -114,7 +112,7 @@ jobs:
       - name: Extract coverage percentage
         id: coverage
         run: |
-          REPORT_FILE="app/build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
+          REPORT_FILE="build/reports/jacoco/aggregate/jacocoAggregateReport.xml"
 
           if [ ! -f "$REPORT_FILE" ]; then
             echo "Report XML not found!"
