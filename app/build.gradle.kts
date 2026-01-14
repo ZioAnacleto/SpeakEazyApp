@@ -1,3 +1,4 @@
+import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.w3c.dom.Document
 import org.xml.sax.InputSource
 import java.io.FileInputStream
@@ -134,6 +135,18 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     testImplementation(libs.kotlinx.coroutines.test)
+}
+
+tasks.withType<Test> {
+    testLogging {
+        events(
+            TestLogEvent.STARTED,
+            TestLogEvent.PASSED,
+            TestLogEvent.FAILED,
+            TestLogEvent.SKIPPED
+        )
+        showStandardStreams = true
+    }
 }
 
 // generating JaCoCo report for code coverage

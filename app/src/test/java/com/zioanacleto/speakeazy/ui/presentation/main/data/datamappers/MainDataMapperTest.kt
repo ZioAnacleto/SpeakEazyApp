@@ -3,9 +3,8 @@ package com.zioanacleto.speakeazy.ui.presentation.main.data.datamappers
 import com.zioanacleto.speakeazy.assertAllTrue
 import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.MainResponseDTO
 import io.mockk.clearAllMocks
-import org.junit.Assert.*
-
 import org.junit.After
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class MainDataMapperTest {
@@ -29,7 +28,7 @@ class MainDataMapperTest {
             result.drinks.size == 1,
             result.drinks.first().name == "test",
             result.drinks.first().category == "testCategory",
-            result.drinks.first().instructions == "testInstructions1",
+            result.drinks.first().instructions.first().instruction == "testInstructions1",
             result.drinks.first().glass == "testGlass",
             result.drinks.first().imageUrl == "testImageSource",
             result.drinks.first().ingredients.size == 1,
@@ -61,7 +60,7 @@ class MainDataMapperTest {
             result.drinks.size == 1,
             result.drinks.first().name == "",
             result.drinks.first().category == "",
-            result.drinks.first().instructions == "",
+            result.drinks.first().instructions.first().instruction == "",
             result.drinks.first().glass == "",
             result.drinks.first().imageUrl == "",
             result.drinks.first().ingredients.isEmpty()

@@ -20,7 +20,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.PlatformImeOptions
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
@@ -29,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zioanacleto.buffa.compose.hideKeyboardOnTouch
 import com.zioanacleto.speakeazy.ui.presentation.components.CocktailLoadingAnimation
-import com.zioanacleto.speakeazy.ui.presentation.components.ExpandableHorizontalFilterView
+import com.zioanacleto.speakeazy.ui.presentation.components.SearchFilterSection
 import com.zioanacleto.speakeazy.ui.presentation.components.SelectedFilter
 import com.zioanacleto.speakeazy.ui.presentation.search.domain.SearchFilterItem
 import com.zioanacleto.speakeazy.ui.presentation.search.domain.model.SearchLandingModel
@@ -54,6 +53,7 @@ private fun SearchScreenContent(
     when (val uiState = landingState.collectAsStateWithLifecycle().value) {
         is SearchLandingUiState.Success -> {
             SearchScreenWithFilter(
+                modifier = modifier,
                 viewModel = viewModel,
                 data = uiState.data,
                 onButtonSearchClick = {
@@ -96,10 +96,12 @@ private fun SearchScreenWithFilter(
         )
     }
     var selectedSearchFilterItem: SearchFilterItem? by remember { mutableStateOf(null) }
-    var selectedFilters by remember { mutableStateOf<List<SelectedFilter>>(emptyList()) }
+    var selectedFilters by remember {
+        mutableStateOf<Map<SearchFilterItem, List<SelectedFilter>>>(emptyMap())
+    }
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .hideKeyboardOnTouch()
             .padding(top = 60.dp)
@@ -155,14 +157,14 @@ private fun SearchScreenWithFilter(
             )
         )
 
-        ExpandableHorizontalFilterView(
+        SearchFilterSection(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 20.dp, end = 20.dp),
-            list = SearchFilterItem.entries.toList(),
+                .padding(start = 20.dp, end = 20.dp, top = 2.dp),
+            list = listOf(SearchFilterItem.INGREDIENTS, SearchFilterItem.TAGS),
             onFilterSelectClick = { searchFilterItem ->
                 val filters = if (searchFilterItem == selectedSearchFilterItem)
-                    selectedFilters
+                    selectedFilters[searchFilterItem].orEmpty()
                 else when (searchFilterItem) {
                     SearchFilterItem.INGREDIENTS -> {
                         data.ingredients.map {
@@ -182,13 +184,9 @@ private fun SearchScreenWithFilter(
                 selectedSearchFilterItem = searchFilterItem
                 filters
             },
-            onFilterDoneClick = { list ->
-                if (selectedFilters != list) {
-                    selectedFilters = list
-                    selectedSearchFilterItem?.let {
-                        viewModel.filter(it, selectedFilters)
-                    }
-                }
+            onFilterDoneClick = { map ->
+                selectedFilters = map
+                viewModel.filter(selectedFilters)
             }
         )
 

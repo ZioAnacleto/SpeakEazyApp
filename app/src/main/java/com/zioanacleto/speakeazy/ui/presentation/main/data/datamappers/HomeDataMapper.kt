@@ -3,12 +3,14 @@ package com.zioanacleto.speakeazy.ui.presentation.main.data.datamappers
 import com.zioanacleto.buffa.datamappers.DataMapper
 import com.zioanacleto.buffa.default
 import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.HomeSectionResponseDTO
+import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.MainSpeakEazyBEInstructionDTO
 import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.MainSpeakEazyBEResponseDTO
 import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.BannerModel
 import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.DrinkModel
 import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.HomeModel
 import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.HomeSectionModel
 import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.IngredientModel
+import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.InstructionModel
 
 class HomeDataMapper : DataMapper<HomeSectionResponseDTO, HomeModel> {
     override fun mapInto(input: HomeSectionResponseDTO): HomeModel =
@@ -36,7 +38,8 @@ class HomeDataMapper : DataMapper<HomeSectionResponseDTO, HomeModel> {
         id = id.default(),
         name = name.default(),
         category = category.default(),
-        instructions = instructionsIt.default(),
+        instructions = instructions?.map { it.toInstructionModel() } ?: listOf(),
+        instructionsIt = instructionsIt?.map { it.toInstructionModel() } ?: listOf(),
         glass = glass.default(),
         isAlcoholic = isAlcoholic.default(false),
         imageUrl = imageLink.default(),
@@ -64,4 +67,9 @@ class HomeDataMapper : DataMapper<HomeSectionResponseDTO, HomeModel> {
 
     private fun String?.toOzMeasure(): String? =
         this?.let { if (it.contains("-")) null else it.plus("oz") }
+
+    private fun MainSpeakEazyBEInstructionDTO.toInstructionModel() = InstructionModel(
+        type = this.type.default(),
+        instruction = this.instruction.default()
+    )
 }
