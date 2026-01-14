@@ -20,7 +20,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.PlatformImeOptions
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
@@ -28,11 +27,10 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zioanacleto.buffa.compose.hideKeyboardOnTouch
+import com.zioanacleto.speakeazy.core.domain.search.model.SearchLandingModel
 import com.zioanacleto.speakeazy.ui.presentation.components.CocktailLoadingAnimation
 import com.zioanacleto.speakeazy.ui.presentation.components.ExpandableHorizontalFilterView
 import com.zioanacleto.speakeazy.ui.presentation.components.SelectedFilter
-import com.zioanacleto.speakeazy.ui.presentation.search.domain.SearchFilterItem
-import com.zioanacleto.speakeazy.ui.presentation.search.domain.model.SearchLandingModel
 import com.zioanacleto.speakeazy.ui.theme.YellowFFE271
 import org.koin.androidx.compose.getViewModel
 
@@ -159,18 +157,18 @@ private fun SearchScreenWithFilter(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 20.dp, end = 20.dp),
-            list = SearchFilterItem.entries.toList(),
+            list = SearchFilterItem::class.sealedSubclasses.map { it.objectInstance!! },
             onFilterSelectClick = { searchFilterItem ->
                 val filters = if (searchFilterItem == selectedSearchFilterItem)
                     selectedFilters
                 else when (searchFilterItem) {
-                    SearchFilterItem.INGREDIENTS -> {
+                    is SearchFilterItem.Ingredients -> {
                         data.ingredients.map {
                             SelectedFilter(it.name, false)
                         }
                     }
 
-                    SearchFilterItem.TAGS -> {
+                    is SearchFilterItem.Tags -> {
                         data.tags.map {
                             SelectedFilter(it.name, false)
                         }

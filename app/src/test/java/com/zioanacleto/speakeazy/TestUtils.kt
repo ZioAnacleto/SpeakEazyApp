@@ -1,6 +1,6 @@
 package com.zioanacleto.speakeazy
 
-import com.zioanacleto.speakeazy.data.api.ApiClientImpl
+import com.zioanacleto.speakeazy.core.network.api.ApiClientImpl
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.respond
 import io.ktor.http.HttpHeaders

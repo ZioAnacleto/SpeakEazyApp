@@ -1,7 +1,7 @@
 package com.zioanacleto.speakeazy.ui.presentation.detail.presentation
 
 import com.zioanacleto.buffa.events.Resource
-import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.MainModel
+import com.zioanacleto.speakeazy.core.domain.main.model.MainModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -12,7 +12,7 @@ sealed interface DetailUiState {
 }
 
 fun Flow<Resource<MainModel>>.mapResourceAsDetailUiState() = this.map { detailResource ->
-    when(detailResource) {
+    when (detailResource) {
         is Resource.Success -> DetailUiState.Success(detailResource.data)
         is Resource.Error -> DetailUiState.Error(detailResource.exception)
         is Resource.Loading -> DetailUiState.Loading

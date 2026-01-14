@@ -1,7 +1,7 @@
 package com.zioanacleto.speakeazy.ui.presentation.user.presentation
 
 import com.zioanacleto.buffa.events.Resource
-import com.zioanacleto.speakeazy.ui.presentation.user.domain.model.UserModel
+import com.zioanacleto.speakeazy.core.domain.user.model.UserModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 

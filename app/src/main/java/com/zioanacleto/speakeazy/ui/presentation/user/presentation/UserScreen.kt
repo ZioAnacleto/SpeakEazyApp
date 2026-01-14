@@ -50,12 +50,12 @@ import com.airbnb.lottie.compose.LottieCancellationBehavior
 import com.zioanacleto.buffa.compose.hideKeyboardOnTouch
 import com.zioanacleto.buffa.logging.AnacletoLogger
 import com.zioanacleto.speakeazy.R
+import com.zioanacleto.speakeazy.core.domain.user.model.Language
+import com.zioanacleto.speakeazy.core.domain.user.model.UserModel
 import com.zioanacleto.speakeazy.ui.presentation.components.BackFloatingButton
 import com.zioanacleto.speakeazy.ui.presentation.components.CocktailLoadingAnimation
 import com.zioanacleto.speakeazy.ui.presentation.components.CustomSwitchButton
 import com.zioanacleto.speakeazy.ui.presentation.components.SafeClickableGenericButton
-import com.zioanacleto.speakeazy.ui.presentation.user.domain.model.Language
-import com.zioanacleto.speakeazy.ui.presentation.user.domain.model.UserModel
 import com.zioanacleto.speakeazy.ui.theme.LocalSnackBarHostState
 import com.zioanacleto.speakeazy.ui.theme.YellowFFE271
 import kotlinx.coroutines.flow.Flow

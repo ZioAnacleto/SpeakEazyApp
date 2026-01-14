@@ -2,8 +2,8 @@ package com.zioanacleto.speakeazy.ui.presentation.detail.presentation
 
 import com.zioanacleto.buffa.base.BaseViewModel
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
-import com.zioanacleto.speakeazy.ui.presentation.detail.domain.DetailRepository
-import com.zioanacleto.speakeazy.ui.presentation.main.domain.MainRepository
+import com.zioanacleto.speakeazy.core.domain.detail.DetailRepository
+import com.zioanacleto.speakeazy.core.domain.main.MainRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn

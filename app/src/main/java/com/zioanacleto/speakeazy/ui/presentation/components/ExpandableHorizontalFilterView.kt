@@ -38,7 +38,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.zioanacleto.speakeazy.ui.presentation.search.domain.SearchFilterItem
+import com.zioanacleto.speakeazy.ui.presentation.search.presentation.SearchFilterItem
 
 @Composable
 fun ExpandableHorizontalFilterView(
@@ -214,7 +214,7 @@ private fun Modifier.conditionalBackground(
 @Composable
 fun ExpandableHorizontalFilterViewPreview() {
     ExpandableHorizontalFilterView(
-        list = SearchFilterItem.entries.map { it }
+        list = SearchFilterItem::class.sealedSubclasses.map { it.objectInstance!! }
     )
 }
 

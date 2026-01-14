@@ -2,7 +2,7 @@ package com.zioanacleto.speakeazy.ui.presentation.favorites.presentation
 
 import com.zioanacleto.buffa.base.BaseViewModel
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
-import com.zioanacleto.speakeazy.ui.presentation.favorites.domain.FavoritesRepository
+import com.zioanacleto.speakeazy.core.domain.favorites.FavoritesRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn

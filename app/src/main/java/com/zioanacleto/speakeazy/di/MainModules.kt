@@ -5,79 +5,86 @@ import com.zioanacleto.buffa.coroutines.DefaultDispatcherProvider
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.buffa.datamappers.DataMapper
 import com.zioanacleto.speakeazy.MainActivityViewModel
-import com.zioanacleto.speakeazy.data.api.ApiClientImpl
-import com.zioanacleto.speakeazy.database.SpeakEazyRoomDatabase
-import com.zioanacleto.speakeazy.domain.models.DataContext
-import com.zioanacleto.speakeazy.ui.presentation.create.data.datamappers.CreateCocktailDataMapper
-import com.zioanacleto.speakeazy.ui.presentation.create.data.datasources.CreateCocktailDataSource
-import com.zioanacleto.speakeazy.ui.presentation.create.data.datasources.CreateCocktailLocalDataSource
-import com.zioanacleto.speakeazy.ui.presentation.create.data.datasources.CreateCocktailNetworkUploadDataSource
-import com.zioanacleto.speakeazy.ui.presentation.create.data.datasources.CreateCocktailUploadDataSource
-import com.zioanacleto.speakeazy.ui.presentation.create.data.dto.CreateCocktailRequestDTO
-import com.zioanacleto.speakeazy.ui.presentation.create.data.repositories.CreateCocktailRepositoryImpl
-import com.zioanacleto.speakeazy.ui.presentation.create.domain.CreateCocktailRepository
-import com.zioanacleto.speakeazy.ui.presentation.create.domain.model.CreateCocktailModel
+import com.zioanacleto.speakeazy.core.data.create.datamappers.CreateCocktailDataMapper
+import com.zioanacleto.speakeazy.core.data.create.datasources.CreateCocktailDataSource
+import com.zioanacleto.speakeazy.core.data.create.datasources.CreateCocktailLocalDataSource
+import com.zioanacleto.speakeazy.core.data.create.datasources.CreateCocktailNetworkUploadDataSource
+import com.zioanacleto.speakeazy.core.data.create.datasources.CreateCocktailUploadDataSource
+import com.zioanacleto.speakeazy.core.data.create.dto.CreateCocktailRequestDTO
+import com.zioanacleto.speakeazy.core.data.create.repositories.CreateCocktailRepositoryImpl
+import com.zioanacleto.speakeazy.core.data.detail.datamappers.IngredientsDataMapper
+import com.zioanacleto.speakeazy.core.data.detail.datasources.IngredientDataSource
+import com.zioanacleto.speakeazy.core.data.detail.datasources.IngredientLocalDataSource
+import com.zioanacleto.speakeazy.core.data.detail.datasources.IngredientNetworkDataSource
+import com.zioanacleto.speakeazy.core.data.detail.dto.IngredientsListDTO
+import com.zioanacleto.speakeazy.core.data.detail.repositories.DetailRepositoryImpl
+import com.zioanacleto.speakeazy.core.data.favorites.FavoritesRepositoryImpl
+import com.zioanacleto.speakeazy.core.data.favorites.datamappers.FavoritesDataMapper
+import com.zioanacleto.speakeazy.core.data.favorites.datasources.FavoritesDataSource
+import com.zioanacleto.speakeazy.core.data.favorites.datasources.FavoritesLocalDataSource
+import com.zioanacleto.speakeazy.core.data.favorites.datasources.FavoritesNetworkDataSource
+import com.zioanacleto.speakeazy.core.data.main.datamappers.HomeDataMapper
+import com.zioanacleto.speakeazy.core.data.main.datamappers.MainDataMapper
+import com.zioanacleto.speakeazy.core.data.main.datamappers.MainListDataMapper
+import com.zioanacleto.speakeazy.core.data.main.datamappers.MainSpeakEazyBEDataMapper
+import com.zioanacleto.speakeazy.core.data.main.datamappers.MainSpeakEazyBEListDataMapper
+import com.zioanacleto.speakeazy.core.data.main.datasources.HomeDataSource
+import com.zioanacleto.speakeazy.core.data.main.datasources.HomeNetworkDataSource
+import com.zioanacleto.speakeazy.core.data.main.datasources.MainDataSource
+import com.zioanacleto.speakeazy.core.data.main.datasources.MainLocalDataSource
+import com.zioanacleto.speakeazy.core.data.main.datasources.MainNetworkDataSource
+import com.zioanacleto.speakeazy.core.data.main.dto.HomeSectionResponseDTO
+import com.zioanacleto.speakeazy.core.data.main.dto.MainListResponseDTO
+import com.zioanacleto.speakeazy.core.data.main.dto.MainResponseDTO
+import com.zioanacleto.speakeazy.core.data.main.dto.MainSpeakEazyBEListResponseDTO
+import com.zioanacleto.speakeazy.core.data.main.dto.MainSpeakEazyBEResponseDTO
+import com.zioanacleto.speakeazy.core.data.main.repositories.HomeRepositoryImpl
+import com.zioanacleto.speakeazy.core.data.main.repositories.MainRepositoryImpl
+import com.zioanacleto.speakeazy.core.data.search.datamappers.SearchRequestDataMapper
+import com.zioanacleto.speakeazy.core.data.search.datamappers.SearchResponseDataMapper
+import com.zioanacleto.speakeazy.core.data.search.datamappers.TagsDataMapper
+import com.zioanacleto.speakeazy.core.data.search.datasources.NetworkSearchDataSource
+import com.zioanacleto.speakeazy.core.data.search.datasources.SearchDataSource
+import com.zioanacleto.speakeazy.core.data.search.dto.SearchRequestDTO
+import com.zioanacleto.speakeazy.core.data.search.dto.SearchResponseDTO
+import com.zioanacleto.speakeazy.core.data.search.dto.TagsResponseDTO
+import com.zioanacleto.speakeazy.core.data.search.repositories.SearchRepositoryImpl
+import com.zioanacleto.speakeazy.core.data.user.datasources.UserDataSource
+import com.zioanacleto.speakeazy.core.data.user.datasources.UserLocalDataSource
+import com.zioanacleto.speakeazy.core.data.user.repositories.UserRepositoryImpl
+import com.zioanacleto.speakeazy.core.database.SpeakEazyRoomDatabase
+import com.zioanacleto.speakeazy.core.database.dao.CreateCocktailDao
+import com.zioanacleto.speakeazy.core.database.dao.FavoritesDao
+import com.zioanacleto.speakeazy.core.database.dao.IngredientDao
+import com.zioanacleto.speakeazy.core.database.dao.UserDao
+import com.zioanacleto.speakeazy.core.domain.create.CreateCocktailRepository
+import com.zioanacleto.speakeazy.core.domain.create.model.CreateCocktailModel
+import com.zioanacleto.speakeazy.core.domain.detail.DetailRepository
+import com.zioanacleto.speakeazy.core.domain.detail.model.IngredientsModel
+import com.zioanacleto.speakeazy.core.domain.favorites.FavoritesRepository
+import com.zioanacleto.speakeazy.core.domain.favorites.model.FavoritesModel
+import com.zioanacleto.speakeazy.core.domain.main.HomeRepository
+import com.zioanacleto.speakeazy.core.domain.main.MainRepository
+import com.zioanacleto.speakeazy.core.domain.main.model.HomeModel
+import com.zioanacleto.speakeazy.core.domain.main.model.MainModel
+import com.zioanacleto.speakeazy.core.domain.search.SearchRepository
+import com.zioanacleto.speakeazy.core.domain.search.model.SearchModel
+import com.zioanacleto.speakeazy.core.domain.search.model.TagsModel
+import com.zioanacleto.speakeazy.core.domain.user.UserRepository
+import com.zioanacleto.speakeazy.core.network.api.ApiClientImpl
+import com.zioanacleto.speakeazy.di.models.DataContext
 import com.zioanacleto.speakeazy.ui.presentation.create.presentation.CreateCocktailViewModel
-import com.zioanacleto.speakeazy.ui.presentation.detail.data.datamappers.IngredientsDataMapper
-import com.zioanacleto.speakeazy.ui.presentation.detail.data.datasources.IngredientDataSource
-import com.zioanacleto.speakeazy.ui.presentation.detail.data.datasources.IngredientLocalDataSource
-import com.zioanacleto.speakeazy.ui.presentation.detail.data.datasources.IngredientNetworkDataSource
-import com.zioanacleto.speakeazy.ui.presentation.detail.data.dto.IngredientsListDTO
-import com.zioanacleto.speakeazy.ui.presentation.detail.data.repositories.DetailRepositoryImpl
-import com.zioanacleto.speakeazy.ui.presentation.detail.domain.DetailRepository
-import com.zioanacleto.speakeazy.ui.presentation.detail.domain.model.IngredientsModel
 import com.zioanacleto.speakeazy.ui.presentation.detail.presentation.DetailViewModel
-import com.zioanacleto.speakeazy.ui.presentation.favorites.data.FavoritesRepositoryImpl
-import com.zioanacleto.speakeazy.ui.presentation.favorites.data.datamappers.FavoritesDataMapper
-import com.zioanacleto.speakeazy.ui.presentation.favorites.data.datasources.FavoritesDataSource
-import com.zioanacleto.speakeazy.ui.presentation.favorites.data.datasources.FavoritesLocalDataSource
-import com.zioanacleto.speakeazy.ui.presentation.favorites.data.datasources.FavoritesNetworkDataSource
-import com.zioanacleto.speakeazy.ui.presentation.favorites.domain.FavoritesRepository
-import com.zioanacleto.speakeazy.ui.presentation.favorites.domain.model.FavoritesModel
 import com.zioanacleto.speakeazy.ui.presentation.favorites.presentation.FavoritesViewModel
-import com.zioanacleto.speakeazy.ui.presentation.main.data.datamappers.HomeDataMapper
-import com.zioanacleto.speakeazy.ui.presentation.main.data.datamappers.MainDataMapper
-import com.zioanacleto.speakeazy.ui.presentation.main.data.datamappers.MainListDataMapper
-import com.zioanacleto.speakeazy.ui.presentation.main.data.datamappers.MainSpeakEazyBEDataMapper
-import com.zioanacleto.speakeazy.ui.presentation.main.data.datamappers.MainSpeakEazyBEListDataMapper
-import com.zioanacleto.speakeazy.ui.presentation.main.data.datasources.HomeDataSource
-import com.zioanacleto.speakeazy.ui.presentation.main.data.datasources.HomeNetworkDataSource
-import com.zioanacleto.speakeazy.ui.presentation.main.data.datasources.MainDataSource
-import com.zioanacleto.speakeazy.ui.presentation.main.data.datasources.MainLocalDataSource
-import com.zioanacleto.speakeazy.ui.presentation.main.data.datasources.MainNetworkDataSource
-import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.HomeSectionResponseDTO
-import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.MainListResponseDTO
-import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.MainResponseDTO
-import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.MainSpeakEazyBEListResponseDTO
-import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.MainSpeakEazyBEResponseDTO
-import com.zioanacleto.speakeazy.ui.presentation.main.data.repositories.HomeRepositoryImpl
-import com.zioanacleto.speakeazy.ui.presentation.main.data.repositories.MainRepositoryImpl
-import com.zioanacleto.speakeazy.ui.presentation.main.domain.HomeRepository
-import com.zioanacleto.speakeazy.ui.presentation.main.domain.MainRepository
-import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.HomeModel
-import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.MainModel
 import com.zioanacleto.speakeazy.ui.presentation.main.presentation.MainViewModel
-import com.zioanacleto.speakeazy.ui.presentation.search.data.datamappers.SearchRequestDataMapper
-import com.zioanacleto.speakeazy.ui.presentation.search.data.datamappers.SearchResponseDataMapper
-import com.zioanacleto.speakeazy.ui.presentation.search.data.datamappers.TagsDataMapper
-import com.zioanacleto.speakeazy.ui.presentation.search.data.datasources.NetworkSearchDataSource
-import com.zioanacleto.speakeazy.ui.presentation.search.data.datasources.SearchDataSource
-import com.zioanacleto.speakeazy.ui.presentation.search.data.dto.SearchRequestDTO
-import com.zioanacleto.speakeazy.ui.presentation.search.data.dto.SearchResponseDTO
-import com.zioanacleto.speakeazy.ui.presentation.search.data.dto.TagsResponseDTO
-import com.zioanacleto.speakeazy.ui.presentation.search.data.repositories.SearchRepositoryImpl
-import com.zioanacleto.speakeazy.ui.presentation.search.domain.SearchRepository
-import com.zioanacleto.speakeazy.ui.presentation.search.domain.model.SearchModel
-import com.zioanacleto.speakeazy.ui.presentation.search.domain.model.TagsModel
 import com.zioanacleto.speakeazy.ui.presentation.search.presentation.SearchViewModel
-import com.zioanacleto.speakeazy.ui.presentation.user.data.datasources.UserDataSource
-import com.zioanacleto.speakeazy.ui.presentation.user.data.datasources.UserLocalDataSource
-import com.zioanacleto.speakeazy.ui.presentation.user.data.repositories.UserRepositoryImpl
-import com.zioanacleto.speakeazy.ui.presentation.user.domain.UserRepository
 import com.zioanacleto.speakeazy.ui.presentation.user.presentation.UserViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
+
+// todo: declarations of modules' classes should be moved to corresponding modules,
+// adding there Koin dependency
 
 // Singleton
 val singletonModule = module {
@@ -86,6 +93,8 @@ val singletonModule = module {
 }
 
 // Database
+// todo: keep this here or move it to core.database?
+// the second option would need to add koin to core.database module
 val databaseModule = module {
     single {
         Room.databaseBuilder(
@@ -105,9 +114,9 @@ val viewModelModule = module {
     factory { MainViewModel(get(), get()) }
     factory { DetailViewModel(get(), get(), get()) }
     factory { SearchViewModel(get(), get()) }
-    factory { UserViewModel(get(), get()) }
+    factory { UserViewModel(get<UserRepository>(), get()) }
     factory { FavoritesViewModel(get(), get()) }
-    factory { MainActivityViewModel(get(), get()) }
+    factory { MainActivityViewModel(get<UserRepository>(), get()) }
     factory { CreateCocktailViewModel(get(), get(), get()) }
 }
 
@@ -117,7 +126,7 @@ val dataSourceModule = module {
         named(DataContext.NETWORK.name)
     ) {
         MainNetworkDataSource(
-            apiClient = get(),
+            apiClient = get<ApiClientImpl>(),
             dataMapper = get(getNamedClass<MainSpeakEazyBEDataMapper>()),
             listDataMapper = get(getNamedClass<MainSpeakEazyBEListDataMapper>())
         )
@@ -126,14 +135,14 @@ val dataSourceModule = module {
         named(DataContext.LOCAL.name)
     ) {
         MainLocalDataSource(
-            favoritesDao = get()
+            favoritesDao = get<FavoritesDao>()
         )
     }
     factory<IngredientDataSource>(
         named(DataContext.NETWORK.name)
     ) {
         IngredientNetworkDataSource(
-            apiClient = get(),
+            apiClient = get<ApiClientImpl>(),
             dataMapper = get(getNamedClass<IngredientsDataMapper>())
         )
     }
@@ -141,14 +150,14 @@ val dataSourceModule = module {
         named(DataContext.LOCAL.name)
     ) {
         IngredientLocalDataSource(
-            ingredientDao = get()
+            ingredientDao = get<IngredientDao>()
         )
     }
     factory<HomeDataSource>(
         named(DataContext.NETWORK.name)
     ) {
         HomeNetworkDataSource(
-            apiClient = get(),
+            apiClient = get<ApiClientImpl>(),
             dataMapper = get(getNamedClass<HomeDataMapper>())
         )
     }
@@ -156,14 +165,14 @@ val dataSourceModule = module {
         named(DataContext.LOCAL.name)
     ) {
         UserLocalDataSource(
-            userDao = get()
+            userDao = get<UserDao>()
         )
     }
     factory<FavoritesDataSource>(
         named(DataContext.NETWORK.name)
     ) {
         FavoritesNetworkDataSource(
-            apiClient = get(),
+            apiClient = get<ApiClientImpl>(),
             dataMapper = get(getNamedClass<FavoritesDataMapper>())
         )
     }
@@ -171,14 +180,14 @@ val dataSourceModule = module {
         named(DataContext.LOCAL.name)
     ) {
         FavoritesLocalDataSource(
-            favoritesDao = get()
+            favoritesDao = get<FavoritesDao>()
         )
     }
     factory<SearchDataSource>(
         named(DataContext.NETWORK.name)
     ) {
         NetworkSearchDataSource(
-            apiClient = get(),
+            apiClient = get<ApiClientImpl>(),
             requestDataMapper = get(getNamedClass<SearchRequestDataMapper>()),
             responseDataMapper = get(getNamedClass<SearchResponseDataMapper>()),
             tagsDataMapper = get(getNamedClass<TagsDataMapper>()),
@@ -187,12 +196,12 @@ val dataSourceModule = module {
     }
     factory<CreateCocktailDataSource> {
         CreateCocktailLocalDataSource(
-            createCocktailDao = get()
+            createCocktailDao = get<CreateCocktailDao>()
         )
     }
     factory<CreateCocktailUploadDataSource> {
         CreateCocktailNetworkUploadDataSource(
-            apiClient = get(),
+            apiClient = get<ApiClientImpl>(),
             requestDataMapper = get(getNamedClass<CreateCocktailDataMapper>())
         )
     }
@@ -259,7 +268,7 @@ val repositoryModule = module {
         CreateCocktailRepositoryImpl(
             localDataSource = get(),
             networkDataSource = get(),
-            ingredientDataSource = get(named(DataContext.NETWORK.name)),
+            ingredientDataSource = get<IngredientDataSource>(named(DataContext.NETWORK.name)),
             dispatcherProvider = get()
         )
     }

@@ -1,8 +1,8 @@
 package com.zioanacleto.speakeazy.ui.presentation.create.presentation
 
 import com.zioanacleto.buffa.events.Resource
+import com.zioanacleto.speakeazy.core.domain.create.model.CreateCocktailModel
 import com.zioanacleto.speakeazy.ui.presentation.components.CreateWizardStepData
-import com.zioanacleto.speakeazy.ui.presentation.create.domain.model.CreateCocktailModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.util.Date
@@ -23,7 +23,7 @@ fun Flow<Resource<List<CreateCocktailModel>>>.mapResourceAsCreateCocktailUiState
             // in this case we create a fake wizard
             is Resource.Error -> CreateCocktailUiState.SuccessSingle(
                 CreateCocktailModel(
-                    currentStep = CreateWizardStepData.First,
+                    currentStep = CreateWizardStepData.First.order,
                     cocktailName = "",
                     createdTime = Date(),
                     lastUpdateTime = Date(),

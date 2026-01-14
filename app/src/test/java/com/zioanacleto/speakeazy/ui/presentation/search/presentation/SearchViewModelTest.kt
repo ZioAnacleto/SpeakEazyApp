@@ -5,15 +5,15 @@ import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.buffa.events.Resource
 import com.zioanacleto.speakeazy.TestDispatcherProvider
 import com.zioanacleto.speakeazy.assertAllTrue
+import com.zioanacleto.speakeazy.core.domain.main.model.MainModel
+import com.zioanacleto.speakeazy.core.domain.search.SearchRepository
+import com.zioanacleto.speakeazy.core.domain.search.model.SearchLandingModel
+import com.zioanacleto.speakeazy.core.domain.search.model.SearchModel
 import com.zioanacleto.speakeazy.testResourceFlow
-import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.MainModel
-import com.zioanacleto.speakeazy.ui.presentation.search.domain.SearchFilterItem
-import com.zioanacleto.speakeazy.ui.presentation.search.domain.SearchRepository
-import com.zioanacleto.speakeazy.ui.presentation.search.domain.model.SearchLandingModel
-import com.zioanacleto.speakeazy.ui.presentation.search.domain.model.SearchModel
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
@@ -24,6 +24,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class SearchViewModelTest {
 
     private lateinit var repository: SearchRepository
@@ -137,7 +138,7 @@ class SearchViewModelTest {
 
         // when
         val sut = createSut()
-        sut.filter(SearchFilterItem.INGREDIENTS, listOf())
+        sut.filter(SearchFilterItem.Ingredients, listOf())
         advanceUntilIdle()
 
         // then
@@ -157,7 +158,7 @@ class SearchViewModelTest {
 
         // when
         val sut = createSut()
-        sut.filter(SearchFilterItem.INGREDIENTS, listOf())
+        sut.filter(SearchFilterItem.Ingredients, listOf())
         advanceUntilIdle()
 
         // then
