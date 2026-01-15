@@ -35,5 +35,9 @@ gradlePlugin {
             id = libs.plugins.zioanacleto.jacoco.application.plugin.get().pluginId
             implementationClass = "com.zioanacleto.speakeazy.buildlogic.plugins.JacocoAndroidApplicationSettingsPlugin"
         }
+        register("jacocoAggregateReportPlugin") {
+            id = libs.plugins.zioanacleto.jacoco.aggregate.plugin.get().pluginId
+            implementationClass = "com.zioanacleto.speakeazy.buildlogic.plugins.JacocoAggregateReportPlugin"
+        }
     }
 }
