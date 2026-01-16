@@ -2,6 +2,7 @@ package com.zioanacleto.speakeazy.core.data.main.datamappers
 
 import com.zioanacleto.speakeazy.core.data.assertAllTrue
 import com.zioanacleto.speakeazy.core.data.main.dto.MainSpeakEazyBEIngredientsListDTO
+import com.zioanacleto.speakeazy.core.data.main.dto.MainSpeakEazyBEInstructionDTO
 import com.zioanacleto.speakeazy.core.data.main.dto.MainSpeakEazyBEListResponseDTO
 import com.zioanacleto.speakeazy.core.data.main.dto.MainSpeakEazyBEResponseDTO
 import io.mockk.clearAllMocks

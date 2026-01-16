@@ -6,6 +6,7 @@ import com.zioanacleto.speakeazy.core.data.main.dto.HomeSectionDTO
 import com.zioanacleto.speakeazy.core.data.main.dto.HomeSectionResponseDTO
 import com.zioanacleto.speakeazy.core.data.main.dto.MainSpeakEazyBEIngredientDTO
 import com.zioanacleto.speakeazy.core.data.main.dto.MainSpeakEazyBEIngredientsListDTO
+import com.zioanacleto.speakeazy.core.data.main.dto.MainSpeakEazyBEInstructionDTO
 import com.zioanacleto.speakeazy.core.data.main.dto.MainSpeakEazyBEResponseDTO
 import io.mockk.clearAllMocks
 import org.junit.After
