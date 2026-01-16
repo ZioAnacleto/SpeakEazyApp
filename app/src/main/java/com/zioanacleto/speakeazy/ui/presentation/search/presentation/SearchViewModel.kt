@@ -50,7 +50,7 @@ class SearchViewModel(
         selectedFilters: Map<SearchFilterItem, List<SelectedFilter>>
     ) {
         val filters = selectedFilters.map { (filter, selectedFilters) ->
-            filter to selectedFilters.filter { it.second }.map { it.first }
+            filter.id to selectedFilters.filter { it.second }.map { it.first }
         }.toMap()
         AnacletoLogger.mumbling(
             mumble = "selectedFilters: $selectedFilters, filters: $filters"

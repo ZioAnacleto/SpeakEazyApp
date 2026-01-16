@@ -3,12 +3,14 @@ package com.zioanacleto.speakeazy.core.data.main.datamappers
 import com.zioanacleto.buffa.datamappers.DataMapper
 import com.zioanacleto.buffa.default
 import com.zioanacleto.speakeazy.core.data.main.dto.HomeSectionResponseDTO
+import com.zioanacleto.speakeazy.core.data.main.dto.MainSpeakEazyBEInstructionDTO
 import com.zioanacleto.speakeazy.core.data.main.dto.MainSpeakEazyBEResponseDTO
 import com.zioanacleto.speakeazy.core.domain.main.model.BannerModel
 import com.zioanacleto.speakeazy.core.domain.main.model.DrinkModel
 import com.zioanacleto.speakeazy.core.domain.main.model.HomeModel
 import com.zioanacleto.speakeazy.core.domain.main.model.HomeSectionModel
 import com.zioanacleto.speakeazy.core.domain.main.model.IngredientModel
+import com.zioanacleto.speakeazy.core.domain.main.model.InstructionModel
 
 class HomeDataMapper : DataMapper<HomeSectionResponseDTO, HomeModel> {
     override fun mapInto(input: HomeSectionResponseDTO): HomeModel =

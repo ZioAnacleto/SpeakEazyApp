@@ -5,6 +5,7 @@ import com.zioanacleto.buffa.default
 import com.zioanacleto.speakeazy.core.data.main.dto.MainResponseDTO
 import com.zioanacleto.speakeazy.core.domain.main.model.DrinkModel
 import com.zioanacleto.speakeazy.core.domain.main.model.IngredientModel
+import com.zioanacleto.speakeazy.core.domain.main.model.InstructionModel
 import com.zioanacleto.speakeazy.core.domain.main.model.MainModel
 
 class MainDataMapper : DataMapper<MainResponseDTO, MainModel> {

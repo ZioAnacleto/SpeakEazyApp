@@ -38,6 +38,7 @@ android {
 
 dependencies {
     implementation(libs.androidx.core.ktx)
+    implementation(libs.kotlinx.serialization.json)
 
     // Zioanacleto Buffa
     implementation(libs.zioanacleto.buffa)

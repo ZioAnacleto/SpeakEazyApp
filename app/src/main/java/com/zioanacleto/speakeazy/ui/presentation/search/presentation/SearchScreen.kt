@@ -160,7 +160,7 @@ private fun SearchScreenWithFilter(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 20.dp, end = 20.dp, top = 2.dp),
-            list = SearchFilterItem::class.sealedSubclasses.map { it.objectInstance!! },
+            list = listOf(SearchFilterItem.Ingredients, SearchFilterItem.Tags),
             onFilterSelectClick = { searchFilterItem ->
                 val filters = if (searchFilterItem == selectedSearchFilterItem)
                     selectedFilters[searchFilterItem].orEmpty()

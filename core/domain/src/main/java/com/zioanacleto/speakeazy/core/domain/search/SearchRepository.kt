@@ -11,7 +11,6 @@ interface SearchRepository {
     fun submitQuery(query: String): Flow<Resource<SearchModel>>
     fun getSearchLandingData(): Flow<Resource<SearchLandingModel>>
     fun submitFilter(
-        selectedFilter: SearchFilterModel,
-        filters: List<String>
+        filters: Map<SearchFilterModel, List<String>>
     ): Flow<Resource<MainModel>>
 }

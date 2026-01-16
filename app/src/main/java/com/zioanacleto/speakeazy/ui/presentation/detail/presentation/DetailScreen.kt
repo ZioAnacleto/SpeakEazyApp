@@ -53,6 +53,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import com.zioanacleto.speakeazy.core.domain.main.model.DrinkModel
 import com.zioanacleto.speakeazy.core.domain.main.model.IngredientModel
+import com.zioanacleto.speakeazy.core.domain.main.model.InstructionModel
 import com.zioanacleto.speakeazy.ui.presentation.components.BackFloatingButton
 import com.zioanacleto.speakeazy.ui.presentation.components.CocktailDetailInformation
 import com.zioanacleto.speakeazy.ui.presentation.components.CocktailLoadingAnimation

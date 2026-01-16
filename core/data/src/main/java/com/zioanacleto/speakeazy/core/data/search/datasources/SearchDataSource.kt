@@ -10,7 +10,6 @@ interface SearchDataSource {
     suspend fun querySearch(query: String): Resource<SearchModel>
     suspend fun getTags(): Resource<TagsModel>
     suspend fun queryFilter(
-        selectedFilterItem: SearchFilterModel,
-        filters: List<String>
+        filters: Map<SearchFilterModel, List<String>>
     ): Resource<MainModel>
 }
