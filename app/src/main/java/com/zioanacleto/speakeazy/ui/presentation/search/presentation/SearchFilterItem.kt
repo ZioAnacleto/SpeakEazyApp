@@ -14,7 +14,7 @@ sealed class SearchFilterItem(
 ) {
     data object Ingredients : SearchFilterItem(
         id = SearchFilterModel.INGREDIENTS,
-        label = "Item",
+        label = "Ingredients",
         icon = R.drawable.ingredients_filter_icon,
         selectedColor = YellowFFE271
     )

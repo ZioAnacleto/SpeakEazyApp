@@ -46,16 +46,17 @@ class SearchViewModel(
         }
     }
 
-    fun filter(selectedSearchFilterItem: SearchFilterItem, selectedFilters: List<SelectedFilter>) {
-        val filters = selectedFilters.filter { it.second }.map { it.first }
+    fun filter(
+        selectedFilters: Map<SearchFilterItem, List<SelectedFilter>>
+    ) {
+        val filters = selectedFilters.map { (filter, selectedFilters) ->
+            filter to selectedFilters.filter { it.second }.map { it.first }
+        }.toMap()
         AnacletoLogger.mumbling(
             mumble = "selectedFilters: $selectedFilters, filters: $filters"
         )
         coroutineScope.launch(dispatcherProvider.io()) {
-            repository.submitFilter(
-                selectedSearchFilterItem.id,
-                filters
-            )
+            repository.submitFilter(filters)
                 .mapResourceAsFilterUiState()
                 .onStart { emit(FilterUiState.Loading) }
                 .collect {

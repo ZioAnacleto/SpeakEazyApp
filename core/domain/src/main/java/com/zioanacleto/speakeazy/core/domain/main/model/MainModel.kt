@@ -1,5 +1,7 @@
 package com.zioanacleto.speakeazy.core.domain.main.model
 
+import kotlinx.serialization.Serializable
+
 data class MainModel(
     val drinks: List<DrinkModel>
 )
@@ -8,8 +10,8 @@ data class DrinkModel(
     val id: String,
     val name: String,
     val category: String = "",
-    val instructions: String = "",
-    val instructionsIt: String = "",
+    val instructions: List<InstructionModel> = listOf(),
+    val instructionsIt: List<InstructionModel> = listOf(),
     val glass: String = "",
     val isAlcoholic: Boolean = false,
     var ingredients: List<IngredientModel> = listOf(),
@@ -29,4 +31,10 @@ data class IngredientModel(
     val measureCl: String? = null,
     val measureOz: String? = null,
     val measureSpecial: String? = null
+)
+
+@Serializable
+data class InstructionModel(
+    val type: String,
+    val instruction: String
 )

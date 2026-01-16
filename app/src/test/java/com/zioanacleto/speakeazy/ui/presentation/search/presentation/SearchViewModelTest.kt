@@ -130,7 +130,7 @@ class SearchViewModelTest {
     fun test_filter_whenRepositoryIsSuccess_filterUiStateIsSuccess() = runTest {
         // given
         dispatcherProvider = TestDispatcherProvider(StandardTestDispatcher(testScheduler))
-        every { repository.submitFilter(any(), any()) } returns flowOf(
+        every { repository.submitFilter(any()) } returns flowOf(
             Resource.Success(
                 MainModel(listOf())
             )
@@ -138,7 +138,7 @@ class SearchViewModelTest {
 
         // when
         val sut = createSut()
-        sut.filter(SearchFilterItem.Ingredients, listOf())
+        sut.filter(mapOf())
         advanceUntilIdle()
 
         // then
@@ -150,7 +150,7 @@ class SearchViewModelTest {
     fun test_filter_whenRepositoryIsError_filterUiStateIsError() = runTest {
         // given
         dispatcherProvider = TestDispatcherProvider(StandardTestDispatcher(testScheduler))
-        every { repository.submitFilter(any(), any()) } returns flowOf(
+        every { repository.submitFilter(any()) } returns flowOf(
             Resource.Error(
                 Exception("testException")
             )
@@ -158,7 +158,7 @@ class SearchViewModelTest {
 
         // when
         val sut = createSut()
-        sut.filter(SearchFilterItem.Ingredients, listOf())
+        sut.filter(mapOf())
         advanceUntilIdle()
 
         // then

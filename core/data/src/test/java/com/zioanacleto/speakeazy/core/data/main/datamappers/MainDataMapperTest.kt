@@ -28,7 +28,7 @@ class MainDataMapperTest {
             result.drinks.size == 1,
             result.drinks.first().name == "test",
             result.drinks.first().category == "testCategory",
-            result.drinks.first().instructions == "testInstructions1",
+            result.drinks.first().instructions.first().instruction == "testInstructions1",
             result.drinks.first().glass == "testGlass",
             result.drinks.first().imageUrl == "testImageSource",
             result.drinks.first().ingredients.size == 1,
@@ -60,7 +60,7 @@ class MainDataMapperTest {
             result.drinks.size == 1,
             result.drinks.first().name == "",
             result.drinks.first().category == "",
-            result.drinks.first().instructions == "",
+            result.drinks.first().instructions.first().instruction == "",
             result.drinks.first().glass == "",
             result.drinks.first().imageUrl == "",
             result.drinks.first().ingredients.isEmpty()

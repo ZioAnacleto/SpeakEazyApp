@@ -39,8 +39,18 @@ class SearchResponseDataMapperTest {
                     id = "1",
                     name = "testName",
                     category = "testCategory",
-                    instructions = "testInstructions",
-                    instructionsIt = "testInstructionsIt",
+                    instructions = listOf(
+                        MainSpeakEazyBEInstructionDTO(
+                            type = "testType",
+                            "testInstructions"
+                        )
+                    ),
+                    instructionsIt = listOf(
+                        MainSpeakEazyBEInstructionDTO(
+                            type = "testType",
+                            "testInstructionsIt"
+                        )
+                    ),
                     glass = "testGlass",
                     isAlcoholic = true,
                     imageLink = "testImageLink",

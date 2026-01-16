@@ -14,7 +14,12 @@ class MainDataMapper : DataMapper<MainResponseDTO, MainModel> {
                 id = it?.idDrink.default(),
                 name = it?.strDrink.default(),
                 category = it?.strCategory.default(),
-                instructions = it?.strInstructionsIT.default(),
+                instructions = listOf(
+                    InstructionModel(
+                        type = "ingredient",
+                        instruction = it?.strInstructionsIT.default()
+                    )
+                ),
                 glass = it?.strGlass.default(),
                 imageUrl = it?.strImageSource.default(),
                 ingredients = it?.gatherAllIngredients()?.map { (ingredient, measure) ->

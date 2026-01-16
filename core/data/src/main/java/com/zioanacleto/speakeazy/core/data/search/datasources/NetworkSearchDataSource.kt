@@ -43,15 +43,14 @@ class NetworkSearchDataSource(
     }
 
     override suspend fun queryFilter(
-        selectedFilterItem: SearchFilterModel,
-        filters: List<String>
+        filters: Map<SearchFilterItem, List<String>>
     ): Resource<MainModel> {
         return getResponseOrCatchError(mainDataMapper) {
             apiClient.executeGetRequest(
                 SpeakEazyBEUrlBuilder.buildUrl(
                     SpeakEazyBEUrlBuilder.Endpoint.Filter(
-                        ingredients = if (selectedFilterItem == SearchFilterModel.INGREDIENTS) filters else null,
-                        tags = if (selectedFilterItem == SearchFilterModel.TAGS) filters else null
+                        ingredients = filters[SearchFilterItem.INGREDIENTS],
+                        tags = filters[SearchFilterItem.TAGS]
                     )
                 )
             )

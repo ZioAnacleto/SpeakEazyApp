@@ -36,7 +36,8 @@ class HomeDataMapper : DataMapper<HomeSectionResponseDTO, HomeModel> {
         id = id.default(),
         name = name.default(),
         category = category.default(),
-        instructions = instructionsIt.default(),
+        instructions = instructions?.map { it.toInstructionModel() } ?: listOf(),
+        instructionsIt = instructionsIt?.map { it.toInstructionModel() } ?: listOf(),
         glass = glass.default(),
         isAlcoholic = isAlcoholic.default(false),
         imageUrl = imageLink.default(),
@@ -64,4 +65,9 @@ class HomeDataMapper : DataMapper<HomeSectionResponseDTO, HomeModel> {
 
     private fun String?.toOzMeasure(): String? =
         this?.let { if (it.contains("-")) null else it.plus("oz") }
+
+    private fun MainSpeakEazyBEInstructionDTO.toInstructionModel() = InstructionModel(
+        type = this.type.default(),
+        instruction = this.instruction.default()
+    )
 }

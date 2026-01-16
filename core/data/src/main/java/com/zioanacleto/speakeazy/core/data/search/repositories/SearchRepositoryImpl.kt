@@ -46,12 +46,11 @@ class SearchRepositoryImpl(
         }.flowOn(dispatcherProvider.io())
 
     override fun submitFilter(
-        selectedFilter: SearchFilterModel,
-        filters: List<String>
+        selectedFilters: Map<SearchFilterItem, List<String>>
     ): Flow<Resource<MainModel>> =
         flow {
             emit(
-                searchDataSource.queryFilter(selectedFilter, filters)
+                searchDataSource.queryFilter(selectedFilters)
             )
         }.flowOn(dispatcherProvider.io())
 }

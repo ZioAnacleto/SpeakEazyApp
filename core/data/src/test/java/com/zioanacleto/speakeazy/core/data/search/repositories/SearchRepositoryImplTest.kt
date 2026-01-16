@@ -53,13 +53,13 @@ class SearchRepositoryImplTest {
     @Test
     fun test_submitFilter() = runBlocking {
         // given
-        coEvery { searchDataSource.queryFilter(any(), any()) } returns Resource.Success(
+        coEvery { searchDataSource.queryFilter(any()) } returns Resource.Success(
             MainModel(drinks = listOf())
         )
 
         // when
         val sut = createSut()
-        val response = sut.submitFilter(SearchFilterModel.INGREDIENTS, listOf()).first()
+        val response = sut.submitFilter(mapOf()).first()
 
         // then
         assert(response is Resource.Success<MainModel>)

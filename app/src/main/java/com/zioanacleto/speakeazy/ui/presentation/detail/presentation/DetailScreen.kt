@@ -363,7 +363,12 @@ fun DetailScreen() {
             name = "Test Cocktail",
             category = "Test Category",
             imageUrl = "",
-            instructions = "Test Instructions",
+            instructions = listOf(
+                InstructionModel(
+                    type = "test",
+                    instruction = "Test Instructions"
+                )
+            ),
             glass = "Test Glass",
             type = "Test Type",
             method = "Test Method",

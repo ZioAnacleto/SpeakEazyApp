@@ -29,8 +29,8 @@ class MainSpeakEazyBEDataMapperTest {
             response.drinks.first().id == "1",
             response.drinks.first().name == "testName",
             response.drinks.first().category == "testCategory",
-            response.drinks.first().instructions == "testInstructions",
-            response.drinks.first().instructionsIt == "testInstructionsIt",
+            response.drinks.first().instructions.first().instruction == "testInstructions",
+            response.drinks.first().instructionsIt.first().instruction == "testInstructionsIt",
             response.drinks.first().glass == "testGlass",
             response.drinks.first().isAlcoholic,
             response.drinks.first().imageUrl == "testImageLink",
@@ -108,8 +108,18 @@ class MainSpeakEazyBEDataMapperTest {
             id = "1",
             name = "testName",
             category = "testCategory",
-            instructions = "testInstructions",
-            instructionsIt = "testInstructionsIt",
+            instructions = listOf(
+                MainSpeakEazyBEInstructionDTO(
+                    type = "testType",
+                    "testInstructions"
+                )
+            ),
+            instructionsIt = listOf(
+                MainSpeakEazyBEInstructionDTO(
+                    type = "testType",
+                    "testInstructionsIt"
+                )
+            ),
             glass = "testGlass",
             isAlcoholic = true,
             imageLink = "testImageLink",

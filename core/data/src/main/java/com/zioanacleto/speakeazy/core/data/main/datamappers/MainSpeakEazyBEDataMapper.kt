@@ -7,7 +7,7 @@ import com.zioanacleto.speakeazy.core.domain.main.model.DrinkModel
 import com.zioanacleto.speakeazy.core.domain.main.model.IngredientModel
 import com.zioanacleto.speakeazy.core.domain.main.model.MainModel
 
-class MainSpeakEazyBEDataMapper: DataMapper<MainSpeakEazyBEResponseDTO, MainModel> {
+class MainSpeakEazyBEDataMapper : DataMapper<MainSpeakEazyBEResponseDTO, MainModel> {
     override fun mapInto(input: MainSpeakEazyBEResponseDTO): MainModel {
         return MainModel(
             listOf(
@@ -15,8 +15,8 @@ class MainSpeakEazyBEDataMapper: DataMapper<MainSpeakEazyBEResponseDTO, MainMode
                     id = input.id.default(),
                     name = input.name.default(),
                     category = input.category.default(),
-                    instructions = input.instructions.default(),
-                    instructionsIt = input.instructionsIt.default(),
+                    instructions = input.instructions?.map { it.toModel() } ?: listOf(),
+                    instructionsIt = input.instructionsIt?.map { it.toModel() } ?: listOf(),
                     glass = input.glass.default(),
                     isAlcoholic = input.isAlcoholic.default(false),
                     imageUrl = input.imageLink.default(),
@@ -41,6 +41,14 @@ class MainSpeakEazyBEDataMapper: DataMapper<MainSpeakEazyBEResponseDTO, MainMode
     }
 
     private fun String?.toMethod(): String = this?.replace(" and ", " & ").default()
-    private fun String?.toClMeasure(): String? = this?.let { if(it.contains("-")) null else it.plus("cl") }
-    private fun String?.toOzMeasure(): String? = this?.let { if(it.contains("-")) null else it.plus("oz") }
+    private fun String?.toClMeasure(): String? =
+        this?.let { if (it.contains("-")) null else it.plus("cl") }
+
+    private fun String?.toOzMeasure(): String? =
+        this?.let { if (it.contains("-")) null else it.plus("oz") }
+
+    private fun MainSpeakEazyBEInstructionDTO.toModel() = InstructionModel(
+        type = this.type.default(),
+        instruction = this.instruction.default()
+    )
 }

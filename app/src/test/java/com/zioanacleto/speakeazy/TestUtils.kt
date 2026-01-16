@@ -17,7 +17,9 @@ import org.junit.Assert.assertTrue
  */
 fun assertAllTrue(
     vararg condition: Boolean,
-) = condition.forEach { assertTrue(it) }
+) = condition.forEachIndexed { index, it ->
+    assertTrue("Condition ${index + 1} failed", it)
+}
 
 /**
  *  Utility function that retrieves first value and second value after [dropCount] emissions
@@ -26,8 +28,8 @@ fun assertAllTrue(
 suspend fun <T> Flow<T>.testResourceFlow(
     dropCount: Int = 1
 ): Pair<T, T> = this.zip(this.drop(dropCount)) { first, second ->
-        first to second
-    }.first()
+    first to second
+}.first()
 
 /**
  *  Utility function that mocks a [ApiClientImpl] with a [MockEngine], providing given response
