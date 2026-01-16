@@ -9,7 +9,7 @@ import com.zioanacleto.speakeazy.di.databaseModule
 import com.zioanacleto.speakeazy.di.repositoryModule
 import com.zioanacleto.speakeazy.di.singletonModule
 import com.zioanacleto.speakeazy.di.viewModelModule
-import com.zioanacleto.speakeazy.domain.logger.LocalLogger
+import com.zioanacleto.speakeazy.logger.LocalLogger
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import org.koin.dsl.binds

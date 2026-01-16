@@ -5,11 +5,11 @@ import com.google.firebase.auth.auth
 import com.zioanacleto.buffa.base.BaseViewModel
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.buffa.default
+import com.zioanacleto.speakeazy.core.domain.create.CreateCocktailRepository
+import com.zioanacleto.speakeazy.core.domain.create.model.CreateCocktailModel
+import com.zioanacleto.speakeazy.core.domain.user.UserRepository
+import com.zioanacleto.speakeazy.core.domain.user.model.Language
 import com.zioanacleto.speakeazy.ui.presentation.components.CreateWizardStepData
-import com.zioanacleto.speakeazy.ui.presentation.create.domain.CreateCocktailRepository
-import com.zioanacleto.speakeazy.ui.presentation.create.domain.model.CreateCocktailModel
-import com.zioanacleto.speakeazy.ui.presentation.user.domain.UserRepository
-import com.zioanacleto.speakeazy.ui.presentation.user.domain.model.Language
 import com.zioanacleto.speakeazy.ui.presentation.user.presentation.UserUiState
 import com.zioanacleto.speakeazy.ui.presentation.user.presentation.mapResourceAsUserUiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -105,7 +105,7 @@ class CreateCocktailViewModel(
     fun createNewWizard() {
         _createCocktailUiState.value = CreateCocktailUiState.SuccessSingle(
             CreateCocktailModel(
-                currentStep = CreateWizardStepData.First,
+                currentStep = CreateWizardStepData.First.order,
                 cocktailName = "",
                 createdTime = Date(),
                 lastUpdateTime = Date(),
@@ -122,7 +122,7 @@ class CreateCocktailViewModel(
         var (currentCreateCocktail, currentDate) = currentUiState()
 
         currentCreateCocktail = currentCreateCocktail.copy(
-            currentStep = CreateWizardStepData.Second,
+            currentStep = CreateWizardStepData.Second.order,
             cocktailName = cocktailName,
             lastUpdateTime = currentDate,
             isAlcoholic = isAlcoholic
@@ -135,7 +135,7 @@ class CreateCocktailViewModel(
         var (currentCreateCocktail, currentDate) = currentUiState()
 
         currentCreateCocktail = currentCreateCocktail.copy(
-            currentStep = CreateWizardStepData.Third,
+            currentStep = CreateWizardStepData.Third.order,
             type = type,
             method = method,
             glass = glass,
@@ -149,7 +149,7 @@ class CreateCocktailViewModel(
         var (currentCreateCocktail, currentDate) = currentUiState()
 
         currentCreateCocktail = currentCreateCocktail.copy(
-            currentStep = CreateWizardStepData.Fourth,
+            currentStep = CreateWizardStepData.Fourth.order,
             ingredients = ingredients,
             lastUpdateTime = currentDate
         )
@@ -169,7 +169,7 @@ class CreateCocktailViewModel(
         val instructionsIt = currentLanguage.assignInstructions(Language.ITALIAN)
 
         currentCreateCocktail = currentCreateCocktail.copy(
-            currentStep = CreateWizardStepData.Fifth,
+            currentStep = CreateWizardStepData.Fifth.order,
             instructions = instructionsEn,
             instructionsIt = instructionsIt,
             lastUpdateTime = currentDate
@@ -182,7 +182,7 @@ class CreateCocktailViewModel(
         var (currentCreateCocktail, currentDate) = currentUiState()
 
         currentCreateCocktail = currentCreateCocktail.copy(
-            currentStep = CreateWizardStepData.Uploading,
+            currentStep = CreateWizardStepData.Uploading.order,
             imageUrl = imageUrl,
             lastUpdateTime = currentDate
         )
@@ -194,7 +194,7 @@ class CreateCocktailViewModel(
         var (currentCreateCocktail, currentDate) = currentUiState()
 
         currentCreateCocktail = currentCreateCocktail.copy(
-            currentStep = CreateWizardStepData.Success,
+            currentStep = CreateWizardStepData.Success.order,
             lastUpdateTime = currentDate
         )
 
@@ -205,7 +205,7 @@ class CreateCocktailViewModel(
         var (currentCreateCocktail, currentDate) = currentUiState()
 
         currentCreateCocktail = currentCreateCocktail.copy(
-            currentStep = step,
+            currentStep = step.order,
             lastUpdateTime = currentDate
         )
 

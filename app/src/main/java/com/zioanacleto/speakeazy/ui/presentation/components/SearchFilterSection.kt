@@ -35,7 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
-import com.zioanacleto.speakeazy.ui.presentation.search.domain.SearchFilterItem
+import com.zioanacleto.speakeazy.ui.presentation.search.presentation.SearchFilterItem
 import com.zioanacleto.speakeazy.ui.theme.YellowFFE271
 import kotlinx.coroutines.delay
 
@@ -225,10 +225,10 @@ fun SearchFilterSectionPreview() {
     SearchFilterSection(
         modifier = Modifier
             .fillMaxWidth(),
-        list = listOf(SearchFilterItem.INGREDIENTS, SearchFilterItem.TAGS),
+        list = listOf(SearchFilterItem.Ingredients, SearchFilterItem.Tags),
         onFilterSelectClick = {
             when (it) {
-                SearchFilterItem.INGREDIENTS -> listOf(
+                SearchFilterItem.Ingredients -> listOf(
                     "Vodka" to false,
                     "Rum" to false,
                     "Gin" to false

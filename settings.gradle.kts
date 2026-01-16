@@ -21,4 +21,8 @@ dependencyResolutionManagement {
 
 rootProject.name = "SpeakEazy"
 include(":app")
- 
+include(":core:data")
+include(":core:domain")
+include(":core:network")
+include(":core:database")
+includeBuild("buildLogic")

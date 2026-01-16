@@ -5,11 +5,11 @@ import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.buffa.events.Resource
 import com.zioanacleto.speakeazy.TestDispatcherProvider
 import com.zioanacleto.speakeazy.assertAllTrue
+import com.zioanacleto.speakeazy.core.domain.main.model.MainModel
+import com.zioanacleto.speakeazy.core.domain.search.SearchRepository
+import com.zioanacleto.speakeazy.core.domain.search.model.SearchLandingModel
+import com.zioanacleto.speakeazy.core.domain.search.model.SearchModel
 import com.zioanacleto.speakeazy.testResourceFlow
-import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.MainModel
-import com.zioanacleto.speakeazy.ui.presentation.search.domain.SearchRepository
-import com.zioanacleto.speakeazy.ui.presentation.search.domain.model.SearchLandingModel
-import com.zioanacleto.speakeazy.ui.presentation.search.domain.model.SearchModel
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk

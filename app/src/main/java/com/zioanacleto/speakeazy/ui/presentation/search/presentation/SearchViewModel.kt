@@ -3,9 +3,8 @@ package com.zioanacleto.speakeazy.ui.presentation.search.presentation
 import com.zioanacleto.buffa.base.BaseViewModel
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.buffa.logging.AnacletoLogger
+import com.zioanacleto.speakeazy.core.domain.search.SearchRepository
 import com.zioanacleto.speakeazy.ui.presentation.components.SelectedFilter
-import com.zioanacleto.speakeazy.ui.presentation.search.domain.SearchFilterItem
-import com.zioanacleto.speakeazy.ui.presentation.search.domain.SearchRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -51,7 +50,7 @@ class SearchViewModel(
         selectedFilters: Map<SearchFilterItem, List<SelectedFilter>>
     ) {
         val filters = selectedFilters.map { (filter, selectedFilters) ->
-            filter to selectedFilters.filter { it.second }.map { it.first }
+            filter.id to selectedFilters.filter { it.second }.map { it.first }
         }.toMap()
         AnacletoLogger.mumbling(
             mumble = "selectedFilters: $selectedFilters, filters: $filters"

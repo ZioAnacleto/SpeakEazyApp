@@ -2,7 +2,7 @@ package com.zioanacleto.speakeazy
 
 import androidx.lifecycle.ViewModel
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
-import com.zioanacleto.speakeazy.ui.presentation.user.domain.UserRepository
+import com.zioanacleto.speakeazy.core.domain.user.UserRepository
 import com.zioanacleto.speakeazy.ui.presentation.user.presentation.UserUiState
 import com.zioanacleto.speakeazy.ui.presentation.user.presentation.mapResourceAsUserUiState
 import kotlinx.coroutines.CoroutineScope

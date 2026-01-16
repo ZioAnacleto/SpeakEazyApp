@@ -28,7 +28,7 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.zioanacleto.speakeazy.domain.CREATE_COCKTAIL_MAX_INGREDIENTS_NUMBER
+import com.zioanacleto.speakeazy.CREATE_COCKTAIL_MAX_INGREDIENTS_NUMBER
 import com.zioanacleto.speakeazy.ui.presentation.components.CocktailLoadingAnimation
 import com.zioanacleto.speakeazy.ui.presentation.components.CreateCocktailNewIngredientDialog
 import com.zioanacleto.speakeazy.ui.presentation.components.GlassWithIngredients

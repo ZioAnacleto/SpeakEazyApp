@@ -4,9 +4,9 @@ import com.zioanacleto.buffa.coroutines.DefaultDispatcherProvider
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.buffa.events.Resource
 import com.zioanacleto.speakeazy.assertAllTrue
+import com.zioanacleto.speakeazy.core.domain.main.HomeRepository
+import com.zioanacleto.speakeazy.core.domain.main.model.HomeModel
 import com.zioanacleto.speakeazy.testResourceFlow
-import com.zioanacleto.speakeazy.ui.presentation.main.domain.HomeRepository
-import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.HomeModel
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk

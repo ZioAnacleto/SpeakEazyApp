@@ -51,6 +51,9 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
+import com.zioanacleto.speakeazy.core.domain.main.model.DrinkModel
+import com.zioanacleto.speakeazy.core.domain.main.model.IngredientModel
+import com.zioanacleto.speakeazy.core.domain.main.model.InstructionModel
 import com.zioanacleto.speakeazy.ui.presentation.components.BackFloatingButton
 import com.zioanacleto.speakeazy.ui.presentation.components.CocktailDetailInformation
 import com.zioanacleto.speakeazy.ui.presentation.components.CocktailLoadingAnimation
@@ -59,9 +62,6 @@ import com.zioanacleto.speakeazy.ui.presentation.components.IngredientView
 import com.zioanacleto.speakeazy.ui.presentation.components.parallaxLayoutModifier
 import com.zioanacleto.speakeazy.ui.presentation.components.speakEazyGradientBackground
 import com.zioanacleto.speakeazy.ui.presentation.components.withAlpha
-import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.DrinkModel
-import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.IngredientModel
-import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.InstructionModel
 import org.koin.androidx.compose.getViewModel
 
 @Composable

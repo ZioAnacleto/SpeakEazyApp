@@ -27,11 +27,10 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zioanacleto.buffa.compose.hideKeyboardOnTouch
+import com.zioanacleto.speakeazy.core.domain.search.model.SearchLandingModel
 import com.zioanacleto.speakeazy.ui.presentation.components.CocktailLoadingAnimation
 import com.zioanacleto.speakeazy.ui.presentation.components.SearchFilterSection
 import com.zioanacleto.speakeazy.ui.presentation.components.SelectedFilter
-import com.zioanacleto.speakeazy.ui.presentation.search.domain.SearchFilterItem
-import com.zioanacleto.speakeazy.ui.presentation.search.domain.model.SearchLandingModel
 import com.zioanacleto.speakeazy.ui.theme.YellowFFE271
 import org.koin.androidx.compose.getViewModel
 
@@ -161,18 +160,18 @@ private fun SearchScreenWithFilter(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 20.dp, end = 20.dp, top = 2.dp),
-            list = listOf(SearchFilterItem.INGREDIENTS, SearchFilterItem.TAGS),
+            list = listOf(SearchFilterItem.Ingredients, SearchFilterItem.Tags),
             onFilterSelectClick = { searchFilterItem ->
                 val filters = if (searchFilterItem == selectedSearchFilterItem)
                     selectedFilters[searchFilterItem].orEmpty()
                 else when (searchFilterItem) {
-                    SearchFilterItem.INGREDIENTS -> {
+                    is SearchFilterItem.Ingredients -> {
                         data.ingredients.map {
                             SelectedFilter(it.name, false)
                         }
                     }
 
-                    SearchFilterItem.TAGS -> {
+                    is SearchFilterItem.Tags -> {
                         data.tags.map {
                             SelectedFilter(it.name, false)
                         }

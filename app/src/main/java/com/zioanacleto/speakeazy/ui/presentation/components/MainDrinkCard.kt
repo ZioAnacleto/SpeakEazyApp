@@ -74,7 +74,7 @@ fun MainDrinkCard(
                     modifier = Modifier
                         .size(18.dp)
                         .align(Alignment.TopEnd),
-                    painter = if(isFavorite)
+                    painter = if (isFavorite)
                         rememberVectorPainter(Icons.Filled.Favorite)
                     else
                         rememberVectorPainter(Icons.Filled.FavoriteBorder),
@@ -90,11 +90,11 @@ fun MainDrinkCard(
             }
         }
 
-        if(userName?.isNotEmpty() == true) {
+        if (userName?.isNotEmpty() == true) {
             Box(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
-                    .padding(end =  10.dp)
+                    .padding(end = 10.dp)
                     .clip(RoundedCornerShape(10.dp))
                     .background(YellowFFE271),
                 contentAlignment = Alignment.Center
