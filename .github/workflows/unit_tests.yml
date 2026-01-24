@@ -107,10 +107,6 @@ jobs:
             --max-workers=1
           kill $KEEPALIVE_PID
 
-      # Start adb for emulator
-      - name: Start adb
-        run: adb start-server
-
       # Run android tests on core:database module
       - name: Run androidTest (core:database)
         uses: reactivecircus/android-emulator-runner@v2
