@@ -4,7 +4,6 @@ import com.zioanacleto.speakeazy.buildlogic.coverageExclusions
 import com.zioanacleto.speakeazy.buildlogic.libs
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.Task
 import org.gradle.kotlin.dsl.register
 import org.gradle.testing.jacoco.tasks.JacocoReport
 
@@ -63,19 +62,9 @@ class JacocoAggregateReportPlugin : Plugin<Project> {
 
                 dependsOn(
                     subprojects.flatMap { sub ->
-                        val tasks = mutableListOf<Task>()
-                        tasks += sub.tasks.matching {
+                        sub.tasks.matching {
                             it.name == "testDebugUnitTest"
                         }
-
-                        // only for :core:database
-                        if (sub.path == ":core:database") {
-                            tasks += sub.tasks.matching {
-                                it.name == "connectedDebugAndroidTest"
-                            }
-                        }
-
-                        tasks
                     }
                 )
 
