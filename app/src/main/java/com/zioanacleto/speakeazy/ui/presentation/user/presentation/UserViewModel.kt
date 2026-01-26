@@ -7,20 +7,29 @@ import com.google.firebase.auth.auth
 import com.zioanacleto.buffa.base.BaseViewModel
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.buffa.default
+import com.zioanacleto.buffa.logging.AnacletoLevel
 import com.zioanacleto.buffa.logging.AnacletoLogger
 import com.zioanacleto.speakeazy.APP_PACKAGE
 import com.zioanacleto.speakeazy.core.domain.user.UserRepository
 import com.zioanacleto.speakeazy.core.domain.user.model.UserModel
 import com.zioanacleto.speakeazy.ui.presentation.user.navigation.USER_DEEPLINK_URI
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class UserViewModel(
     private val repository: UserRepository,
     private val dispatcherProvider: DispatcherProvider
-): BaseViewModel(dispatcherProvider) {
+) : BaseViewModel(dispatcherProvider) {
+
+    private val _onUserSavedError = MutableStateFlow(false)
+    val onUserSavedError: StateFlow<Boolean> = _onUserSavedError
+
+    private val _onUserUpdatedError = MutableStateFlow(false)
+    val onUserUpdatedError: StateFlow<Boolean> = _onUserUpdatedError
 
     private val actionCodeSettings: ActionCodeSettings = actionCodeSettings {
         url = USER_DEEPLINK_URI
@@ -49,7 +58,22 @@ class UserViewModel(
             repository.saveUser(
                 UserModel(
                     email = userEmail
-                )
+                ),
+                {
+                    AnacletoLogger.mumbling(
+                        mumble = "Success in saving local user.",
+                        level = AnacletoLevel.INFO
+                    )
+                    _onUserSavedError.value = false
+                },
+                onError = { exception ->
+                    AnacletoLogger.mumbling(
+                        mumble = "Error while saving user",
+                        error = exception,
+                        level = AnacletoLevel.WARNING
+                    )
+                    _onUserSavedError.value = true
+                }
             )
         }
         // sending email to user

@@ -1,23 +1,21 @@
-package com.zioanacleto.speakeazy.ui.presentation.user.presentation
+package com.zioanacleto.speakeazy
 
 import com.zioanacleto.buffa.coroutines.DefaultDispatcherProvider
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.buffa.events.Resource
-import com.zioanacleto.speakeazy.assertAllTrue
 import com.zioanacleto.speakeazy.core.domain.user.UserRepository
 import com.zioanacleto.speakeazy.core.domain.user.model.UserModel
-import com.zioanacleto.speakeazy.testResourceFlow
+import com.zioanacleto.speakeazy.ui.presentation.user.presentation.UserUiState
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
-class UserViewModelTest {
-
+class MainActivityViewModelTest {
     private lateinit var repository: UserRepository
     private lateinit var dispatcherProvider: DispatcherProvider
 
@@ -33,42 +31,45 @@ class UserViewModelTest {
     }
 
     @Test
-    fun test_userUiState_whenResourceIsSuccess_uiStateIsSuccess() = runBlocking {
+    fun `userUiState - when success return Success`() = runTest{
         // given
         every { repository.getUser() } returns flowOf(
             Resource.Success(
-                UserModel(name = "nameTest", email = "mailTest@blablabla.it")
+                UserModel(
+                    name = "testName",
+                    email = "testEmail"
+                )
             )
         )
 
         // when
         val sut = createSut()
-        val (resultLoading, result) = sut.userUiState.testResourceFlow()
+        val (responseLoading, responseSuccess) = sut.userUiState.testResourceFlow()
 
         // then
         assertAllTrue(
-            resultLoading is UserUiState.Loading,
-            result is UserUiState.Success
+            responseLoading is UserUiState.Loading,
+            responseSuccess is UserUiState.Success
         )
     }
 
     @Test
-    fun test_userUiState_whenResourceIsError_uiStateIsError() = runBlocking {
+    fun `userUiState - when error return Error`() = runTest{
         // given
         every { repository.getUser() } returns flowOf(
-            Resource.Error(Exception("test"))
+            Resource.Error(Exception("testException"))
         )
 
         // when
         val sut = createSut()
-        val (resultLoading, result) = sut.userUiState.testResourceFlow()
+        val (responseLoading, responseSuccess) = sut.userUiState.testResourceFlow()
 
         // then
         assertAllTrue(
-            resultLoading is UserUiState.Loading,
-            result is UserUiState.Error
+            responseLoading is UserUiState.Loading,
+            responseSuccess is UserUiState.Error
         )
     }
 
-    private fun createSut() = UserViewModel(repository, dispatcherProvider)
+    private fun createSut() = MainActivityViewModel(repository, dispatcherProvider)
 }

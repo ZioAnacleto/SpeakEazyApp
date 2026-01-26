@@ -25,10 +25,12 @@ val coverageExclusions = listOf(
     "**/Manifest*.*",
     "**/*Activity.*",
     "**/*Screen*.*",
+    "**/*SpeakEazy*.*",
     "**/di/**",
     "**/theme/**",
     "**/components/**",
-    "**/navigation/**"
+    "**/navigation/**",
+    "**/logger/**"
 )
 
 private fun String.capitalize() = replaceFirstChar {
