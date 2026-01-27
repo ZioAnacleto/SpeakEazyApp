@@ -11,6 +11,7 @@ import com.zioanacleto.speakeazy.core.domain.detail.model.IngredientsModel
 import com.zioanacleto.speakeazy.core.domain.user.UserRepository
 import com.zioanacleto.speakeazy.core.domain.user.model.Language
 import com.zioanacleto.speakeazy.core.domain.user.model.UserModel
+import com.zioanacleto.speakeazy.testDispatcher
 import com.zioanacleto.speakeazy.testResourceFlow
 import com.zioanacleto.speakeazy.ui.presentation.components.CreateWizardStepData
 import io.mockk.clearAllMocks
@@ -19,7 +20,6 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -50,8 +50,9 @@ class CreateCocktailViewModelTest {
 
     @Test
     fun `ingredientsUiState - when Repository returns Success uiState is Loading then Success`() =
-        runBlocking {
+        runTest {
             // given
+            dispatcherProvider = testDispatcher()
             every { repository.getIngredients() } returns flowOf(
                 Resource.Success(
                     IngredientsModel(listOf())
@@ -71,8 +72,9 @@ class CreateCocktailViewModelTest {
 
     @Test
     fun `ingredientsUiState - when Repository returns Error uiState is Loading then Error`() =
-        runBlocking {
+        runTest {
             // given
+            dispatcherProvider = testDispatcher()
             every { repository.getIngredients() } returns flowOf(
                 Resource.Error(Exception("testException"))
             )

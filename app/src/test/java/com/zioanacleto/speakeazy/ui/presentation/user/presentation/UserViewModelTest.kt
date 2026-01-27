@@ -6,12 +6,13 @@ import com.zioanacleto.buffa.events.Resource
 import com.zioanacleto.speakeazy.assertAllTrue
 import com.zioanacleto.speakeazy.core.domain.user.UserRepository
 import com.zioanacleto.speakeazy.core.domain.user.model.UserModel
+import com.zioanacleto.speakeazy.testDispatcher
 import com.zioanacleto.speakeazy.testResourceFlow
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -33,8 +34,9 @@ class UserViewModelTest {
     }
 
     @Test
-    fun test_userUiState_whenResourceIsSuccess_uiStateIsSuccess() = runBlocking {
+    fun test_userUiState_whenResourceIsSuccess_uiStateIsSuccess() = runTest {
         // given
+        dispatcherProvider = testDispatcher()
         every { repository.getUser() } returns flowOf(
             Resource.Success(
                 UserModel(name = "nameTest", email = "mailTest@blablabla.it")
@@ -53,8 +55,9 @@ class UserViewModelTest {
     }
 
     @Test
-    fun test_userUiState_whenResourceIsError_uiStateIsError() = runBlocking {
+    fun test_userUiState_whenResourceIsError_uiStateIsError() = runTest {
         // given
+        dispatcherProvider = testDispatcher()
         every { repository.getUser() } returns flowOf(
             Resource.Error(Exception("test"))
         )

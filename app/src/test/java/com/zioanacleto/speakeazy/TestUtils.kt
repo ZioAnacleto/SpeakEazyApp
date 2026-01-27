@@ -4,6 +4,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.zip
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestScope
 import org.junit.Assert.assertTrue
 
 /**
@@ -24,3 +26,5 @@ suspend fun <T> Flow<T>.testResourceFlow(
 ): Pair<T, T> = this.zip(this.drop(dropCount)) { first, second ->
     first to second
 }.first()
+
+fun TestScope.testDispatcher() = TestDispatcherProvider(StandardTestDispatcher(testScheduler))
