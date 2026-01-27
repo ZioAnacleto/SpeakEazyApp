@@ -61,6 +61,11 @@ dependencies {
     implementation(libs.ktor.serialization)
     implementation(libs.ktor.client.logging)
 
+    // Firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth)
+    implementation(libs.google.play.services.auth)
+
     // Unit tests
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
