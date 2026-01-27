@@ -10,6 +10,7 @@ import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
@@ -31,8 +32,9 @@ class MainActivityViewModelTest {
     }
 
     @Test
-    fun `userUiState - when success return Success`() = runTest{
+    fun `userUiState - when success return Success`() = runTest {
         // given
+        dispatcherProvider = TestDispatcherProvider(StandardTestDispatcher(testScheduler))
         every { repository.getUser() } returns flowOf(
             Resource.Success(
                 UserModel(
@@ -54,8 +56,9 @@ class MainActivityViewModelTest {
     }
 
     @Test
-    fun `userUiState - when error return Error`() = runTest{
+    fun `userUiState - when error return Error`() = runTest {
         // given
+        dispatcherProvider = TestDispatcherProvider(StandardTestDispatcher(testScheduler))
         every { repository.getUser() } returns flowOf(
             Resource.Error(Exception("testException"))
         )
