@@ -5,22 +5,22 @@ object TheCocktailDBUrlBuilder {
     private const val API_KEY = "1"
 
     fun buildUrl(endpoint: Endpoint): String =
-        "$BASE_URL/$API_KEY/${endpoint.buildQuery()}"
+        "$BASE_URL/$API_KEY/${endpoint.buildRelativeUri()}"
 
     sealed class Endpoint(
-        val url: String
+        val uri: String
     ) {
-        abstract fun buildQuery(): String
+        abstract fun buildRelativeUri(): String
 
         data object Random : Endpoint("random.php") {
-            override fun buildQuery(): String = this.url
+            override fun buildRelativeUri(): String = this.uri
         }
 
         data class Search(
             private val parameter: String,
             private val queryMode: QueryMode,
         ) : Endpoint("search.php") {
-            override fun buildQuery() = "$url?${queryMode.param}=$parameter"
+            override fun buildRelativeUri() = "$uri?${queryMode.param}=$parameter"
 
             enum class QueryMode(val param: String) {
                 NAME(QUERY_PARAM_NAME),
@@ -39,7 +39,7 @@ object TheCocktailDBUrlBuilder {
             private val parameter: String,
             private val queryMode: QueryMode
         ) : Endpoint("lookup.php") {
-            override fun buildQuery() = "$url?${queryMode.param}=$parameter"
+            override fun buildRelativeUri() = "$uri?${queryMode.param}=$parameter"
 
             enum class QueryMode(val param: String) {
                 ID(QUERY_PARAM_ID),
@@ -57,7 +57,7 @@ object TheCocktailDBUrlBuilder {
             private val queryMode: QueryMode
         ): Endpoint("filter.php") {
 
-            override fun buildQuery() = "$url?${queryMode.param}=$parameter"
+            override fun buildRelativeUri() = "$uri?${queryMode.param}=$parameter"
 
             enum class QueryMode(val param: String) {
                 ALCOHOLIC(QUERY_PARAM_ALCOHOLIC),
@@ -71,16 +71,13 @@ object TheCocktailDBUrlBuilder {
                 private const val QUERY_PARAM_INGREDIENTS = "i"
                 private const val QUERY_PARAM_CATEGORY = "c"
                 private const val QUERY_PARAM_GLASS = "g"
-
-                const val ALCOHOLIC = "Alcoholic"
-                const val NON_ALCOHOLIC = "Non_Alcoholic"
             }
         }
 
         data class List(
             private val queryMode: QueryMode
         ): Endpoint("list.php") {
-            override fun buildQuery() = "$url?${queryMode.param}=list"
+            override fun buildRelativeUri() = "$uri?${queryMode.param}=list"
 
             enum class QueryMode(val param: String) {
                 ALCOHOLIC(QUERY_PARAM_ALCOHOLIC),
