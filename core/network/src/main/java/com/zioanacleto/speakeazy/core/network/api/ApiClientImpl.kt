@@ -23,8 +23,11 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
+import io.ktor.util.reflect.TypeInfo
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 import java.security.MessageDigest
+import kotlin.reflect.KClass
 
 class ApiClientImpl(
     engine: HttpClientEngine = CIO.create()
@@ -50,9 +53,10 @@ class ApiClientImpl(
 
     val httpClient: HttpClient by lazy { _httpClient }
 
-    suspend inline fun <reified T> executeGetRequest(
+    suspend fun <T: Any> executeGetRequest(
         url: String,
-        isCached: Boolean = false
+        responseType: KClass<T>,
+        isCached: Boolean = false,
     ): T {
         return httpClient
             .get(url) {
@@ -64,33 +68,47 @@ class ApiClientImpl(
                         )
                     append(HttpHeaders.Authorization, createAuthorizationHeader())
                 }
-            }.body()
+            }.body(TypeInfo(responseType))
     }
 
-    suspend inline fun <reified T> executePutRequest(url: String, body: T? = null): Int {
+    suspend fun <T: Any> executePutRequest(
+        url: String,
+        body: T? = null,
+        serializer: KSerializer<T>? = null
+    ): Int {
         return httpClient.put(url) {
             headers {
                 append(HttpHeaders.Authorization, createAuthorizationHeader())
             }
             contentType(ContentType.Application.Json)
-            setBody(Json.encodeToString(body))
+            body?.let { requestBody ->
+                serializer?.let { requestBodySerializer ->
+                    setBody(Json.encodeToString(requestBodySerializer, requestBody))
+                }
+            }
         }.body<Int>()
     }
 
-    suspend inline fun <reified Input, reified Output> executePostRequest(
+    suspend fun <Input : Any, Output : Any> executePostRequest(
         url: String,
-        body: Input? = null
+        body: Input? = null,
+        responseType: KClass<Output>,
+        bodySerializer: KSerializer<Input>?
     ): Output {
         return httpClient.post(url) {
             headers {
                 append(HttpHeaders.Authorization, createAuthorizationHeader())
             }
             contentType(ContentType.Application.Json)
-            setBody(Json.encodeToString(body))
+            body?.let { requestBody ->
+                bodySerializer?.let { serializer ->
+                    setBody(Json.encodeToString(serializer, requestBody))
+                }
+            }
             timeout {
                 requestTimeoutMillis = REQUEST_TIMEOUT
             }
-        }.body()
+        }.body(TypeInfo(responseType))
     }
 
     fun createAuthorizationHeader(): String {

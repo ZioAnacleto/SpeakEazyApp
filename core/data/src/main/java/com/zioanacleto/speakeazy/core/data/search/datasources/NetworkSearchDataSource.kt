@@ -13,7 +13,10 @@ import com.zioanacleto.speakeazy.core.domain.search.model.SearchModel
 import com.zioanacleto.speakeazy.core.domain.search.model.TagsModel
 import com.zioanacleto.speakeazy.core.network.api.ApiClientImpl
 import com.zioanacleto.speakeazy.core.network.builders.SpeakEazyBEUrlBuilder
+import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.serializer
 
+@OptIn(InternalSerializationApi::class)
 class NetworkSearchDataSource(
     private val apiClient: ApiClientImpl,
     private val requestDataMapper: DataMapper<String, SearchRequestDTO>,
@@ -24,10 +27,12 @@ class NetworkSearchDataSource(
     override suspend fun querySearch(query: String): Resource<SearchModel> {
         return getResponseOrCatchError(responseDataMapper) {
             apiClient.executePostRequest(
-                SpeakEazyBEUrlBuilder.buildUrl(
+                url = SpeakEazyBEUrlBuilder.buildUrl(
                     SpeakEazyBEUrlBuilder.Endpoint.Search
                 ),
-                requestDataMapper.mapInto(query)
+                body = requestDataMapper.mapInto(query),
+                bodySerializer = SearchRequestDTO::class.serializer(),
+                responseType = SearchResponseDTO::class
             )
         }
     }
@@ -37,7 +42,8 @@ class NetworkSearchDataSource(
             apiClient.executeGetRequest(
                 SpeakEazyBEUrlBuilder.buildUrl(
                     SpeakEazyBEUrlBuilder.Endpoint.Tags
-                )
+                ),
+                TagsResponseDTO::class
             )
         }
     }
@@ -52,7 +58,8 @@ class NetworkSearchDataSource(
                         ingredients = filters[SearchFilterModel.INGREDIENTS],
                         tags = filters[SearchFilterModel.TAGS]
                     )
-                )
+                ),
+                MainSpeakEazyBEListResponseDTO::class
             )
         }
     }

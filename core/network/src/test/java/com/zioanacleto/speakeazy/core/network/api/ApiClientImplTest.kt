@@ -12,11 +12,14 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
 import io.mockk.clearAllMocks
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.serializer
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
+@OptIn(InternalSerializationApi::class)
 class ApiClientImplTest {
 
     @After
@@ -42,7 +45,7 @@ class ApiClientImplTest {
         }
 
         // when
-        val response = sut.executeGetRequest<String>("", true)
+        val response = sut.executeGetRequest("", String::class, true)
 
         // then
         assert(response == "test")
@@ -73,7 +76,7 @@ class ApiClientImplTest {
         }
 
         // when
-        val response = sut.executeGetRequest<String>("", false)
+        val response = sut.executeGetRequest("", String::class, false)
 
         // then
         assert(response == "test")
@@ -96,7 +99,7 @@ class ApiClientImplTest {
         }
 
         // when
-        val response = sut.executePutRequest("", "test")
+        val response = sut.executePutRequest("", "test", String::class.serializer())
 
         // then
         assert(response == 1)
@@ -126,7 +129,12 @@ class ApiClientImplTest {
         }
 
         // when
-        val response = sut.executePostRequest<String, String>("", "testRequest")
+        val response = sut.executePostRequest(
+            "",
+            "testRequest",
+            bodySerializer = String::class.serializer(),
+            responseType = String::class
+        )
 
         // then
         assert(response == "testResponse")
