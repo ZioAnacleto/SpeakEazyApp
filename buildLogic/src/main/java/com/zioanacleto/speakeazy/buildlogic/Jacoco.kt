@@ -26,6 +26,7 @@ val coverageExclusions = listOf(
     "**/*Activity*.*",
     "**/*Screen*.*",
     "**/*SpeakEazyApp*.*",
+    "**/*SpeakEazyRoomDatabase*.*",
     "**/di/**",
     "**/theme/**",
     "**/components/**",

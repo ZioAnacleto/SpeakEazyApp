@@ -46,6 +46,5 @@ class MainLocalDataSource(
 
     override suspend fun updateVisualizations(
         cocktailId: String
-    ) { /*do nothing here*/
-    }
+    ) { /*do nothing here*/ }
 }
