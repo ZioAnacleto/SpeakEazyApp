@@ -207,6 +207,7 @@ jobs:
       
       # Upload a code coverage report to build folder
       - name: Upload Coverage Report
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
