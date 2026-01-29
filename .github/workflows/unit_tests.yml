@@ -173,6 +173,21 @@ jobs:
           echo "Coverage: $COVERAGE%"
           echo "coverage=$COVERAGE" >> $GITHUB_OUTPUT
 
+      # We keep the PR check just to avoid errors
+      - name: Comment coverage on PR
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            ## 📊 Code Coverage Report
+
+            **Coverage:** ${{ steps.coverage.outputs.coverage }}%  
+            **Required:** ${{ vars.COVERAGE_THRESHOLD }}%
+
+            ### Merge checklist
+            - [ ] Coverage ≥ ${{ vars.COVERAGE_THRESHOLD }}%
+          comment_tag: coverage-comment
+
       # This will break the pipeline if the coverage is under threshold
       - name: Check coverage threshold
         if: always()
@@ -189,21 +204,6 @@ jobs:
           else
             echo "✅ Coverage meets threshold"
           fi
-
-      # We keep the PR check just to avoid errors
-      - name: Comment coverage on PR
-        if: ${{ github.event_name == 'pull_request' }}
-        uses: thollander/actions-comment-pull-request@v2
-        with:
-          message: |
-            ## 📊 Code Coverage Report
-
-            **Coverage:** ${{ steps.coverage.outputs.coverage }}%  
-            **Required:** ${{ vars.COVERAGE_THRESHOLD }}%
-
-            ### Merge checklist
-            - [ ] Coverage ≥ ${{ vars.COVERAGE_THRESHOLD }}%
-          comment_tag: coverage-comment
       
       # Upload a code coverage report to build folder
       - name: Upload Coverage Report
