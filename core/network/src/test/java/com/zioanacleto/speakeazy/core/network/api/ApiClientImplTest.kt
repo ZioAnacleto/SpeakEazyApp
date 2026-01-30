@@ -13,6 +13,7 @@ import io.ktor.http.headersOf
 import io.mockk.clearAllMocks
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -123,7 +124,7 @@ class ApiClientImplTest {
 
             respond(
                 status = HttpStatusCode.OK,
-                content = "testResponse",
+                content = Json.encodeToString("testResponse"),
                 headers = headersOf()
             )
         }
