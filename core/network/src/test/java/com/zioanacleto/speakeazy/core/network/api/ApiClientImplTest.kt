@@ -133,7 +133,7 @@ class ApiClientImplTest {
             "",
             "testRequest",
             bodySerializer = String::class.serializer(),
-            responseType = String::class
+            responseSerializer = String::class.serializer()
         )
 
         // then

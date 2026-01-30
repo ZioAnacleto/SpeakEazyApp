@@ -14,7 +14,6 @@ import com.zioanacleto.speakeazy.core.domain.search.model.TagsModel
 import com.zioanacleto.speakeazy.core.network.api.ApiClientImpl
 import com.zioanacleto.speakeazy.core.network.builders.SpeakEazyBEUrlBuilder
 import kotlinx.serialization.InternalSerializationApi
-import kotlinx.serialization.serializer
 
 @OptIn(InternalSerializationApi::class)
 class NetworkSearchDataSource(
@@ -31,8 +30,8 @@ class NetworkSearchDataSource(
                     SpeakEazyBEUrlBuilder.Endpoint.Search
                 ),
                 body = requestDataMapper.mapInto(query),
-                bodySerializer = SearchRequestDTO::class.serializer(),
-                responseType = SearchResponseDTO::class
+                bodySerializer = SearchRequestDTO.serializer(),
+                responseSerializer = SearchResponseDTO.serializer()
             )
         }
     }

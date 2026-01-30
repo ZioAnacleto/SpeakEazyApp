@@ -18,6 +18,7 @@ import io.ktor.client.request.headers
 import io.ktor.client.request.post
 import io.ktor.client.request.put
 import io.ktor.client.request.setBody
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.CacheControl
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
@@ -92,10 +93,10 @@ class ApiClientImpl(
     suspend fun <Input : Any, Output : Any> executePostRequest(
         url: String,
         body: Input? = null,
-        responseType: KClass<Output>,
-        bodySerializer: KSerializer<Input>?
+        bodySerializer: KSerializer<Input>?,
+        responseSerializer: KSerializer<Output>
     ): Output {
-        return httpClient.post(url) {
+        val response = httpClient.post(url) {
             headers {
                 append(HttpHeaders.Authorization, createAuthorizationHeader())
             }
@@ -108,7 +109,9 @@ class ApiClientImpl(
             timeout {
                 requestTimeoutMillis = REQUEST_TIMEOUT
             }
-        }.body(TypeInfo(responseType))
+        }.bodyAsText()
+
+        return Json.decodeFromString(responseSerializer, response)
     }
 
     fun createAuthorizationHeader(): String {
