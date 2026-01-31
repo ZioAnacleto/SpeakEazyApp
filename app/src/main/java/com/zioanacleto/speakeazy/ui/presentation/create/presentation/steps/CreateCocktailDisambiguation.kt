@@ -28,9 +28,10 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import com.zioanacleto.buffa.default
 import com.zioanacleto.speakeazy.R
+import com.zioanacleto.speakeazy.core.domain.create.model.CreateCocktailModel
 import com.zioanacleto.speakeazy.ui.presentation.components.CreateCocktailInformation
 import com.zioanacleto.speakeazy.ui.presentation.components.CreateWizardStepData
-import com.zioanacleto.speakeazy.ui.presentation.create.domain.model.CreateCocktailModel
+import com.zioanacleto.speakeazy.ui.presentation.components.fromOrderToStep
 import com.zioanacleto.speakeazy.ui.theme.YellowFFE271
 import java.util.Date
 import kotlin.random.Random
@@ -94,7 +95,7 @@ fun CreateCocktailDisambiguationScreen(
                             cocktailName = item.cocktailName.default(),
                             image = iconsList[iconIndex],
                             createdDate = item.createdTime.toLocaleString(),
-                            currentStep = item.currentStep
+                            currentStep = item.currentStep.fromOrderToStep()
                         )
                     }
                     item {
@@ -157,25 +158,25 @@ fun CreateCocktailDisambiguationScreenPreview() {
                 cocktailName = "test1",
                 createdTime = Date(),
                 lastUpdateTime = Date(),
-                currentStep = CreateWizardStepData.First
+                currentStep = CreateWizardStepData.First.order
             ),
             CreateCocktailModel(
                 cocktailName = "test2",
                 createdTime = Date(),
                 lastUpdateTime = Date(),
-                currentStep = CreateWizardStepData.Third
+                currentStep = CreateWizardStepData.Third.order
             ),
             CreateCocktailModel(
                 cocktailName = "test3",
                 createdTime = Date(),
                 lastUpdateTime = Date(),
-                currentStep = CreateWizardStepData.First
+                currentStep = CreateWizardStepData.First.order
             ),
             CreateCocktailModel(
                 cocktailName = "test4 lungo lungo per andare su due righe",
                 createdTime = Date(),
                 lastUpdateTime = Date(),
-                currentStep = CreateWizardStepData.Third
+                currentStep = CreateWizardStepData.Third.order
             )
         ),
         onCreateCocktailSelected = {},

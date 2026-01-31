@@ -4,10 +4,10 @@ import com.zioanacleto.buffa.coroutines.DefaultDispatcherProvider
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.buffa.events.Resource
 import com.zioanacleto.speakeazy.assertAllTrue
+import com.zioanacleto.speakeazy.core.domain.detail.DetailRepository
+import com.zioanacleto.speakeazy.core.domain.main.MainRepository
+import com.zioanacleto.speakeazy.core.domain.main.model.MainModel
 import com.zioanacleto.speakeazy.testResourceFlow
-import com.zioanacleto.speakeazy.ui.presentation.detail.domain.DetailRepository
-import com.zioanacleto.speakeazy.ui.presentation.main.domain.MainRepository
-import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.MainModel
 import io.mockk.clearAllMocks
 import io.mockk.coVerify
 import io.mockk.every
@@ -37,26 +37,27 @@ class DetailViewModelTest {
     }
 
     @Test
-    fun test_detailUiState_whenRepositoryReturnsSuccess_uiStateIsLoadingThenSuccess() = runBlocking {
-        // given
-        val cocktailId = "1"
-        every { mainRepository.getMainById(any()) } returns flowOf(
-            Resource.Success(
-                MainModel(drinks = listOf())
+    fun test_detailUiState_whenRepositoryReturnsSuccess_uiStateIsLoadingThenSuccess() =
+        runBlocking {
+            // given
+            val cocktailId = "1"
+            every { mainRepository.getMainById(any()) } returns flowOf(
+                Resource.Success(
+                    MainModel(drinks = listOf())
+                )
             )
-        )
 
-        val sut = createSut()
+            val sut = createSut()
 
-        // when
-        val (resultLoading, result) = sut.detailUiState(cocktailId).testResourceFlow()
+            // when
+            val (resultLoading, result) = sut.detailUiState(cocktailId).testResourceFlow()
 
-        // then
-        assertAllTrue(
-            resultLoading is DetailUiState.Loading,
-            result is DetailUiState.Success
-        )
-    }
+            // then
+            assertAllTrue(
+                resultLoading is DetailUiState.Loading,
+                result is DetailUiState.Success
+            )
+        }
 
     @Test
     fun test_detailUiState_whenRepositoryReturnsError_uiStateIsLoadingThenError() = runBlocking {

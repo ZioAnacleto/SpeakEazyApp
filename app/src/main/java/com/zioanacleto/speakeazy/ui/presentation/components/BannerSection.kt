@@ -27,8 +27,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import coil3.compose.rememberAsyncImagePainter
 import com.zioanacleto.buffa.default
-import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.BannerModel
-import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.DrinkModel
+import com.zioanacleto.speakeazy.core.domain.main.model.BannerModel
+import com.zioanacleto.speakeazy.core.domain.main.model.DrinkModel
 import com.zioanacleto.speakeazy.ui.theme.YellowFFE271
 
 @Composable

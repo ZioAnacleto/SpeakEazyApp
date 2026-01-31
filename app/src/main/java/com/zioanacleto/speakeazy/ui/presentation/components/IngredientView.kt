@@ -18,7 +18,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.IngredientModel
+import com.zioanacleto.speakeazy.core.domain.main.model.IngredientModel
 
 // todo: detail?
 @Composable

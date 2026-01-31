@@ -67,6 +67,17 @@ sealed class CreateWizardStepData(
     data object Success : CreateWizardStepData(5, Icons.Filled.Check)
 }
 
+fun Int.fromOrderToStep() = when (this) {
+    0 -> CreateWizardStepData.First
+    1 -> CreateWizardStepData.Second
+    2 -> CreateWizardStepData.Third
+    3 -> CreateWizardStepData.Fourth
+    4 -> CreateWizardStepData.Fifth
+    5 -> CreateWizardStepData.Success
+    100 -> CreateWizardStepData.Uploading
+    else -> CreateWizardStepData.First
+}
+
 @Composable
 fun CreateWizardStepBar(
     modifier: Modifier = Modifier,
@@ -275,7 +286,7 @@ fun CreateWizardStepBarPreview(
 
 @Preview
 @Composable
-fun OtherStepBarPreview(
+fun CreateWizardLinearStepBarPreview(
     @PreviewParameter(CreateWizardParameterProvider::class) currentStep: CreateWizardStepData
 ) {
     CreateWizardLinearStepBar(

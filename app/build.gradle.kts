@@ -1,3 +1,5 @@
+import com.zioanacleto.speakeazy.buildlogic.CoreModule
+import com.zioanacleto.speakeazy.buildlogic.coreModule
 import org.w3c.dom.Document
 import org.xml.sax.InputSource
 import java.io.FileInputStream
@@ -10,10 +12,11 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.zioanacleto.featurefromtemplate.plugin)
     id("com.google.gms.google-services")
     alias(libs.plugins.devtools.ksp)
     jacoco
+    alias(libs.plugins.zioanacleto.core.convention.plugin)
+    alias(libs.plugins.zioanacleto.jacoco.application.plugin)
 }
 
 android {
@@ -31,14 +34,12 @@ android {
 
         val apiToken = getLocalPropertiesVariable("apiToken")
         buildConfigField("String", "API_KEY", apiToken)
-
-        //noinspection WrongGradleMethod
-        ksp {
-            arg("room.schemaLocation", "$projectDir/schemas")
-        }
     }
 
     buildTypes {
+        debug {
+            enableUnitTestCoverage = true
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -70,11 +71,11 @@ android {
     }
 }
 
-jacoco {
-    toolVersion = libs.versions.jacoco.get()
-}
-
 dependencies {
+    api(coreModule(CoreModule.Data))
+    api(coreModule(CoreModule.Domain))
+    api(coreModule(CoreModule.Database))
+    api(coreModule(CoreModule.Network))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)
@@ -135,6 +136,7 @@ dependencies {
     // Unit tests
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
+    testImplementation(libs.archunit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
@@ -146,51 +148,8 @@ dependencies {
     testImplementation(libs.kotlinx.coroutines.test)
 }
 
-// generating JaCoCo report for code coverage
-tasks.register<JacocoReport>("jacocoTestReport") {
-    dependsOn("testDebugUnitTest")
-
-    reports {
-        xml.required.set(true)
-        html.required.set(true)
-    }
-
-    val excludes = listOf(
-        "**/R.class",
-        "**/R$*.class",
-        "**/BuildConfig.*",
-        "**/Manifest*.*",
-        "**/*Activity.*",
-        "**/*Screen*.*",
-        "**/di/**",
-        "**/theme/**",
-        "**/components/**",
-        "**/navigation/**",
-        "**/ApiClientImpl",
-        "**/database/**",
-        "**/domain/**",
-        "**/steps/**",
-        "**/Cocktail3DSceneKt",
-        "**/Cocktail3DSceneControllerImpl"
-    )
-
-    val classDirectoriesTree = fileTree("$buildDir") {
-        include(
-            "intermediates/javac/debug/classes/**",
-            "tmp/kotlin-classes/debug/**"
-        )
-        exclude(excludes)
-    }
-
-    classDirectories.setFrom(classDirectoriesTree)
-
-    sourceDirectories.setFrom(
-        files(
-            "$projectDir/src/main/java"
-        )
-    )
-
-    executionData.setFrom(file("$buildDir/jacoco/testDebugUnitTest.exec"))
+tasks.named("check") {
+    dependsOn("checkCoreModules")
 }
 
 // calculates code coverage in percentage

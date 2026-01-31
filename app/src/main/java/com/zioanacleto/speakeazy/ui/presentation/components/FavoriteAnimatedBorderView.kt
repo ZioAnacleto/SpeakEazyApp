@@ -113,7 +113,7 @@ fun GradientCircularShadowBoxPreview() {
             interactionSource = mis,
             onClick = {},
         ) {
-            BackFloatingButton {  }
+            BackFloatingButton { }
         }
     }
 }

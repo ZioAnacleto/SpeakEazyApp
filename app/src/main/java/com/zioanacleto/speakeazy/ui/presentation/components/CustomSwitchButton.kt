@@ -81,7 +81,7 @@ fun CustomSwitchButton(
     )
 
     val progressBar by animateFloatAsState(
-        targetValue = if(switchClicked) 1f else 0f,
+        targetValue = if (switchClicked) 1f else 0f,
         animationSpec = tween(durationMillis = animationDuration),
         label = "barProgress"
     )
@@ -126,7 +126,7 @@ fun CustomSwitchButton(
                     targetState = switchClicked,
                     animationSpec = tween(durationMillis = animationDuration)
                 ) {
-                    if(it) onContent() else offContent()
+                    if (it) onContent() else offContent()
                 }
             }
         }

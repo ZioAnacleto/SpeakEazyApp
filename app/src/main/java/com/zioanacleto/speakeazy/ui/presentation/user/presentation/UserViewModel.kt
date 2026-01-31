@@ -8,9 +8,9 @@ import com.zioanacleto.buffa.base.BaseViewModel
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.buffa.default
 import com.zioanacleto.buffa.logging.AnacletoLogger
-import com.zioanacleto.speakeazy.domain.APP_PACKAGE
-import com.zioanacleto.speakeazy.ui.presentation.user.domain.UserRepository
-import com.zioanacleto.speakeazy.ui.presentation.user.domain.model.UserModel
+import com.zioanacleto.speakeazy.APP_PACKAGE
+import com.zioanacleto.speakeazy.core.domain.user.UserRepository
+import com.zioanacleto.speakeazy.core.domain.user.model.UserModel
 import com.zioanacleto.speakeazy.ui.presentation.user.navigation.USER_DEEPLINK_URI
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted

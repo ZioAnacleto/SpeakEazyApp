@@ -1,0 +1,11 @@
+package com.zioanacleto.speakeazy.core.data.user.datasources
+
+import com.zioanacleto.buffa.events.Resource
+import com.zioanacleto.speakeazy.core.domain.user.model.UserModel
+
+interface UserDataSource {
+    suspend fun getUser(): Resource<UserModel>
+    suspend fun saveUser(userModel: UserModel)
+    suspend fun updateUser(userModel: UserModel)
+    suspend fun deleteUser(userModel: UserModel)
+}

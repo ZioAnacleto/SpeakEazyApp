@@ -20,6 +20,7 @@ import com.zioanacleto.speakeazy.ui.presentation.components.ConfirmationDialog
 import com.zioanacleto.speakeazy.ui.presentation.components.CreateWizardLinearStepBar
 import com.zioanacleto.speakeazy.ui.presentation.components.CreateWizardStepData
 import com.zioanacleto.speakeazy.ui.presentation.components.CrossSlide
+import com.zioanacleto.speakeazy.ui.presentation.components.fromOrderToStep
 import com.zioanacleto.speakeazy.ui.presentation.create.presentation.steps.CreateCocktailDisambiguationScreen
 import com.zioanacleto.speakeazy.ui.presentation.create.presentation.steps.CreateCocktailFifthStepScreen
 import com.zioanacleto.speakeazy.ui.presentation.create.presentation.steps.CreateCocktailFirstStepScreen
@@ -85,7 +86,7 @@ private fun CreateCocktailScreenContent(
 
         LaunchedEffect(currentUiState) {
             if ((currentUiState as? CreateCocktailUiState.SuccessSingle)
-                    ?.createCocktail?.currentStep == CreateWizardStepData.Uploading
+                    ?.createCocktail?.currentStep == CreateWizardStepData.Uploading.order
             )
                 viewModel.uploadCurrentCocktail()
         }
@@ -122,13 +123,13 @@ private fun CreateCocktailScreenContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 40.dp, start = 10.dp, end = 10.dp),
-                    currentStep = currentStep
+                    currentStep = currentStep.fromOrderToStep()
                 )
 
                 CrossSlide(
-                    targetState = currentStep,
+                    targetState = currentStep.fromOrderToStep(),
                     reverseAnimation = !isForwardScreen
-                ) {
+                ) { it: CreateWizardStepData ->
                     when (it) {
                         CreateWizardStepData.First -> {
                             CreateCocktailFirstStepScreen(

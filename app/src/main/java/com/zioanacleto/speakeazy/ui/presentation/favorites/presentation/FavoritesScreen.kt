@@ -30,11 +30,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import com.zioanacleto.speakeazy.core.domain.main.model.DrinkModel
 import com.zioanacleto.speakeazy.ui.presentation.components.CocktailLoadingAnimation
 import com.zioanacleto.speakeazy.ui.presentation.components.MainDrinkCard
 import com.zioanacleto.speakeazy.ui.presentation.components.MainFilterView
-import com.zioanacleto.speakeazy.ui.presentation.main.domain.MainFilterItem
-import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.DrinkModel
+import com.zioanacleto.speakeazy.ui.presentation.main.presentation.MainFilterItem
 import org.koin.androidx.compose.getViewModel
 
 @Composable

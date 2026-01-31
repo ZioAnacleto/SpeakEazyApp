@@ -13,8 +13,10 @@ compose = "1.7.8"
 navigation = "2.9.1"
 koin-core = "3.5.0"
 koin-android = "3.4.0"
-buffa = "1.0.9"
+buffa = "1.0.11"
 featurefromtemplate-plugin = "1.1.0"
+jacoco-plugin = "1.0.0"
+core-convention-plugin = "1.0.0"
 timber = "5.0.1"
 ktor = "3.1.1"
 kotlin-serialization = "1.9.21"
@@ -29,6 +31,10 @@ gson = "2.13.1"
 mockk = "1.13.16"
 jacoco = "0.8.12"
 kotlinxCoroutinesTest = "1.9.0"
+archunit = "1.4.1"
+appcompat = "1.7.1"
+material = "1.13.0"
+jetbrainsKotlinJvm = "2.0.0"
 sceneform = "2.3.0"
 
 [libraries]
@@ -62,6 +68,7 @@ gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 mockk-android = { group = "io.mockk", name = "mockk-android", version.ref = "mockk" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
+archunit = { module = "com.tngtech.archunit:archunit-junit4", version.ref = "archunit" }
 
 # Firebase
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }
@@ -83,6 +90,9 @@ room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+android-gradleApiPlugin = { group = "com.android.tools.build", name = "gradle-api", version.ref = "agp" }
 
 # Sceneform
 sceneform = { module = "io.github.sceneview:sceneview", version.ref = "sceneform" }
@@ -91,5 +101,12 @@ sceneform = { module = "io.github.sceneview:sceneview", version.ref = "sceneform
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-zioanacleto-featurefromtemplate-plugin = { id = "com.zioanacleto.featurefromtemplateplugin", version.ref = "featurefromtemplate-plugin" }
 devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
+# ZioAnacleto plugins
+zioanacleto-featurefromtemplate-plugin = { id = "com.zioanacleto.featurefromtemplateplugin", version.ref = "featurefromtemplate-plugin" }
+zioanacleto-core-convention-plugin = { id = "com.zioanacleto.speakeazy.core-convention-plugin" }
+zioanacleto-jacoco-library-plugin = { id = "com.zioanacleto.speakeazy.jacoco-library-settings-plugin" }
+zioanacleto-jacoco-application-plugin = { id = "com.zioanacleto.speakeazy.jacoco-application-settings-plugin"}
+zioanacleto-jacoco-aggregate-plugin = { id = "com.zioanacleto.speakeazy.jacoco-aggregate-report-plugin" }
