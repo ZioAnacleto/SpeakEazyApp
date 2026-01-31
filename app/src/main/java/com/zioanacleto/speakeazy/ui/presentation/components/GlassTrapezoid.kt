@@ -1,5 +1,6 @@
 package com.zioanacleto.speakeazy.ui.presentation.components
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -33,6 +34,7 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import com.zioanacleto.speakeazy.R
 
+@SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 fun <T : Pair<String, String>> GlassTrapezoid(
     modifier: Modifier = Modifier,

@@ -5,8 +5,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import com.zioanacleto.speakeazy.core.domain.main.model.InstructionModel
 import com.zioanacleto.speakeazy.ui.presentation.detail.presentation.DetailScreen
-import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.InstructionModel
 import kotlinx.serialization.Serializable
 
 @Serializable

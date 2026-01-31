@@ -1,6 +1,7 @@
 package com.zioanacleto.speakeazy.core.data.create.dto
 
 import com.zioanacleto.speakeazy.core.data.main.dto.MainSpeakEazyBEIngredientsListDTO
+import com.zioanacleto.speakeazy.core.data.main.dto.MainSpeakEazyBEInstructionDTO
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

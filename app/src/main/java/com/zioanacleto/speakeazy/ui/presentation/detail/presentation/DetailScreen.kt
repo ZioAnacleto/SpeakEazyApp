@@ -38,6 +38,7 @@ import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -70,9 +71,6 @@ import com.zioanacleto.speakeazy.ui.presentation.components.bottomSheetStyle
 import com.zioanacleto.speakeazy.ui.presentation.components.parallaxLayoutModifier
 import com.zioanacleto.speakeazy.ui.presentation.components.speakEazyGradientBackground
 import com.zioanacleto.speakeazy.ui.presentation.components.withAlpha
-import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.DrinkModel
-import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.IngredientModel
-import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.InstructionModel
 import com.zioanacleto.speakeazy.ui.theme.BottomBarBackground
 import com.zioanacleto.speakeazy.ui.theme.YellowFFE271
 import org.koin.androidx.compose.getViewModel

@@ -9,9 +9,9 @@ import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.buffa.default
 import com.zioanacleto.buffa.logging.AnacletoLogger
 import com.zioanacleto.speakeazy.APP_PACKAGE
+import com.zioanacleto.speakeazy.USER_DEEPLINK_URI
 import com.zioanacleto.speakeazy.core.domain.user.UserRepository
 import com.zioanacleto.speakeazy.core.domain.user.model.UserModel
-import com.zioanacleto.speakeazy.ui.presentation.user.navigation.USER_DEEPLINK_URI
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 class UserViewModel(
     private val repository: UserRepository,
     private val dispatcherProvider: DispatcherProvider
-): BaseViewModel(dispatcherProvider) {
+) : BaseViewModel(dispatcherProvider) {
 
     private val actionCodeSettings: ActionCodeSettings = actionCodeSettings {
         url = USER_DEEPLINK_URI

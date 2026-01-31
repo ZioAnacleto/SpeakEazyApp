@@ -27,12 +27,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import com.zioanacleto.speakeazy.core.domain.main.model.InstructionModel
 import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.Cocktail3DScene
 import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.domain.Cocktail3DSceneController
 import com.zioanacleto.speakeazy.ui.presentation.components.BackFloatingButton
 import com.zioanacleto.speakeazy.ui.presentation.components.bottomSheetStyle
 import com.zioanacleto.speakeazy.ui.presentation.components.speakEazyGradientBackground
-import com.zioanacleto.speakeazy.ui.presentation.main.domain.model.InstructionModel
 import org.koin.androidx.compose.get
 
 @Composable

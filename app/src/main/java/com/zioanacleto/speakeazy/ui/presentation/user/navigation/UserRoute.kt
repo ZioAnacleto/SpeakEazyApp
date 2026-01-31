@@ -6,10 +6,9 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
 import androidx.navigation.navigation
+import com.zioanacleto.speakeazy.USER_DEEPLINK_URI
 import com.zioanacleto.speakeazy.ui.presentation.user.presentation.UserScreen
 import kotlinx.serialization.Serializable
-
-const val USER_DEEPLINK_URI = "https://speakeazy-ec7b5.web.app/finishSignIn.html"
 
 @Serializable
 data object UserRoute

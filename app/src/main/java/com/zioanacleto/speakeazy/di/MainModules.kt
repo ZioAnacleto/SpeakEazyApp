@@ -73,6 +73,13 @@ import com.zioanacleto.speakeazy.core.domain.search.model.TagsModel
 import com.zioanacleto.speakeazy.core.domain.user.UserRepository
 import com.zioanacleto.speakeazy.core.network.api.ApiClientImpl
 import com.zioanacleto.speakeazy.di.models.DataContext
+import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.Cocktail3DSceneControllerImpl
+import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.data.Cocktail3DModelDataMapper
+import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.data.CocktailInfo
+import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.data.CocktailSceneDataMapper
+import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.domain.Cocktail3DSceneController
+import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.domain.model.Cocktail3DModel
+import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.domain.model.CocktailScene
 import com.zioanacleto.speakeazy.ui.presentation.create.presentation.CreateCocktailViewModel
 import com.zioanacleto.speakeazy.ui.presentation.detail.presentation.DetailViewModel
 import com.zioanacleto.speakeazy.ui.presentation.favorites.presentation.FavoritesViewModel

@@ -6,6 +6,7 @@ import com.zioanacleto.speakeazy.core.data.create.dto.CreateCocktailRequestDTO
 import com.zioanacleto.speakeazy.core.data.create.dto.TagsRequestDTO
 import com.zioanacleto.speakeazy.core.data.main.dto.MainSpeakEazyBEIngredientDTO
 import com.zioanacleto.speakeazy.core.data.main.dto.MainSpeakEazyBEIngredientsListDTO
+import com.zioanacleto.speakeazy.core.data.main.dto.MainSpeakEazyBEInstructionDTO
 import com.zioanacleto.speakeazy.core.domain.create.model.CreateCocktailModel
 
 class CreateCocktailDataMapper : DataMapper<CreateCocktailModel, CreateCocktailRequestDTO> {

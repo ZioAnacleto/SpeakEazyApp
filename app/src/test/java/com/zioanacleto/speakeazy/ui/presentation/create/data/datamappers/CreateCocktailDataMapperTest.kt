@@ -1,8 +1,9 @@
 package com.zioanacleto.speakeazy.ui.presentation.create.data.datamappers
 
 import com.zioanacleto.speakeazy.assertAllTrue
+import com.zioanacleto.speakeazy.core.data.create.datamappers.CreateCocktailDataMapper
+import com.zioanacleto.speakeazy.core.domain.create.model.CreateCocktailModel
 import com.zioanacleto.speakeazy.ui.presentation.components.CreateWizardStepData
-import com.zioanacleto.speakeazy.ui.presentation.create.domain.model.CreateCocktailModel
 import io.mockk.clearAllMocks
 import org.junit.After
 import org.junit.Test
@@ -46,7 +47,7 @@ class CreateCocktailDataMapperTest {
 
     private fun createInput() = CreateCocktailModel(
         id = 1,
-        currentStep = CreateWizardStepData.First,
+        currentStep = CreateWizardStepData.First.order,
         createdTime = Date(),
         lastUpdateTime = Date(),
         cocktailName = "testName",

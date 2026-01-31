@@ -2,8 +2,6 @@ package com.zioanacleto.speakeazy.core.domain.main.model
 
 import kotlinx.serialization.Serializable
 
-import kotlinx.serialization.Serializable
-
 data class MainModel(
     val drinks: List<DrinkModel>
 )

@@ -3,13 +3,14 @@ package com.zioanacleto.speakeazy.ui.presentation.create.data.datasources
 import com.zioanacleto.buffa.datamappers.DataMapper
 import com.zioanacleto.buffa.events.Resource
 import com.zioanacleto.speakeazy.assertAllTrue
+import com.zioanacleto.speakeazy.core.data.create.datasources.CreateCocktailNetworkUploadDataSource
+import com.zioanacleto.speakeazy.core.data.create.dto.CreateCocktailRequestDTO
+import com.zioanacleto.speakeazy.core.data.create.dto.TagsRequestDTO
+import com.zioanacleto.speakeazy.core.data.main.dto.MainSpeakEazyBEIngredientsListDTO
+import com.zioanacleto.speakeazy.core.domain.create.model.CreateCocktailModel
+import com.zioanacleto.speakeazy.core.network.api.ApiClientImpl
 import com.zioanacleto.speakeazy.createApiClientWithResponse
-import com.zioanacleto.speakeazy.data.api.ApiClientImpl
 import com.zioanacleto.speakeazy.ui.presentation.components.CreateWizardStepData
-import com.zioanacleto.speakeazy.ui.presentation.create.data.dto.CreateCocktailRequestDTO
-import com.zioanacleto.speakeazy.ui.presentation.create.data.dto.TagsRequestDTO
-import com.zioanacleto.speakeazy.ui.presentation.create.domain.model.CreateCocktailModel
-import com.zioanacleto.speakeazy.ui.presentation.main.data.dto.MainSpeakEazyBEIngredientsListDTO
 import io.ktor.http.HttpStatusCode
 import io.mockk.clearAllMocks
 import io.mockk.every
@@ -65,7 +66,7 @@ class CreateCocktailNetworkUploadDataSourceTest {
         val response = sut.uploadCocktail(
             CreateCocktailModel(
                 id = 1000,
-                currentStep = CreateWizardStepData.First,
+                currentStep = CreateWizardStepData.First.order,
                 createdTime = Date(),
                 lastUpdateTime = Date(),
             )
@@ -108,7 +109,7 @@ class CreateCocktailNetworkUploadDataSourceTest {
         val response = sut.uploadCocktail(
             CreateCocktailModel(
                 id = 1000,
-                currentStep = CreateWizardStepData.First,
+                currentStep = CreateWizardStepData.First.order,
                 createdTime = Date(),
                 lastUpdateTime = Date(),
             )
