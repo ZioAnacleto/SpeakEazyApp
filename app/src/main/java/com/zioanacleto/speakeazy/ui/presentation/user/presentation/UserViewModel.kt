@@ -45,7 +45,7 @@ class UserViewModel(
                 UserModel(
                     email = userEmail
                 ),
-                {
+                onSuccess = {
                     AnacletoLogger.mumbling(
                         mumble = "Success in saving local user.",
                         level = AnacletoLevel.INFO

@@ -1,6 +1,5 @@
 package com.zioanacleto.speakeazy.ui.presentation.main.presentation
 
-import com.zioanacleto.buffa.coroutines.DefaultDispatcherProvider
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.buffa.events.Resource
 import com.zioanacleto.speakeazy.assertAllTrue
@@ -25,7 +24,6 @@ class MainViewModelTest {
     @Before
     fun setUp() {
         repository = mockk(relaxed = true)
-        dispatcherProvider = DefaultDispatcherProvider()
     }
 
     @After
