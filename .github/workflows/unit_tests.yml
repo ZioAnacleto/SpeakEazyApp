@@ -184,6 +184,12 @@ jobs:
             **Coverage:** ${{ steps.coverage.outputs.coverage }}%  
             **Required:** ${{ vars.COVERAGE_THRESHOLD }}%
 
+            ➡️ Open the link below and download the **coverage-report** artifact.
+            🔗 **Coverage report artifact:**  
+            [Download coverage report](
+            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            )
+
             ### Merge checklist
             - [ ] Coverage ≥ ${{ vars.COVERAGE_THRESHOLD }}%
           comment_tag: coverage-comment
