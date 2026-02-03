@@ -14,8 +14,9 @@ class HomeNetworkDataSource(
 ) : HomeDataSource {
     override suspend fun getHomeSections(): Resource<HomeModel> {
         return getResponseOrCatchError(dataMapper) {
-            apiClient.executeGetRequest<HomeSectionResponseDTO>(
+            apiClient.executeGetRequest(
                 url = SpeakEazyBEUrlBuilder.buildUrl(SpeakEazyBEUrlBuilder.Endpoint.Home),
+                responseType = HomeSectionResponseDTO::class,
                 isCached = true
             )
         }

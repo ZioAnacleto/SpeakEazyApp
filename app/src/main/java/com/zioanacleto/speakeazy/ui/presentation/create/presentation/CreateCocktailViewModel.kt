@@ -58,10 +58,11 @@ class CreateCocktailViewModel(
             .mapResourceAsCreateCocktailIngredientsUiState()
             .stateIn(
                 scope = coroutineScope,
-                started = SharingStarted.WhileSubscribed(5_000),
+                started = SharingStarted.WhileSubscribed(5000),
                 initialValue = CreateCocktailIngredientsUiState.Loading
             )
 
+    // useful Pair to get current cocktail and new date
     private val currentUiState: () -> Pair<CreateCocktailModel, Date> = {
         val currentCreateCocktail =
             (_createCocktailUiState.value as CreateCocktailUiState.SuccessSingle).createCocktail
@@ -71,14 +72,13 @@ class CreateCocktailViewModel(
     }
 
     private fun CreateCocktailModel.saveCocktail() {
-        coroutineScope.launch(dispatcherProvider.io()) {
-            val savedId = repository.saveCreateCocktail(this@saveCocktail)
-
-            val updatedCocktail = this@saveCocktail.copy(id = savedId)
-
-            withContext(dispatcherProvider.main()) {
-                _createCocktailUiState.value = CreateCocktailUiState.SuccessSingle(updatedCocktail)
+        coroutineScope.launch {
+            val savedId = withContext(dispatcherProvider.io()) {
+                repository.saveCreateCocktail(this@saveCocktail)
             }
+
+            _createCocktailUiState.value =
+                CreateCocktailUiState.SuccessSingle(copy(id = savedId))
         }
     }
 
@@ -159,8 +159,7 @@ class CreateCocktailViewModel(
 
     fun saveFourthStep(instructions: String) {
         var (currentCreateCocktail, currentDate) = currentUiState()
-        val currentLanguage = (_userInfo.value as? UserUiState.Success)
-            ?.user?.selectedLanguage ?: Language.ITALIAN
+        val currentLanguage = (_userInfo.value as UserUiState.Success).user.selectedLanguage
 
         fun Language.assignInstructions(currentLanguage: Language) =
             if (this == currentLanguage) instructions else ""

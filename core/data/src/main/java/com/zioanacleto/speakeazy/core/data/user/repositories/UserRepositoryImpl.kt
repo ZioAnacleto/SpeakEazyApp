@@ -20,9 +20,11 @@ class UserRepositoryImpl(
             )
         }.flowOn(dispatcherProvider.io())
 
-    override suspend fun saveUser(user: UserModel) {
-        localDataSource.saveUser(user)
-    }
+    override suspend fun saveUser(
+        user: UserModel,
+        onSuccess: () -> Unit,
+        onError: (Throwable) -> Unit
+    ) = localDataSource.saveUser(user, onSuccess, onError)
 
     override suspend fun updateUser(user: UserModel) {
         localDataSource.updateUser(user)

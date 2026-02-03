@@ -7,7 +7,10 @@ import com.zioanacleto.speakeazy.core.data.create.dto.CreateCocktailRequestDTO
 import com.zioanacleto.speakeazy.core.domain.create.model.CreateCocktailModel
 import com.zioanacleto.speakeazy.core.network.api.ApiClientImpl
 import com.zioanacleto.speakeazy.core.network.builders.SpeakEazyBEUrlBuilder
+import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.builtins.serializer
 
+@OptIn(InternalSerializationApi::class)
 class CreateCocktailNetworkUploadDataSource(
     private val apiClient: ApiClientImpl,
     private val requestDataMapper: DataMapper<CreateCocktailModel, CreateCocktailRequestDTO>,
@@ -26,7 +29,9 @@ class CreateCocktailNetworkUploadDataSource(
                 url = SpeakEazyBEUrlBuilder.buildUrl(
                     SpeakEazyBEUrlBuilder.Endpoint.CreateCocktail
                 ),
-                body = requestDataMapper.mapInto(cocktail)
+                body = requestDataMapper.mapInto(cocktail),
+                bodySerializer = CreateCocktailRequestDTO.serializer(),
+                responseSerializer = Int.serializer()
             )
         }
     }

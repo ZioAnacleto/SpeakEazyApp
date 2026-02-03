@@ -27,7 +27,8 @@ class JacocoAggregateReportPlugin : Plugin<Project> {
                         sub.fileTree(sub.buildDir) {
                             include(
                                 "jacoco/test*UnitTest.exec",
-                                "outputs/unit_test_code_coverage/**/*.exec"
+                                "outputs/unit_test_code_coverage/**/*.exec",
+                                "outputs/code_coverage/**/*.ec" // androidTest for database module
                             )
                         }
                     }

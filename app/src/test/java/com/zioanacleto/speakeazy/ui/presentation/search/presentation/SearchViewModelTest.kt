@@ -9,6 +9,7 @@ import com.zioanacleto.speakeazy.core.domain.main.model.MainModel
 import com.zioanacleto.speakeazy.core.domain.search.SearchRepository
 import com.zioanacleto.speakeazy.core.domain.search.model.SearchLandingModel
 import com.zioanacleto.speakeazy.core.domain.search.model.SearchModel
+import com.zioanacleto.speakeazy.testDispatcher
 import com.zioanacleto.speakeazy.testResourceFlow
 import io.mockk.clearAllMocks
 import io.mockk.every
@@ -16,7 +17,6 @@ import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -42,8 +42,9 @@ class SearchViewModelTest {
     }
 
     @Test
-    fun test_landingUiState_whenRepositoryIsSuccess_uiStateIsSuccess() = runBlocking {
+    fun test_landingUiState_whenRepositoryIsSuccess_uiStateIsSuccess() = runTest {
         // given
+        dispatcherProvider = testDispatcher()
         every { repository.getSearchLandingData() } returns flowOf(
             Resource.Success(
                 SearchLandingModel(
@@ -65,8 +66,9 @@ class SearchViewModelTest {
     }
 
     @Test
-    fun test_landingUiState_whenRepositoryIsError_uiStateIsError() = runBlocking {
+    fun test_landingUiState_whenRepositoryIsError_uiStateIsError() = runTest {
         // given
+        dispatcherProvider = testDispatcher()
         every { repository.getSearchLandingData() } returns flowOf(
             Resource.Error(
                 Exception("testException")

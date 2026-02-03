@@ -1,15 +1,11 @@
 package com.zioanacleto.speakeazy
 
-import com.zioanacleto.speakeazy.core.network.api.ApiClientImpl
-import io.ktor.client.engine.mock.MockEngine
-import io.ktor.client.engine.mock.respond
-import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpStatusCode
-import io.ktor.http.headersOf
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.zip
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestScope
 import org.junit.Assert.assertTrue
 
 /**
@@ -31,19 +27,4 @@ suspend fun <T> Flow<T>.testResourceFlow(
     first to second
 }.first()
 
-/**
- *  Utility function that mocks a [ApiClientImpl] with a [MockEngine], providing given response
- */
-fun createApiClientWithResponse(
-    status: HttpStatusCode,
-    response: String
-) =
-    ApiClientImpl(
-        MockEngine { _ ->
-            respond(
-                status = status,
-                content = response,
-                headers = headersOf(HttpHeaders.ContentType, "application/json")
-            )
-        }
-    )
+fun TestScope.testDispatcher() = TestDispatcherProvider(StandardTestDispatcher(testScheduler))

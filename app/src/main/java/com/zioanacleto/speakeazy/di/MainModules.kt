@@ -1,9 +1,11 @@
 package com.zioanacleto.speakeazy.di
 
 import androidx.room.Room
+import com.google.firebase.auth.actionCodeSettings
 import com.zioanacleto.buffa.coroutines.DefaultDispatcherProvider
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.buffa.datamappers.DataMapper
+import com.zioanacleto.speakeazy.APP_PACKAGE
 import com.zioanacleto.speakeazy.MainActivityViewModel
 import com.zioanacleto.speakeazy.core.data.create.datamappers.CreateCocktailDataMapper
 import com.zioanacleto.speakeazy.core.data.create.datasources.CreateCocktailDataSource
@@ -51,6 +53,7 @@ import com.zioanacleto.speakeazy.core.data.search.dto.TagsResponseDTO
 import com.zioanacleto.speakeazy.core.data.search.repositories.SearchRepositoryImpl
 import com.zioanacleto.speakeazy.core.data.user.datasources.UserDataSource
 import com.zioanacleto.speakeazy.core.data.user.datasources.UserLocalDataSource
+import com.zioanacleto.speakeazy.core.data.user.repositories.FirebaseAuthRepositoryImpl
 import com.zioanacleto.speakeazy.core.data.user.repositories.UserRepositoryImpl
 import com.zioanacleto.speakeazy.core.database.SpeakEazyRoomDatabase
 import com.zioanacleto.speakeazy.core.database.dao.CreateCocktailDao
@@ -70,6 +73,7 @@ import com.zioanacleto.speakeazy.core.domain.main.model.MainModel
 import com.zioanacleto.speakeazy.core.domain.search.SearchRepository
 import com.zioanacleto.speakeazy.core.domain.search.model.SearchModel
 import com.zioanacleto.speakeazy.core.domain.search.model.TagsModel
+import com.zioanacleto.speakeazy.core.domain.user.FirebaseAuthRepository
 import com.zioanacleto.speakeazy.core.domain.user.UserRepository
 import com.zioanacleto.speakeazy.core.network.api.ApiClientImpl
 import com.zioanacleto.speakeazy.di.models.DataContext
@@ -78,6 +82,7 @@ import com.zioanacleto.speakeazy.ui.presentation.detail.presentation.DetailViewM
 import com.zioanacleto.speakeazy.ui.presentation.favorites.presentation.FavoritesViewModel
 import com.zioanacleto.speakeazy.ui.presentation.main.presentation.MainViewModel
 import com.zioanacleto.speakeazy.ui.presentation.search.presentation.SearchViewModel
+import com.zioanacleto.speakeazy.ui.presentation.user.navigation.USER_DEEPLINK_URI
 import com.zioanacleto.speakeazy.ui.presentation.user.presentation.UserViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
@@ -114,7 +119,7 @@ val viewModelModule = module {
     factory { MainViewModel(get(), get()) }
     factory { DetailViewModel(get(), get(), get()) }
     factory { SearchViewModel(get(), get()) }
-    factory { UserViewModel(get<UserRepository>(), get()) }
+    factory { UserViewModel(get<UserRepository>(), get(), get()) }
     factory { FavoritesViewModel(get(), get()) }
     factory { MainActivityViewModel(get<UserRepository>(), get()) }
     factory { CreateCocktailViewModel(get(), get(), get()) }
@@ -270,6 +275,19 @@ val repositoryModule = module {
             networkDataSource = get(),
             ingredientDataSource = get<IngredientDataSource>(named(DataContext.NETWORK.name)),
             dispatcherProvider = get()
+        )
+    }
+    factory<FirebaseAuthRepository> {
+        FirebaseAuthRepositoryImpl(
+            actionCodeSettings {
+                url = USER_DEEPLINK_URI
+                setAndroidPackageName(
+                    APP_PACKAGE,
+                    true,
+                    "24"
+                )
+                handleCodeInApp = true
+            }
         )
     }
 }

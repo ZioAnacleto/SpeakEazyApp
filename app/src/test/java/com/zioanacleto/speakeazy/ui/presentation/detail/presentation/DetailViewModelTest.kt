@@ -7,13 +7,14 @@ import com.zioanacleto.speakeazy.assertAllTrue
 import com.zioanacleto.speakeazy.core.domain.detail.DetailRepository
 import com.zioanacleto.speakeazy.core.domain.main.MainRepository
 import com.zioanacleto.speakeazy.core.domain.main.model.MainModel
+import com.zioanacleto.speakeazy.testDispatcher
 import com.zioanacleto.speakeazy.testResourceFlow
 import io.mockk.clearAllMocks
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -38,8 +39,9 @@ class DetailViewModelTest {
 
     @Test
     fun test_detailUiState_whenRepositoryReturnsSuccess_uiStateIsLoadingThenSuccess() =
-        runBlocking {
+        runTest {
             // given
+            dispatcherProvider = testDispatcher()
             val cocktailId = "1"
             every { mainRepository.getMainById(any()) } returns flowOf(
                 Resource.Success(
@@ -60,8 +62,9 @@ class DetailViewModelTest {
         }
 
     @Test
-    fun test_detailUiState_whenRepositoryReturnsError_uiStateIsLoadingThenError() = runBlocking {
+    fun test_detailUiState_whenRepositoryReturnsError_uiStateIsLoadingThenError() = runTest {
         // given
+        dispatcherProvider = testDispatcher()
         val cocktailId = "1"
         every { mainRepository.getMainById(any()) } returns flowOf(
             Resource.Error(

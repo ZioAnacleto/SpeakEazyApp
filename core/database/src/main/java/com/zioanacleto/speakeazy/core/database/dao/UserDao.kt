@@ -9,7 +9,7 @@ import com.zioanacleto.speakeazy.core.database.entities.UserEntity
 @Dao
 interface UserDao {
     @Query("SELECT * FROM userentity WHERE email LIKE :email LIMIT 1")
-    fun getUserByEmail(email: String): UserEntity
+    fun getUserByEmail(email: String): UserEntity?
 
     // Although this could lead to problems, we assume that we'll save just one user
     @Query("SELECT * FROM userentity LIMIT 1")

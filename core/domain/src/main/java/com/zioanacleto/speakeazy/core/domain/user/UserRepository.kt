@@ -6,7 +6,11 @@ import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
     fun getUser(): Flow<Resource<UserModel>>
-    suspend fun saveUser(user: UserModel)
+    suspend fun saveUser(
+        user: UserModel,
+        onSuccess: () -> Unit,
+        onError: (Throwable) -> Unit
+    )
     suspend fun updateUser(user: UserModel)
     suspend fun deleteUser(user: UserModel)
 }
