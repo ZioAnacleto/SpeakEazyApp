@@ -305,6 +305,5 @@ private class CreateWizardParameterProvider : PreviewParameterProvider<CreateWiz
         CreateWizardStepData.Fourth,
         CreateWizardStepData.Fifth,
         CreateWizardStepData.Success
-
     )
 }

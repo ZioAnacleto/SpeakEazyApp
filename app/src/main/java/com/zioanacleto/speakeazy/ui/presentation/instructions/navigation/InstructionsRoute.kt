@@ -12,6 +12,7 @@ import com.zioanacleto.speakeazy.ui.presentation.instructions.InstructionsScreen
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
+private const val KEY_COCKTAIL_NAME = "cocktailName"
 private const val KEY_GLASS_TYPE = "glassType"
 private const val KEY_INSTRUCTIONS = "instructions"
 
@@ -19,10 +20,12 @@ private const val KEY_INSTRUCTIONS = "instructions"
 data object InstructionsRoute
 
 fun NavController.navigateToInstructions(
+    cocktailName: String,
     glassType: String,
     instructions: List<InstructionModel>,
     navOptions: NavOptionsBuilder.() -> Unit = {}
 ) {
+    saveData(KEY_COCKTAIL_NAME, cocktailName)
     saveData(KEY_GLASS_TYPE, glassType)
     // Convert the list of InstructionModel to a JSON string to be passed as parameter
     val json = Json.encodeToString(instructions)
@@ -41,11 +44,13 @@ fun NavGraphBuilder.instructionsSection(
         exitTransition = { fadeOut() }
     ) {
         with(navController) {
+            val cocktailName = retrieveData(KEY_COCKTAIL_NAME)
             val glassType = retrieveData(KEY_GLASS_TYPE)
             val instructions = retrieveData(KEY_INSTRUCTIONS)
             instructions?.let {
                 val parsedInstructions = Json.decodeFromString<List<InstructionModel>>(it)
                 InstructionsScreen(
+                    cocktailName = cocktailName.default(),
                     glassType = glassType.default(),
                     instructions = parsedInstructions,
                     onBackButton = onBackButtonClick

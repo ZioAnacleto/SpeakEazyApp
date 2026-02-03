@@ -20,12 +20,12 @@ sealed class Cocktail3DModel(
         val ice: Boolean,
         val color: String
     ): Cocktail3DModel(
-        sceneModelName = "martini_glass_scene.glb",
+        sceneModelName = "cocktail_scene",
         cocktailColor = color,
         withIce = ice
     )
     object Default: Cocktail3DModel(
-        sceneModelName = "cocktail_scene.glb",
+        sceneModelName = "cocktail_scene",
         cocktailColor = "white",
         withIce = false
     )

@@ -35,6 +35,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -45,6 +47,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
@@ -53,6 +56,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
@@ -72,6 +76,7 @@ import com.zioanacleto.speakeazy.ui.presentation.components.parallaxLayoutModifi
 import com.zioanacleto.speakeazy.ui.presentation.components.speakEazyGradientBackground
 import com.zioanacleto.speakeazy.ui.presentation.components.withAlpha
 import com.zioanacleto.speakeazy.ui.theme.BottomBarBackground
+import com.zioanacleto.speakeazy.ui.theme.Pink80
 import com.zioanacleto.speakeazy.ui.theme.YellowFFE271
 import org.koin.androidx.compose.getViewModel
 
@@ -79,7 +84,7 @@ import org.koin.androidx.compose.getViewModel
 fun DetailScreen(
     modifier: Modifier = Modifier,
     cocktailId: String,
-    onInstructionsClick: (String, List<InstructionModel>) -> Unit,
+    onInstructionsClick: (String, String, List<InstructionModel>) -> Unit,
     onBackButtonClick: () -> Unit
 ) {
     DetailScreenContent(modifier, cocktailId, onInstructionsClick, onBackButtonClick)
@@ -89,7 +94,7 @@ fun DetailScreen(
 private fun DetailScreenContent(
     modifier: Modifier = Modifier,
     cocktailId: String,
-    onInstructionsClick: (String, List<InstructionModel>) -> Unit,
+    onInstructionsClick: (String, String, List<InstructionModel>) -> Unit,
     onBackButton: () -> Unit
 ) {
     var startAnimation by remember { mutableStateOf(false) }
@@ -149,7 +154,7 @@ private fun DetailScreenSuccessView(
     startAnimation: Boolean,
     fadeIn: Float,
     onBackButton: () -> Unit,
-    onInstructionsClick: (String, List<InstructionModel>) -> Unit,
+    onInstructionsClick: (String, String, List<InstructionModel>) -> Unit,
     onAddFavoriteClick: (String, String) -> Unit,
     onDeleteFavoriteClick: (String) -> Unit
 ) {
@@ -162,7 +167,6 @@ private fun DetailScreenSuccessView(
     LaunchedEffect(scrollState.value, titleY) {
         showCollapsedToolbar = titleY <= toolbarHeightPx
     }
-
 
     Box(
         modifier = Modifier
@@ -244,14 +248,48 @@ private fun DetailScreenSuccessView(
                         IngredientView(ingredient)
                     }
 
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        elevation = CardDefaults.elevatedCardElevation()
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(
+                                    Brush.horizontalGradient(
+                                        listOf(
+                                            YellowFFE271,
+                                            Pink80
+                                        )
+                                    )
+                                )
+                                .padding(16.dp)
+                        ) {
+                            Text(
+                                text = "Check out our brand new 3D modelling instructions section!",
+                                fontSize = TextUnit(18f, TextUnitType.Sp),
+                                color = Color(41, 20, 51, 255),
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+                    }
+
                     // todo: think about something else
                     Text(
                         modifier = Modifier
-                            .padding(start = 16.dp, top = 30.dp)
+                            .padding(start = 16.dp, top = 4.dp)
+                            .clickable {
+                                onInstructionsClick(
+                                    cocktail.name,
+                                    cocktail.glass,
+                                    cocktail.instructions
+                                )
+                            }
                             .border(2.dp, YellowFFE271, RoundedCornerShape(8.dp))
-                            .padding(8.dp)
-                            .clickable { onInstructionsClick(cocktail.glass, cocktail.instructions) },
-                        text = "Go to instructions",
+                            .padding(8.dp),
+                        text = "Go to directions",
                         color = YellowFFE271,
                         fontSize = TextUnit(18f, TextUnitType.Sp)
                     )
@@ -484,7 +522,7 @@ fun DetailScreen() {
         startAnimation = true,
         fadeIn = 1f,
         onBackButton = {},
-        onInstructionsClick = { _, _, -> },
+        onInstructionsClick = { _, _, _ -> },
         onAddFavoriteClick = { _, _ -> },
         onDeleteFavoriteClick = {}
     )

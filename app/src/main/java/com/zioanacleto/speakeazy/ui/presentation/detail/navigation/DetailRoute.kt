@@ -24,7 +24,7 @@ fun NavController.navigateToDetail(
 fun NavGraphBuilder.detailSection(
     showTopBar: Boolean,
     onBackButtonClick: () -> Unit,
-    onInstructionsClick: (String, List<InstructionModel>) -> Unit
+    onInstructionsClick: (String, String, List<InstructionModel>) -> Unit
 ) {
     composable<DetailRoute> { entry ->
         val cocktailId = entry.toRoute<DetailRoute>().id

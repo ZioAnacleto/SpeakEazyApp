@@ -33,6 +33,7 @@ import io.github.sceneview.rememberModelLoader
 import io.github.sceneview.rememberNode
 import io.github.sceneview.rememberOnGestureListener
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.get
@@ -97,7 +98,7 @@ fun Cocktail3DScene(
                 rememberNode {
                     ModelNode(
                         modelInstance = modelLoader.createModelInstance(
-                            assetFileLocation = "models/${currentModel.sceneModelName}"
+                            assetFileLocation = "models/${currentModel.sceneModelName}.glb"
                         ),
                         scaleToUnits = 0.85f
                     )
@@ -154,11 +155,11 @@ fun Cocktail3DScene(
 
 typealias Camera = Pair<Node, CameraNode>
 
-private suspend fun Camera.animateScene(scene: CocktailScene) {
-    val (centerNode, cameraNode) = this
+private suspend fun Camera.animateScene(scene: CocktailScene) = coroutineScope {
+    val (centerNode, cameraNode) = this@animateScene
 
-    centerNode.animateToPositionSmooth(scene.centerPosition)
-    cameraNode.animateToPositionSmooth(scene.cameraPosition)
+    launch { centerNode.animateToPositionSmooth(scene.centerPosition) }
+    launch { cameraNode.animateToPositionSmooth(scene.cameraPosition) }
 }
 
 private suspend fun Node.animateToPositionSmooth(
