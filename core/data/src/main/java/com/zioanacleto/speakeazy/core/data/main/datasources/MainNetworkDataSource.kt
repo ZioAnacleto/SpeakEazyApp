@@ -17,21 +17,23 @@ class MainNetworkDataSource(
 ) : MainDataSource {
     override suspend fun getMainList(): Resource<MainModel> =
         getResponseOrCatchError(listDataMapper) {
-            apiClient.executeGetRequest<MainSpeakEazyBEListResponseDTO>(
+            apiClient.executeGetRequest(
                 url = SpeakEazyBEUrlBuilder.buildUrl(
                     SpeakEazyBEUrlBuilder.Endpoint.Cocktails
-                )
+                ),
+                responseType = MainSpeakEazyBEListResponseDTO::class
             )
         }
 
     override suspend fun getMainById(id: String): Resource<MainModel> =
         getResponseOrCatchError(dataMapper) {
-            apiClient.executeGetRequest<MainSpeakEazyBEResponseDTO>(
+            apiClient.executeGetRequest(
                 url = SpeakEazyBEUrlBuilder.buildUrl(
                     endpoint = SpeakEazyBEUrlBuilder.Endpoint.SingleCocktail(
                         id = id
                     )
                 ),
+                responseType = MainSpeakEazyBEResponseDTO::class,
                 isCached = true,
                 maxAgeSeconds = CACHE_MAX_AGE_FIVE_MINUTE
             )

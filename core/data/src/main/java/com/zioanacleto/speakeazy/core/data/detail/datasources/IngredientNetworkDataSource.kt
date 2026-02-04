@@ -14,21 +14,23 @@ class IngredientNetworkDataSource(
 ) : IngredientDataSource {
     override suspend fun getIngredientsList(): Resource<IngredientsModel> =
         getResponseOrCatchError(dataMapper) {
-            apiClient.executeGetRequest<IngredientsListDTO>(
+            apiClient.executeGetRequest(
                 SpeakEazyBEUrlBuilder.buildUrl(
                     SpeakEazyBEUrlBuilder.Endpoint.Ingredients
-                )
+                ),
+                IngredientsListDTO::class
             )
         }
 
     override suspend fun getIngredientById(id: String): Resource<IngredientsModel> =
         getResponseOrCatchError(dataMapper) {
-            apiClient.executeGetRequest<IngredientsListDTO>(
+            apiClient.executeGetRequest(
                 SpeakEazyBEUrlBuilder.buildUrl(
                     SpeakEazyBEUrlBuilder.Endpoint.SingleIngredient(
                         id = id
                     )
-                )
+                ),
+                IngredientsListDTO::class
             )
         }
 }

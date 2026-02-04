@@ -31,7 +31,7 @@ class HomeNetworkDataSourceTest {
     }
 
     @Test
-    fun test_getHomeSections() = runBlocking {
+    fun `getHomeSections - should return correct data`() = runBlocking {
         // given
         apiClientImpl = createApiClientWithResponse(
             status = HttpStatusCode.OK,

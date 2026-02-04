@@ -14,10 +14,11 @@ class FavoritesNetworkDataSource(
 ) : FavoritesDataSource {
     override suspend fun getCocktails(): Resource<FavoritesModel> =
         getResponseOrCatchError(dataMapper) {
-            apiClient.executeGetRequest<MainSpeakEazyBEListResponseDTO>(
+            apiClient.executeGetRequest(
                 url = SpeakEazyBEUrlBuilder.buildUrl(
                     SpeakEazyBEUrlBuilder.Endpoint.Cocktails
-                )
+                ),
+                responseType = MainSpeakEazyBEListResponseDTO::class
             )
         }
 }

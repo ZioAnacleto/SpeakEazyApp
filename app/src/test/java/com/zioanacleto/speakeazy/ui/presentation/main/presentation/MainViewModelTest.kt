@@ -1,17 +1,17 @@
 package com.zioanacleto.speakeazy.ui.presentation.main.presentation
 
-import com.zioanacleto.buffa.coroutines.DefaultDispatcherProvider
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.buffa.events.Resource
 import com.zioanacleto.speakeazy.assertAllTrue
 import com.zioanacleto.speakeazy.core.domain.main.HomeRepository
 import com.zioanacleto.speakeazy.core.domain.main.model.HomeModel
+import com.zioanacleto.speakeazy.testDispatcher
 import com.zioanacleto.speakeazy.testResourceFlow
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -24,7 +24,6 @@ class MainViewModelTest {
     @Before
     fun setUp() {
         repository = mockk(relaxed = true)
-        dispatcherProvider = DefaultDispatcherProvider()
     }
 
     @After
@@ -33,8 +32,9 @@ class MainViewModelTest {
     }
 
     @Test
-    fun test_homeUiState_whenRepositoryReturnsSuccess_uiStateIsSuccess() = runBlocking {
+    fun test_homeUiState_whenRepositoryReturnsSuccess_uiStateIsSuccess() = runTest {
         // given
+        dispatcherProvider = testDispatcher()
         every { repository.getHome() } returns flowOf(
             Resource.Success(
                 HomeModel(listOf())
@@ -53,8 +53,9 @@ class MainViewModelTest {
     }
 
     @Test
-    fun test_homeUiState_whenRepositoryReturnsError_uiStateIsError() = runBlocking {
+    fun test_homeUiState_whenRepositoryReturnsError_uiStateIsError() = runTest {
         // given
+        dispatcherProvider = testDispatcher()
         every { repository.getHome() } returns flowOf(
             Resource.Error(
                 Exception("testException")

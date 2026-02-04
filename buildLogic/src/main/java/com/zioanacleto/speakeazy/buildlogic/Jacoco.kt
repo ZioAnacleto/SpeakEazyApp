@@ -23,12 +23,16 @@ val coverageExclusions = listOf(
     "**/R$*.class",
     "**/BuildConfig.*",
     "**/Manifest*.*",
-    "**/*Activity.*",
+    "**/*Activity*.*",
     "**/*Screen*.*",
+    "**/*SpeakEazyApp*.*",
+    "**/*SpeakEazyRoomDatabase*.*",
     "**/di/**",
     "**/theme/**",
     "**/components/**",
-    "**/navigation/**"
+    "**/navigation/**",
+    "**/logger/**",
+    "**/steps/**"
 )
 
 private fun String.capitalize() = replaceFirstChar {

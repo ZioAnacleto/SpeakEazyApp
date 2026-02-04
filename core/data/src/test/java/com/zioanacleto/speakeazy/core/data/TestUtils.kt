@@ -8,9 +8,14 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.http.headersOf
 import org.junit.Assert.assertTrue
 
+/**
+ *  This implies that all conditions must be true for the test to pass
+ */
 fun assertAllTrue(
     vararg condition: Boolean,
-) = condition.forEach { assertTrue(it) }
+) = condition.forEachIndexed { index, it ->
+    assertTrue("Condition ${index + 1} failed", it)
+}
 
 /**
  *  Utility function that mocks a [ApiClientImpl] with a [MockEngine], providing given response

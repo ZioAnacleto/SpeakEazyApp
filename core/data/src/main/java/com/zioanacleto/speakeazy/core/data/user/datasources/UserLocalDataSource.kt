@@ -30,20 +30,16 @@ class UserLocalDataSource(
         }
     }
 
-    override suspend fun saveUser(userModel: UserModel) {
+    override suspend fun saveUser(
+        userModel: UserModel,
+        onSuccess: () -> Unit,
+        onError: (Throwable) -> Unit
+    ) {
         try {
             userDao.insertUser(userModel.toUserEntity())
-
-            AnacletoLogger.mumbling(
-                mumble = "Success in saving local user.",
-                level = AnacletoLevel.INFO
-            )
+            onSuccess()
         } catch (exception: Exception) {
-            AnacletoLogger.mumbling(
-                mumble = "Error while saving user",
-                error = exception,
-                level = AnacletoLevel.WARNING
-            )
+            onError(exception)
         }
     }
 

@@ -161,7 +161,8 @@ tasks.register("computeCoverage") {
     val coverageType = "LINE" // in case we need to change it
 
     doLast {
-        val reportFile = file("build/reports/jacoco/jacocoTestReport/jacocoTestReport.xml")
+        val reportFile =
+            rootProject.file("build/reports/jacoco/jacocoAggregateReport.xml")
 
         require(reportFile.exists()) {
             "Report not found: $reportFile"

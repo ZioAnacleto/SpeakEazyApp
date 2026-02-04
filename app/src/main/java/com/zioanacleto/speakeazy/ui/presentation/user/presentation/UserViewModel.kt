@@ -1,39 +1,36 @@
 package com.zioanacleto.speakeazy.ui.presentation.user.presentation
 
-import com.google.firebase.Firebase
-import com.google.firebase.auth.ActionCodeSettings
-import com.google.firebase.auth.actionCodeSettings
-import com.google.firebase.auth.auth
 import com.zioanacleto.buffa.base.BaseViewModel
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.buffa.default
+import com.zioanacleto.buffa.logging.AnacletoLevel
 import com.zioanacleto.buffa.logging.AnacletoLogger
 import com.zioanacleto.speakeazy.APP_PACKAGE
 import com.zioanacleto.speakeazy.USER_DEEPLINK_URI
+import com.zioanacleto.speakeazy.core.domain.user.FirebaseAuthRepository
 import com.zioanacleto.speakeazy.core.domain.user.UserRepository
 import com.zioanacleto.speakeazy.core.domain.user.model.UserModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class UserViewModel(
-    private val repository: UserRepository,
+    private val userRepository: UserRepository,
+    private val firebaseAuthRepository: FirebaseAuthRepository,
     private val dispatcherProvider: DispatcherProvider
 ) : BaseViewModel(dispatcherProvider) {
 
-    private val actionCodeSettings: ActionCodeSettings = actionCodeSettings {
-        url = USER_DEEPLINK_URI
-        setAndroidPackageName(
-            APP_PACKAGE,
-            true,
-            "24"
-        )
-        handleCodeInApp = true
-    }
+    private val _onUserSavedError = MutableStateFlow(false)
+    val onUserSavedError: StateFlow<Boolean> = _onUserSavedError
+
+    private val _onUserUpdatedError = MutableStateFlow(false)
+    val onUserUpdatedError: StateFlow<Boolean> = _onUserUpdatedError
 
     val userUiState: Flow<UserUiState> =
-        repository.getUser()
+        userRepository.getUser()
             .mapResourceAsUserUiState()
             .stateIn(
                 scope = coroutineScope,
@@ -46,35 +43,37 @@ class UserViewModel(
         onEmailSent: (Boolean) -> Unit
     ) {
         coroutineScope.launch(dispatcherProvider.io()) {
-            repository.saveUser(
+            userRepository.saveUser(
                 UserModel(
                     email = userEmail
-                )
+                ),
+                onSuccess = {
+                    AnacletoLogger.mumbling(
+                        mumble = "Success in saving local user.",
+                        level = AnacletoLevel.INFO
+                    )
+                    _onUserSavedError.value = false
+                },
+                onError = { exception ->
+                    AnacletoLogger.mumbling(
+                        mumble = "Error while saving user",
+                        error = exception,
+                        level = AnacletoLevel.WARNING
+                    )
+                    _onUserSavedError.value = true
+                }
             )
         }
         // sending email to user
-        Firebase.auth.sendSignInLinkToEmail(userEmail, actionCodeSettings)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    AnacletoLogger.mumbling(
-                        mumble = "Email sent successfully."
-                    )
-                    onEmailSent(true)
-                } else {
-                    AnacletoLogger.mumbling(
-                        mumble = "Email not sent, something went wrong."
-                    )
-                    onEmailSent(false)
-                }
-            }
+        firebaseAuthRepository.sendSignInLinkToEmail(userEmail, onEmailSent)
     }
 
     fun updateUserWithName(name: String) {
         // retrieving current user's mail
-        val email = Firebase.auth.currentUser?.email.default()
+        val email = firebaseAuthRepository.currentUserEmail.default()
 
         coroutineScope.launch(dispatcherProvider.io()) {
-            repository.updateUser(
+            userRepository.updateUser(
                 UserModel(
                     email = email,
                     name = name
@@ -85,7 +84,7 @@ class UserViewModel(
 
     fun updateUserWithLanguage(userModel: UserModel) =
         coroutineScope.launch(dispatcherProvider.io()) {
-            repository.updateUser(userModel)
+            userRepository.updateUser(userModel)
         }
 
     fun finishUserLogin(
@@ -93,33 +92,20 @@ class UserViewModel(
         email: String,
         onSignInDone: (Boolean) -> Unit
     ) {
-        if (Firebase.auth.isSignInWithEmailLink(emailLink)) {
-            Firebase.auth.signInWithEmailLink(email, emailLink)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        AnacletoLogger.mumbling(
-                            mumble = "Email verified successfully."
-                        )
-                    } else {
-                        AnacletoLogger.mumbling(
-                            mumble = "Email not verified, something went wrong."
-                        )
-                    }
-
-                    onSignInDone(task.isSuccessful)
-                }
+        if (firebaseAuthRepository.isSignInWithEmailLink(emailLink)) {
+            firebaseAuthRepository.signInWithEmailLink(email, emailLink, onSignInDone)
         } else onSignInDone(false)
     }
 
     fun logoutUser() {
         coroutineScope.launch(dispatcherProvider.io()) {
-            repository.deleteUser(
+            userRepository.deleteUser(
                 UserModel(
-                    email = Firebase.auth.currentUser?.email.default()
+                    email = firebaseAuthRepository.currentUserEmail.default()
                 )
             )
         }
 
-        Firebase.auth.signOut()
+        firebaseAuthRepository.signOut()
     }
 }
