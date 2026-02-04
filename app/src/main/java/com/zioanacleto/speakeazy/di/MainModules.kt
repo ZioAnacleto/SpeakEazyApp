@@ -7,6 +7,7 @@ import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.buffa.datamappers.DataMapper
 import com.zioanacleto.speakeazy.APP_PACKAGE
 import com.zioanacleto.speakeazy.MainActivityViewModel
+import com.zioanacleto.speakeazy.USER_DEEPLINK_URI
 import com.zioanacleto.speakeazy.core.data.create.datamappers.CreateCocktailDataMapper
 import com.zioanacleto.speakeazy.core.data.create.datasources.CreateCocktailDataSource
 import com.zioanacleto.speakeazy.core.data.create.datasources.CreateCocktailLocalDataSource
@@ -89,7 +90,6 @@ import com.zioanacleto.speakeazy.ui.presentation.detail.presentation.DetailViewM
 import com.zioanacleto.speakeazy.ui.presentation.favorites.presentation.FavoritesViewModel
 import com.zioanacleto.speakeazy.ui.presentation.main.presentation.MainViewModel
 import com.zioanacleto.speakeazy.ui.presentation.search.presentation.SearchViewModel
-import com.zioanacleto.speakeazy.ui.presentation.user.navigation.USER_DEEPLINK_URI
 import com.zioanacleto.speakeazy.ui.presentation.user.presentation.UserViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
