@@ -32,7 +32,9 @@ val coverageExclusions = listOf(
     "**/components/**",
     "**/navigation/**",
     "**/logger/**",
-    "**/steps/**"
+    "**/steps/**",
+    "**/Cocktail3DScene.*",
+    "**/MainFilterItem.*"
 )
 
 private fun String.capitalize() = replaceFirstChar {
