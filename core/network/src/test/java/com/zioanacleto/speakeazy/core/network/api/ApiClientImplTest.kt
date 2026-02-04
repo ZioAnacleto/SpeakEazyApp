@@ -35,7 +35,7 @@ class ApiClientImplTest {
             // Cache control header
             val cacheControl = request.headers[HttpHeaders.CacheControl]
             assertEquals(
-                CacheControl.MaxAge(ApiClientImpl.CACHE_MAX_AGE).toString(),
+                CacheControl.MaxAge(ApiClientImpl.CACHE_MAX_AGE_ONE_HOUR).toString(),
                 cacheControl
             )
             respond(
