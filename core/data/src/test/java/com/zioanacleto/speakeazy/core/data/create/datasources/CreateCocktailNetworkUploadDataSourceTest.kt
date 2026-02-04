@@ -7,6 +7,7 @@ import com.zioanacleto.speakeazy.core.data.create.dto.CreateCocktailRequestDTO
 import com.zioanacleto.speakeazy.core.data.create.dto.TagsRequestDTO
 import com.zioanacleto.speakeazy.core.data.createApiClientWithResponse
 import com.zioanacleto.speakeazy.core.data.main.dto.MainSpeakEazyBEIngredientsListDTO
+import com.zioanacleto.speakeazy.core.data.main.dto.MainSpeakEazyBEInstructionDTO
 import com.zioanacleto.speakeazy.core.domain.create.model.CreateCocktailModel
 import com.zioanacleto.speakeazy.core.network.api.ApiClientImpl
 import io.ktor.http.HttpStatusCode
@@ -68,8 +69,18 @@ class CreateCocktailNetworkUploadDataSourceTest {
         name = "testName",
         category = "testCategory",
         glass = "testGlass",
-        instructions = "testInstructions",
-        instructionsIt = "testInstructionsIt",
+        instructions = listOf(
+            MainSpeakEazyBEInstructionDTO(
+                type = "instructionType",
+                instruction = "testInstructions"
+            )
+        ),
+        instructionsIt = listOf(
+            MainSpeakEazyBEInstructionDTO(
+                type = "instructionTypeIt",
+                instruction = "testInstructionsIt"
+            )
+        ),
         isAlcoholic = true,
         imageLink = "testImageLink",
         type = "testType",
