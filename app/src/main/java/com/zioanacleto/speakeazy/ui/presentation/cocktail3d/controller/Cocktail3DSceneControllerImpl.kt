@@ -1,11 +1,10 @@
-package com.zioanacleto.speakeazy.ui.presentation.cocktail3d
+package com.zioanacleto.speakeazy.ui.presentation.cocktail3d.controller
 
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.buffa.datamappers.DataMapper
-import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.data.CocktailInfo
-import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.domain.Cocktail3DSceneController
-import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.domain.model.Cocktail3DModel
-import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.domain.model.CocktailScene
+import com.zioanacleto.speakeazy.core.data.cocktail3d.datamapper.CocktailInfo
+import com.zioanacleto.speakeazy.core.domain.cocktail3d.model.Cocktail3DModel
+import com.zioanacleto.speakeazy.core.domain.cocktail3d.model.CocktailScene
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

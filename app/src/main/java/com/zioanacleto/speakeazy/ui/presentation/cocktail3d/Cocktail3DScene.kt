@@ -17,8 +17,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.zioanacleto.buffa.logging.AnacletoLogger
-import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.domain.Cocktail3DSceneController
-import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.domain.model.CocktailScene
+import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.controller.Cocktail3DSceneController
+import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.models.CocktailUiScene
+import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.models.toUiScene
 import io.github.sceneview.Scene
 import io.github.sceneview.animation.Transition.animateRotation
 import io.github.sceneview.math.Position
@@ -85,7 +86,7 @@ fun Cocktail3DScene(
             AnacletoLogger.mumbling(
                 mumble = "Scene changed to $currentScene"
             )
-            (centerNode to cameraNode).animateScene(currentScene)
+            (centerNode to cameraNode).animateScene(currentScene.toUiScene())
         }
 
         Scene(
@@ -155,7 +156,7 @@ fun Cocktail3DScene(
 
 typealias Camera = Pair<Node, CameraNode>
 
-private suspend fun Camera.animateScene(scene: CocktailScene) = coroutineScope {
+private suspend fun Camera.animateScene(scene: CocktailUiScene) = coroutineScope {
     val (centerNode, cameraNode) = this@animateScene
 
     launch { centerNode.animateToPositionSmooth(scene.centerPosition) }

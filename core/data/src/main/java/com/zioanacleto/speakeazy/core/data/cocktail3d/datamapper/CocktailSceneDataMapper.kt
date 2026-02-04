@@ -1,8 +1,8 @@
-package com.zioanacleto.speakeazy.ui.presentation.cocktail3d.data
+package com.zioanacleto.speakeazy.core.data.cocktail3d.datamapper
 
 import com.zioanacleto.buffa.datamappers.DataMapper
-import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.domain.model.CocktailScene
-import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.domain.model.InstructionType
+import com.zioanacleto.speakeazy.core.domain.cocktail3d.model.CocktailScene
+import com.zioanacleto.speakeazy.core.domain.cocktail3d.model.InstructionType
 
 /**
  *  Test implementation, to be finished

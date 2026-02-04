@@ -1,4 +1,4 @@
-package com.zioanacleto.speakeazy.ui.presentation.cocktail3d.domain.model
+package com.zioanacleto.speakeazy.core.domain.cocktail3d.model
 
 enum class GlassType {
     DEFAULT,

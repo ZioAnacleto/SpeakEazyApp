@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import com.zioanacleto.speakeazy.core.domain.main.model.InstructionModel
 import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.Cocktail3DScene
-import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.domain.Cocktail3DSceneController
+import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.controller.Cocktail3DSceneController
 import com.zioanacleto.speakeazy.ui.presentation.components.BackFloatingButton
 import com.zioanacleto.speakeazy.ui.presentation.components.InstructionListItem
 import com.zioanacleto.speakeazy.ui.presentation.components.bottomSheetStyle

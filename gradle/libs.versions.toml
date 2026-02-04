@@ -37,6 +37,7 @@ material = "1.13.0"
 jetbrainsKotlinJvm = "2.0.0"
 androidxTestCore = "1.7.0-rc01"
 sceneform = "2.3.0"
+kotlin-math = "1.6.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -71,6 +72,7 @@ mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 mockk-android = { group = "io.mockk", name = "mockk-android", version.ref = "mockk" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 archunit = { module = "com.tngtech.archunit:archunit-junit4", version.ref = "archunit" }
+kotlin-math = { module = "dev.romainguy:kotlin-math", version.ref = "kotlin-math" }
 
 # Firebase
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }

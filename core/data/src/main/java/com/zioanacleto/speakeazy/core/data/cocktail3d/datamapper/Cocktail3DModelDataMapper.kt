@@ -1,8 +1,8 @@
-package com.zioanacleto.speakeazy.ui.presentation.cocktail3d.data
+package com.zioanacleto.speakeazy.core.data.cocktail3d.datamapper
 
 import com.zioanacleto.buffa.datamappers.DataMapper
-import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.domain.model.Cocktail3DModel
-import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.domain.model.GlassType
+import com.zioanacleto.speakeazy.core.domain.cocktail3d.model.Cocktail3DModel
+import com.zioanacleto.speakeazy.core.domain.cocktail3d.model.GlassType
 
 // pair with glassType and color
 typealias CocktailInfo = Pair<String, String>

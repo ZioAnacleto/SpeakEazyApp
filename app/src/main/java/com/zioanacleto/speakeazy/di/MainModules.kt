@@ -8,6 +8,9 @@ import com.zioanacleto.buffa.datamappers.DataMapper
 import com.zioanacleto.speakeazy.APP_PACKAGE
 import com.zioanacleto.speakeazy.MainActivityViewModel
 import com.zioanacleto.speakeazy.USER_DEEPLINK_URI
+import com.zioanacleto.speakeazy.core.data.cocktail3d.datamapper.Cocktail3DModelDataMapper
+import com.zioanacleto.speakeazy.core.data.cocktail3d.datamapper.CocktailInfo
+import com.zioanacleto.speakeazy.core.data.cocktail3d.datamapper.CocktailSceneDataMapper
 import com.zioanacleto.speakeazy.core.data.create.datamappers.CreateCocktailDataMapper
 import com.zioanacleto.speakeazy.core.data.create.datasources.CreateCocktailDataSource
 import com.zioanacleto.speakeazy.core.data.create.datasources.CreateCocktailLocalDataSource
@@ -61,6 +64,8 @@ import com.zioanacleto.speakeazy.core.database.dao.CreateCocktailDao
 import com.zioanacleto.speakeazy.core.database.dao.FavoritesDao
 import com.zioanacleto.speakeazy.core.database.dao.IngredientDao
 import com.zioanacleto.speakeazy.core.database.dao.UserDao
+import com.zioanacleto.speakeazy.core.domain.cocktail3d.model.Cocktail3DModel
+import com.zioanacleto.speakeazy.core.domain.cocktail3d.model.CocktailScene
 import com.zioanacleto.speakeazy.core.domain.create.CreateCocktailRepository
 import com.zioanacleto.speakeazy.core.domain.create.model.CreateCocktailModel
 import com.zioanacleto.speakeazy.core.domain.detail.DetailRepository
@@ -78,13 +83,8 @@ import com.zioanacleto.speakeazy.core.domain.user.FirebaseAuthRepository
 import com.zioanacleto.speakeazy.core.domain.user.UserRepository
 import com.zioanacleto.speakeazy.core.network.api.ApiClientImpl
 import com.zioanacleto.speakeazy.di.models.DataContext
-import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.Cocktail3DSceneControllerImpl
-import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.data.Cocktail3DModelDataMapper
-import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.data.CocktailInfo
-import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.data.CocktailSceneDataMapper
-import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.domain.Cocktail3DSceneController
-import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.domain.model.Cocktail3DModel
-import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.domain.model.CocktailScene
+import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.controller.Cocktail3DSceneController
+import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.controller.Cocktail3DSceneControllerImpl
 import com.zioanacleto.speakeazy.ui.presentation.create.presentation.CreateCocktailViewModel
 import com.zioanacleto.speakeazy.ui.presentation.detail.presentation.DetailViewModel
 import com.zioanacleto.speakeazy.ui.presentation.favorites.presentation.FavoritesViewModel
