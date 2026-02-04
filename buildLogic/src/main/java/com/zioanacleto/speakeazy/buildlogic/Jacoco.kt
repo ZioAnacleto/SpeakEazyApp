@@ -33,7 +33,7 @@ val coverageExclusions = listOf(
     "**/navigation/**",
     "**/logger/**",
     "**/steps/**",
-    "**/Cocktail3DScene.*",
+    "**/*Cocktail3DScene*.*",
     "**/MainFilterItem.*"
 )
 

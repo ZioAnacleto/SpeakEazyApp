@@ -1,14 +1,18 @@
 package com.zioanacleto.speakeazy.core.data.user.repositories
 
 import com.google.firebase.Firebase
-import com.google.firebase.auth.ActionCodeSettings
 import com.google.firebase.auth.auth
 import com.zioanacleto.buffa.logging.AnacletoLogger
+import com.zioanacleto.speakeazy.core.data.user.provider.FirebaseActionCodeSettingsProvider
 import com.zioanacleto.speakeazy.core.domain.user.FirebaseAuthRepository
 
 class FirebaseAuthRepositoryImpl(
-    private val actionCodeSettings: ActionCodeSettings
+    private val actionCodeSettingsProvider: FirebaseActionCodeSettingsProvider
 ) : FirebaseAuthRepository {
+    private val actionCodeSettings by lazy {
+        actionCodeSettingsProvider.provideActionCodeSettings()
+    }
+
     override val currentUserEmail: String? = Firebase.auth.currentUser?.email
 
     override fun sendSignInLinkToEmail(

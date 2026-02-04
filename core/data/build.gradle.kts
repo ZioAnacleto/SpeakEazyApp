@@ -54,6 +54,10 @@ dependencies {
     implementation(libs.material)
     implementation(libs.kotlinx.serialization.json)
 
+    // Koin
+    implementation(libs.koin.core)
+    implementation(libs.koin.android)
+
     // Zioanacleto Buffa
     implementation(libs.zioanacleto.buffa)
 
