@@ -47,6 +47,7 @@ class FirebaseAuthRepositoryImplTest {
         val expectedEmail = "test@example.com"
         val firebaseUser: FirebaseUser = mockk()
         every { firebaseUser.email } returns expectedEmail
+        every { firebaseUser.uid } returns "test"
         every { firebaseAuth.currentUser } returns firebaseUser
 
         // when
@@ -65,6 +66,36 @@ class FirebaseAuthRepositoryImplTest {
         // when
         val sut = createSut()
         val actualEmail = sut.currentUserEmail
+
+        // then
+        assertEquals(null, actualEmail)
+    }
+
+    @Test
+    fun `currentUserId - when user is logged in - returns uid`() {
+        // given
+        val expectedUid = "testUid"
+        val firebaseUser: FirebaseUser = mockk()
+        every { firebaseUser.email } returns "test"
+        every { firebaseUser.uid } returns expectedUid
+        every { firebaseAuth.currentUser } returns firebaseUser
+
+        // when
+        val sut = createSut()
+        val actualEmail = sut.currentUserId
+
+        // then
+        assertEquals(expectedUid, actualEmail)
+    }
+
+    @Test
+    fun `currentUserId - when user is not logged in - returns null`() {
+        // given
+        every { firebaseAuth.currentUser } returns null
+
+        // when
+        val sut = createSut()
+        val actualEmail = sut.currentUserId
 
         // then
         assertEquals(null, actualEmail)

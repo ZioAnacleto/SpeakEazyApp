@@ -41,5 +41,5 @@ val viewModelModule = module {
     factory { UserViewModel(get<UserRepository>(), get(), get()) }
     factory { FavoritesViewModel(get(), get()) }
     factory { MainActivityViewModel(get<UserRepository>(), get()) }
-    factory { CreateCocktailViewModel(get(), get(), get()) }
+    factory { CreateCocktailViewModel(get(), get(), get(), get()) }
 }

@@ -14,6 +14,7 @@ class FirebaseAuthRepositoryImpl(
     }
 
     override val currentUserEmail: String? = Firebase.auth.currentUser?.email
+    override val currentUserId: String? = Firebase.auth.currentUser?.uid
 
     override fun sendSignInLinkToEmail(
         email: String,

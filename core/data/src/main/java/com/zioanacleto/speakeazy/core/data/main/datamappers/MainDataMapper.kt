@@ -10,7 +10,7 @@ import com.zioanacleto.speakeazy.core.domain.main.model.MainModel
 
 class MainDataMapper : DataMapper<MainResponseDTO, MainModel> {
     override fun mapInto(input: MainResponseDTO): MainModel = MainModel(
-        drinks = input.drinks?.mapNotNull {
+        drinks = input.drinks?.map {
             DrinkModel(
                 id = it?.idDrink.default(),
                 name = it?.strDrink.default(),

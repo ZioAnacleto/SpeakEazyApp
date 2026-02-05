@@ -1,12 +1,11 @@
 package com.zioanacleto.speakeazy.ui.presentation.create.presentation
 
-import com.google.firebase.Firebase
-import com.google.firebase.auth.auth
 import com.zioanacleto.buffa.base.BaseViewModel
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.buffa.default
 import com.zioanacleto.speakeazy.core.domain.create.CreateCocktailRepository
 import com.zioanacleto.speakeazy.core.domain.create.model.CreateCocktailModel
+import com.zioanacleto.speakeazy.core.domain.user.FirebaseAuthRepository
 import com.zioanacleto.speakeazy.core.domain.user.UserRepository
 import com.zioanacleto.speakeazy.core.domain.user.model.Language
 import com.zioanacleto.speakeazy.ui.presentation.components.CreateWizardStepData
@@ -27,6 +26,7 @@ import java.util.Date
 class CreateCocktailViewModel(
     private val repository: CreateCocktailRepository,
     private val userRepository: UserRepository,
+    private val firebaseAuthRepository: FirebaseAuthRepository,
     private val dispatcherProvider: DispatcherProvider
 ) : BaseViewModel(dispatcherProvider) {
 
@@ -234,7 +234,7 @@ class CreateCocktailViewModel(
     }
 
     fun uploadCurrentCocktail() {
-        val currentUserId = Firebase.auth.currentUser?.uid.default()
+        val currentUserId = firebaseAuthRepository.currentUserId.default()
         val currentUsername = (_userInfo.value as UserUiState.Success).user.name
 
         var createCocktailModel =
