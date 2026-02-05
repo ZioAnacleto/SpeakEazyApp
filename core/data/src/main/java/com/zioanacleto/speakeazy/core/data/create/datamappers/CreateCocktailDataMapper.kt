@@ -6,6 +6,7 @@ import com.zioanacleto.speakeazy.core.data.create.dto.CreateCocktailRequestDTO
 import com.zioanacleto.speakeazy.core.data.create.dto.TagsRequestDTO
 import com.zioanacleto.speakeazy.core.data.main.dto.MainSpeakEazyBEIngredientDTO
 import com.zioanacleto.speakeazy.core.data.main.dto.MainSpeakEazyBEIngredientsListDTO
+import com.zioanacleto.speakeazy.core.data.main.dto.MainSpeakEazyBEInstructionDTO
 import com.zioanacleto.speakeazy.core.domain.create.model.CreateCocktailModel
 
 class CreateCocktailDataMapper : DataMapper<CreateCocktailModel, CreateCocktailRequestDTO> {
@@ -14,8 +15,18 @@ class CreateCocktailDataMapper : DataMapper<CreateCocktailModel, CreateCocktailR
             id = "1000", // BE will autoincrement it correctly
             name = input.cocktailName.default(),
             category = SPEAKEAZY_CATEGORY, // using dedicated value
-            instructions = input.instructions.default(),
-            instructionsIt = input.instructionsIt.default(),
+            instructions = listOf(
+                MainSpeakEazyBEInstructionDTO(
+                    type = "ingredient",
+                    instruction = input.instructions.default()
+                )
+            ),
+            instructionsIt = listOf(
+                MainSpeakEazyBEInstructionDTO(
+                    type = "ingredient",
+                    instruction = input.instructionsIt.default()
+                )
+            ),
             glass = input.glass.default(),
             isAlcoholic = input.isAlcoholic,
             // todo: upload a default image for now

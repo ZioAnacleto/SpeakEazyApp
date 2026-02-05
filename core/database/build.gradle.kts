@@ -49,6 +49,10 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
 
+    // Koin
+    implementation(libs.koin.core)
+    implementation(libs.koin.android)
+
     // Zioanacleto Buffa
     implementation(libs.zioanacleto.buffa)
 

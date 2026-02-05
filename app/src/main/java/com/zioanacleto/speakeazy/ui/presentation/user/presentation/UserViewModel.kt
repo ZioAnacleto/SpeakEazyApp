@@ -5,6 +5,8 @@ import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.buffa.default
 import com.zioanacleto.buffa.logging.AnacletoLevel
 import com.zioanacleto.buffa.logging.AnacletoLogger
+import com.zioanacleto.speakeazy.APP_PACKAGE
+import com.zioanacleto.speakeazy.USER_DEEPLINK_URI
 import com.zioanacleto.speakeazy.core.domain.user.FirebaseAuthRepository
 import com.zioanacleto.speakeazy.core.domain.user.UserRepository
 import com.zioanacleto.speakeazy.core.domain.user.model.UserModel

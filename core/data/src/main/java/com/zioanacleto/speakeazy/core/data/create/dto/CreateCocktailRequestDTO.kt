@@ -1,6 +1,7 @@
 package com.zioanacleto.speakeazy.core.data.create.dto
 
 import com.zioanacleto.speakeazy.core.data.main.dto.MainSpeakEazyBEIngredientsListDTO
+import com.zioanacleto.speakeazy.core.data.main.dto.MainSpeakEazyBEInstructionDTO
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -9,8 +10,8 @@ data class CreateCocktailRequestDTO(
     @SerialName("id") val id: String,
     @SerialName("name") val name: String,
     @SerialName("category") val category: String,
-    @SerialName("instructions") val instructions: String,
-    @SerialName("instructionsIt") val instructionsIt: String,
+    @SerialName("instructions") val instructions: List<MainSpeakEazyBEInstructionDTO>,
+    @SerialName("instructionsIt") val instructionsIt: List<MainSpeakEazyBEInstructionDTO>,
     @SerialName("glass") val glass: String,
     @SerialName("isAlcoholic") val isAlcoholic: Boolean,
     @SerialName("imageLink") val imageLink: String,

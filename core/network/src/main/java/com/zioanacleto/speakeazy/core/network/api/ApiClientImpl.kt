@@ -58,6 +58,7 @@ class ApiClientImpl(
         url: String,
         responseType: KClass<T>,
         isCached: Boolean = false,
+        maxAgeSeconds: Int = CACHE_MAX_AGE_ONE_HOUR
     ): T {
         return httpClient
             .get(url) {
@@ -65,7 +66,7 @@ class ApiClientImpl(
                     if (isCached)
                         append(
                             HttpHeaders.CacheControl,
-                            CacheControl.MaxAge(CACHE_MAX_AGE).toString()
+                            CacheControl.MaxAge(maxAgeSeconds).toString()
                         )
                     append(HttpHeaders.Authorization, createAuthorizationHeader())
                 }
@@ -125,7 +126,8 @@ class ApiClientImpl(
     }
 
     companion object {
-        const val CACHE_MAX_AGE = 3600
+        const val CACHE_MAX_AGE_ONE_HOUR = 1 * 60 * 60
+        const val CACHE_MAX_AGE_FIVE_MINUTE = 5 * 60
         const val REQUEST_TIMEOUT = 45_000L
     }
 }

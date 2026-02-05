@@ -26,6 +26,7 @@ class MainDataMapperTest {
         // then
         assertAllTrue(
             result.drinks.size == 1,
+            result.drinks.first().id == "1",
             result.drinks.first().name == "test",
             result.drinks.first().category == "testCategory",
             result.drinks.first().instructions.first().instruction == "testInstructions1",
@@ -87,6 +88,58 @@ class MainDataMapperTest {
 
         // then
         assertTrue(result.drinks.isEmpty())
+    }
+
+    @Test
+    fun `mapInto - when input list is empty return empty list`() {
+        // given
+        val input = MainResponseDTO(listOf(null))
+
+        // when
+        val sut = createSut()
+        val result = sut.mapInto(input)
+
+        // then
+        assertTrue(result.drinks.size == 1)
+    }
+
+    @Test
+    fun `mapInto - when ingredients are blank return empty ingredient map`() {
+        // given
+        val input = createInputWithBlankIngredients()
+
+        // when
+        val sut = createSut()
+        val result = sut.mapInto(input)
+
+        // then
+        assertTrue(result.drinks.first().ingredients.isEmpty())
+    }
+
+    @Test
+    fun `mapInto - when measures are blank return empty ingredient map`() {
+        // given
+        val input = createInputWithOnlyBlankMeasures()
+
+        // when
+        val sut = createSut()
+        val result = sut.mapInto(input)
+
+        // then
+        assertTrue(result.drinks.first().ingredients.isEmpty())
+    }
+
+    @Test
+    fun `mapInto - when measures are null return empty ingredient map`() {
+        // given
+        val input = createInputWithOnlyBlankMeasures(measuresNull = true)
+
+        // when
+        val sut = createSut()
+        val result = sut.mapInto(input)
+
+        // then
+        assertTrue(result.drinks.first().ingredients.isEmpty())
     }
 
     private fun createSut() = MainDataMapper()
@@ -207,6 +260,167 @@ class MainDataMapperTest {
                 strMeasure13 = "testMeasure13",
                 strMeasure14 = "testMeasure14",
                 strMeasure15 = "testMeasure15",
+                strImageAttribution = null,
+                strCreativeCommonsConfirmed = null,
+                dateModified = null,
+            )
+        )
+    )
+
+    private fun createInputWithBlankIngredients(
+        id: String? = "1",
+        name: String? = "test",
+        category: String? = "testCategory",
+        instructions: String? = "testInstructions1",
+        glass: String? = "testGlass",
+        imageUrl: String? = "testImageSource"
+    ) = MainResponseDTO(
+        drinks = listOf(
+            MainResponseDTO.DrinkDTO(
+                idDrink = id,
+                strDrink = name,
+                strCategory = category,
+                strInstructionsIT = instructions,
+                strGlass = glass,
+                strImageSource = imageUrl,
+                strIngredient1 = "",
+                strDrinkAlternate = null,
+                strTags = null,
+                strVideo = null,
+                strIBA = null,
+                strAlcoholic = null,
+                strInstructions = null,
+                strInstructionsES = null,
+                strInstructionsDE = null,
+                strInstructionsFR = null,
+                strInstructionsZHHANS = null,
+                strInstructionsZHHANT = null,
+                strDrinkThumb = null,
+                strIngredient2 = "",
+                strIngredient3 = "",
+                strIngredient4 = "",
+                strIngredient5 = "",
+                strIngredient6 = "",
+                strIngredient7 = "",
+                strIngredient8 = "",
+                strIngredient9 = "",
+                strIngredient10 = "",
+                strIngredient11 = "",
+                strIngredient12 = "",
+                strIngredient13 = "",
+                strIngredient14 = "",
+                strIngredient15 = "",
+                strMeasure1 = "",
+                strMeasure2 = "",
+                strMeasure3 = "",
+                strMeasure4 = "",
+                strMeasure5 = "",
+                strMeasure6 = "",
+                strMeasure7 = "",
+                strMeasure8 = "",
+                strMeasure9 = "",
+                strMeasure10 = "",
+                strMeasure11 = "",
+                strMeasure12 = "",
+                strMeasure13 = "",
+                strMeasure14 = "",
+                strMeasure15 = "",
+                strImageAttribution = null,
+                strCreativeCommonsConfirmed = null,
+                dateModified = null,
+            )
+        )
+    )
+
+    private fun createInputWithOnlyBlankMeasures(
+        id: String? = "1",
+        name: String? = "test",
+        category: String? = "testCategory",
+        instructions: String? = "testInstructions1",
+        glass: String? = "testGlass",
+        imageUrl: String? = "testImageSource",
+        measuresNull: Boolean = false
+    ) = MainResponseDTO(
+        drinks = listOf(
+            MainResponseDTO.DrinkDTO(
+                idDrink = id,
+                strDrink = name,
+                strCategory = category,
+                strInstructionsIT = instructions,
+                strGlass = glass,
+                strImageSource = imageUrl,
+                strIngredient1 = "test",
+                strDrinkAlternate = null,
+                strTags = null,
+                strVideo = null,
+                strIBA = null,
+                strAlcoholic = null,
+                strInstructions = null,
+                strInstructionsES = null,
+                strInstructionsDE = null,
+                strInstructionsFR = null,
+                strInstructionsZHHANS = null,
+                strInstructionsZHHANT = null,
+                strDrinkThumb = null,
+                strIngredient2 = "test",
+                strIngredient3 = "test",
+                strIngredient4 = "test",
+                strIngredient5 = "test",
+                strIngredient6 = "test",
+                strIngredient7 = "test",
+                strIngredient8 = "test",
+                strIngredient9 = "test",
+                strIngredient10 = "test",
+                strIngredient11 = "test",
+                strIngredient12 = "test",
+                strIngredient13 = "test",
+                strIngredient14 = "test",
+                strIngredient15 = "test",
+                strMeasure1 = if (measuresNull)
+                    null
+                else "",
+                strMeasure2 = if (measuresNull)
+                    null
+                else "",
+                strMeasure3 = if (measuresNull)
+                    null
+                else "",
+                strMeasure4 = if (measuresNull)
+                    null
+                else "",
+                strMeasure5 = if (measuresNull)
+                    null
+                else "",
+                strMeasure6 = if (measuresNull)
+                    null
+                else "",
+                strMeasure7 = if (measuresNull)
+                    null
+                else "",
+                strMeasure8 = if (measuresNull)
+                    null
+                else "",
+                strMeasure9 = if (measuresNull)
+                    null
+                else "",
+                strMeasure10 = if (measuresNull)
+                    null
+                else "",
+                strMeasure11 = if (measuresNull)
+                    null
+                else "",
+                strMeasure12 = if (measuresNull)
+                    null
+                else "",
+                strMeasure13 = if (measuresNull)
+                    null
+                else "",
+                strMeasure14 = if (measuresNull)
+                    null
+                else "",
+                strMeasure15 = if (measuresNull)
+                    null
+                else "",
                 strImageAttribution = null,
                 strCreativeCommonsConfirmed = null,
                 dateModified = null,

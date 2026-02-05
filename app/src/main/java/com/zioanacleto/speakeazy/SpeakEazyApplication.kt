@@ -3,10 +3,10 @@ package com.zioanacleto.speakeazy
 import android.app.Application
 import android.content.Context
 import com.zioanacleto.buffa.logging.AnacletoLogger
-import com.zioanacleto.speakeazy.di.dataMapperModule
-import com.zioanacleto.speakeazy.di.dataSourceModule
-import com.zioanacleto.speakeazy.di.databaseModule
-import com.zioanacleto.speakeazy.di.repositoryModule
+import com.zioanacleto.speakeazy.core.data.di.dataMapperModule
+import com.zioanacleto.speakeazy.core.data.di.dataSourceModule
+import com.zioanacleto.speakeazy.core.data.di.repositoryModule
+import com.zioanacleto.speakeazy.core.database.di.databaseModule
 import com.zioanacleto.speakeazy.di.singletonModule
 import com.zioanacleto.speakeazy.di.viewModelModule
 import com.zioanacleto.speakeazy.logger.LocalLogger

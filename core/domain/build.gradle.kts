@@ -1,4 +1,5 @@
 plugins {
+    kotlin("plugin.serialization").version(libs.versions.kotlin.serialization.get())
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.zioanacleto.jacoco.library.plugin)

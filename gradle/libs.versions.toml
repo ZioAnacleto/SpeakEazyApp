@@ -36,6 +36,8 @@ appcompat = "1.7.1"
 material = "1.13.0"
 jetbrainsKotlinJvm = "2.0.0"
 androidxTestCore = "1.7.0-rc01"
+sceneform = "2.3.0"
+kotlin-math = "1.6.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -70,6 +72,7 @@ mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 mockk-android = { group = "io.mockk", name = "mockk-android", version.ref = "mockk" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 archunit = { module = "com.tngtech.archunit:archunit-junit4", version.ref = "archunit" }
+kotlin-math = { module = "dev.romainguy:kotlin-math", version.ref = "kotlin-math" }
 
 # Firebase
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase" }
@@ -94,6 +97,9 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 android-gradleApiPlugin = { group = "com.android.tools.build", name = "gradle-api", version.ref = "agp" }
+
+# Sceneform
+sceneform = { module = "io.github.sceneview:sceneview", version.ref = "sceneform" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

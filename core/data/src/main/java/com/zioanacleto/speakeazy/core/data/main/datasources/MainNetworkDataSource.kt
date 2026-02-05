@@ -7,6 +7,7 @@ import com.zioanacleto.speakeazy.core.data.main.dto.MainSpeakEazyBEListResponseD
 import com.zioanacleto.speakeazy.core.data.main.dto.MainSpeakEazyBEResponseDTO
 import com.zioanacleto.speakeazy.core.domain.main.model.MainModel
 import com.zioanacleto.speakeazy.core.network.api.ApiClientImpl
+import com.zioanacleto.speakeazy.core.network.api.ApiClientImpl.Companion.CACHE_MAX_AGE_FIVE_MINUTE
 import com.zioanacleto.speakeazy.core.network.builders.SpeakEazyBEUrlBuilder
 
 class MainNetworkDataSource(
@@ -32,7 +33,9 @@ class MainNetworkDataSource(
                         id = id
                     )
                 ),
-                responseType = MainSpeakEazyBEResponseDTO::class
+                responseType = MainSpeakEazyBEResponseDTO::class,
+                isCached = true,
+                maxAgeSeconds = CACHE_MAX_AGE_FIVE_MINUTE
             )
         }
 

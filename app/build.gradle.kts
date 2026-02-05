@@ -49,11 +49,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -62,6 +62,12 @@ android {
 
     testOptions {
         unitTests.isIncludeAndroidResources = true
+    }
+
+    configurations {
+        testImplementation {
+            exclude(group = "io.github.sceneview")
+        }
     }
 }
 
@@ -124,6 +130,9 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.google.play.services.auth)
 
+    // Sceneform for 3D modelling
+    implementation(libs.sceneform)
+
     // Unit tests
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
@@ -137,6 +146,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.kotlin.math)
 }
 
 tasks.named("check") {

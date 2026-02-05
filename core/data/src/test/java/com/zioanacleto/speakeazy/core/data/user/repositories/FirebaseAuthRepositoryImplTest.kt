@@ -3,10 +3,10 @@ package com.zioanacleto.speakeazy.core.data.user.repositories
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseApp
-import com.google.firebase.auth.ActionCodeSettings
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.zioanacleto.speakeazy.core.data.user.provider.FirebaseActionCodeSettingsProvider
 import io.mockk.clearAllMocks
 import io.mockk.every
 import io.mockk.mockk
@@ -24,7 +24,7 @@ class FirebaseAuthRepositoryImplTest {
 
     private val firebaseAuth: FirebaseAuth = mockk(relaxed = true)
     private val firebaseApp: FirebaseApp = mockk(relaxed = true)
-    private val actionCodeSettings: ActionCodeSettings = mockk()
+    private val provider: FirebaseActionCodeSettingsProvider = mockk(relaxed = true)
 
     @Before
     fun setUp() {
@@ -33,6 +33,7 @@ class FirebaseAuthRepositoryImplTest {
         every { FirebaseApp.getInstance() } returns firebaseApp
         mockkStatic(FirebaseAuth::class)
         every { FirebaseAuth.getInstance() } returns firebaseAuth
+        every { provider.provideActionCodeSettings() } returns mockk(relaxed = true)
     }
 
     @After
@@ -46,6 +47,7 @@ class FirebaseAuthRepositoryImplTest {
         val expectedEmail = "test@example.com"
         val firebaseUser: FirebaseUser = mockk()
         every { firebaseUser.email } returns expectedEmail
+        every { firebaseUser.uid } returns "test"
         every { firebaseAuth.currentUser } returns firebaseUser
 
         // when
@@ -70,6 +72,36 @@ class FirebaseAuthRepositoryImplTest {
     }
 
     @Test
+    fun `currentUserId - when user is logged in - returns uid`() {
+        // given
+        val expectedUid = "testUid"
+        val firebaseUser: FirebaseUser = mockk()
+        every { firebaseUser.email } returns "test"
+        every { firebaseUser.uid } returns expectedUid
+        every { firebaseAuth.currentUser } returns firebaseUser
+
+        // when
+        val sut = createSut()
+        val actualEmail = sut.currentUserId
+
+        // then
+        assertEquals(expectedUid, actualEmail)
+    }
+
+    @Test
+    fun `currentUserId - when user is not logged in - returns null`() {
+        // given
+        every { firebaseAuth.currentUser } returns null
+
+        // when
+        val sut = createSut()
+        val actualEmail = sut.currentUserId
+
+        // then
+        assertEquals(null, actualEmail)
+    }
+
+    @Test
     fun `sendSignInLinkToEmail - when task is successful - calls onEmailSent with true`() {
         // given
         val email = "test@example.com"
@@ -77,7 +109,7 @@ class FirebaseAuthRepositoryImplTest {
         val listener = slot<OnCompleteListener<Void>>()
         var result: Boolean? = null
 
-        every { firebaseAuth.sendSignInLinkToEmail(email, actionCodeSettings) } returns mockTask
+        every { firebaseAuth.sendSignInLinkToEmail(any(), any()) } returns mockTask
         every { mockTask.addOnCompleteListener(capture(listener)) } answers {
             every { mockTask.isSuccessful } returns true
             listener.captured.onComplete(mockTask)
@@ -102,7 +134,7 @@ class FirebaseAuthRepositoryImplTest {
         val listener = slot<OnCompleteListener<Void>>()
         var result: Boolean? = null
 
-        every { firebaseAuth.sendSignInLinkToEmail(email, actionCodeSettings) } returns mockTask
+        every { firebaseAuth.sendSignInLinkToEmail(any(), any()) } returns mockTask
         every { mockTask.addOnCompleteListener(capture(listener)) } answers {
             every { mockTask.isSuccessful } returns false
             listener.captured.onComplete(mockTask)
@@ -196,5 +228,5 @@ class FirebaseAuthRepositoryImplTest {
         verify { firebaseAuth.signOut() }
     }
 
-    private fun createSut() = FirebaseAuthRepositoryImpl(actionCodeSettings)
+    private fun createSut() = FirebaseAuthRepositoryImpl(provider)
 }

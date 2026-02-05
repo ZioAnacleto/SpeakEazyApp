@@ -18,8 +18,7 @@ fun NavController.navigateToFavorites(navOptions: NavOptions? = null) =
     navigate(route = FavoritesRoute, navOptions = navOptions)
 
 fun NavGraphBuilder.favoritesSection(
-    onCocktailClick: (String) -> Unit,
-    cocktailDestination: NavGraphBuilder.() -> Unit
+    onCocktailClick: (String) -> Unit
 ) {
     navigation<FavoritesBaseRoute>(startDestination = FavoritesRoute) {
         composable<FavoritesRoute> {
@@ -27,6 +26,5 @@ fun NavGraphBuilder.favoritesSection(
                 onCocktailClick = onCocktailClick
             )
         }
-        cocktailDestination()
     }
 }

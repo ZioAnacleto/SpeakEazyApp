@@ -36,7 +36,7 @@ class IngredientNetworkDataSourceTest {
         // given
         apiClient = createApiClientWithResponse(
             status = HttpStatusCode.OK,
-            response = """{"ingredients": []}"""
+            response = "{\"ingredients\": []}"
         )
 
         every {
@@ -77,7 +77,7 @@ class IngredientNetworkDataSourceTest {
         // given
         apiClient = createApiClientWithResponse(
             status = HttpStatusCode.OK,
-            response = """{"ingredients": []}"""
+            response = "{\"ingredients\": []}"
         )
 
         every {

@@ -48,8 +48,8 @@ class CreateCocktailDataMapperTest {
                 type == "testType",
                 method == "testMethod",
                 glass == "testGlass",
-                instructions == "testInstructions",
-                instructionsIt == "testInstructionsIt",
+                instructions.first().instruction == "testInstructions",
+                instructionsIt.first().instruction == "testInstructionsIt",
                 imageLink == "testImageUrl",
                 userId == "testUserId",
                 username == "testUsername"

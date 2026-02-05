@@ -3,11 +3,11 @@ package com.zioanacleto.speakeazy.ui.presentation.create.presentation
 import com.zioanacleto.buffa.coroutines.DefaultDispatcherProvider
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.buffa.events.Resource
-import com.zioanacleto.speakeazy.TestDispatcherProvider
 import com.zioanacleto.speakeazy.assertAllTrue
 import com.zioanacleto.speakeazy.core.domain.create.CreateCocktailRepository
 import com.zioanacleto.speakeazy.core.domain.create.model.CreateCocktailModel
 import com.zioanacleto.speakeazy.core.domain.detail.model.IngredientsModel
+import com.zioanacleto.speakeazy.core.domain.user.FirebaseAuthRepository
 import com.zioanacleto.speakeazy.core.domain.user.UserRepository
 import com.zioanacleto.speakeazy.core.domain.user.model.Language
 import com.zioanacleto.speakeazy.core.domain.user.model.UserModel
@@ -20,11 +20,11 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.After
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import java.util.Date
@@ -34,12 +34,14 @@ class CreateCocktailViewModelTest {
 
     private lateinit var repository: CreateCocktailRepository
     private lateinit var userRepository: UserRepository
+    private lateinit var firebaseAuthRepository: FirebaseAuthRepository
     private lateinit var dispatcherProvider: DispatcherProvider
 
     @Before
     fun setUp() {
         repository = mockk(relaxed = true)
         userRepository = mockk(relaxed = true)
+        firebaseAuthRepository = mockk(relaxed = true)
         dispatcherProvider = DefaultDispatcherProvider()
     }
 
@@ -197,7 +199,7 @@ class CreateCocktailViewModelTest {
 
     @Test
     fun `saveFourthStep - when selected language is ENGLISH, instructionsIt is empty`() = runTest {
-        dispatcherProvider = TestDispatcherProvider(StandardTestDispatcher(testScheduler))
+        dispatcherProvider = testDispatcher()
         // given
         every { repository.getCreateCocktail() } returns flowOf(
             Resource.Error(Exception("testException"))
@@ -232,7 +234,7 @@ class CreateCocktailViewModelTest {
 
     @Test
     fun `saveFourthStep - when selected language is ITALIAN, instructions is empty`() = runTest {
-        dispatcherProvider = TestDispatcherProvider(StandardTestDispatcher(testScheduler))
+        dispatcherProvider = testDispatcher()
         // given
         every { repository.getCreateCocktail() } returns flowOf(
             Resource.Error(Exception("testException"))
@@ -322,7 +324,7 @@ class CreateCocktailViewModelTest {
     @Test
     fun `deleteCreateCocktail - createCocktailDeleted is true`() = runTest {
         // given
-        dispatcherProvider = TestDispatcherProvider(StandardTestDispatcher(testScheduler))
+        dispatcherProvider = testDispatcher()
         coEvery { repository.deleteCreateCocktail(any()) } returns true
         val sut = createSut()
 
@@ -338,7 +340,7 @@ class CreateCocktailViewModelTest {
     @Test
     fun `setCreateCocktailToBeDeleted - createCocktailToBeDeleted corresponds to given wizard`() = runTest {
         // given
-        dispatcherProvider = TestDispatcherProvider(StandardTestDispatcher(testScheduler))
+        dispatcherProvider = testDispatcher()
         val givenWizard = CreateCocktailModel(
             id = 2502,
             currentStep = CreateWizardStepData.First.order,
@@ -370,11 +372,61 @@ class CreateCocktailViewModelTest {
         assert(result == null)
     }
 
+    @Test
+    fun `uploadCurrentCocktail - when success sets createCocktailUploaded to true`() = runTest {
+        // given
+        dispatcherProvider = testDispatcher()
+        val testUser = UserModel(name = "testName", email = "testEmail")
+        val testUserId = "testUserId"
+        
+        every { userRepository.getUser() } returns flowOf(Resource.Success(testUser))
+        every { firebaseAuthRepository.currentUserId } returns testUserId
+        coEvery { repository.uploadCocktail(any()) } returns true
+        every { repository.getCreateCocktail() } returns flowOf(
+            Resource.Error(Exception("testException"))
+        )
+
+        val sut = createSutForSaveStepTest()
+        advanceUntilIdle() // to load user info
+
+        // when
+        sut.uploadCurrentCocktail()
+        advanceUntilIdle()
+
+        // then
+        assertTrue(sut.createCocktailUploaded.value)
+    }
+
+    @Test
+    fun `uploadCurrentCocktail - when error sets createCocktailUploaded to false`() = runTest {
+        // given
+        dispatcherProvider = testDispatcher()
+        val testUser = UserModel(name = "testName", email = "testEmail")
+        val testUserId = "testUserId"
+
+        every { userRepository.getUser() } returns flowOf(Resource.Success(testUser))
+        every { firebaseAuthRepository.currentUserId } returns testUserId
+        coEvery { repository.uploadCocktail(any()) } returns false
+        every { repository.getCreateCocktail() } returns flowOf(
+            Resource.Error(Exception("testException"))
+        )
+
+        val sut = createSutForSaveStepTest()
+        advanceUntilIdle() // to load user info
+
+        // when
+        sut.uploadCurrentCocktail()
+        advanceUntilIdle()
+
+        // then
+        assertTrue(!sut.createCocktailUploaded.value)
+    }
+
     private fun createSut() =
-        CreateCocktailViewModel(repository, userRepository, dispatcherProvider)
+        CreateCocktailViewModel(repository, userRepository, firebaseAuthRepository, dispatcherProvider)
 
     private fun TestScope.createSutForSaveStepTest() = run {
-        dispatcherProvider = TestDispatcherProvider(StandardTestDispatcher(testScheduler))
+        dispatcherProvider = testDispatcher()
         val givenWizard = CreateCocktailModel(
             id = 2502,
             currentStep = CreateWizardStepData.First.order,

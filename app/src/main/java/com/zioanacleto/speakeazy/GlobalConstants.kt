@@ -5,3 +5,4 @@ val CREATE_COCKTAIL_MEASURES_LIST = listOf(
     "cl", "oz", "splash", "dash", "drop", "squeeze", "sprig", "tbsp"
 )
 const val APP_PACKAGE = "com.zioanacleto.speakeazy"
+const val USER_DEEPLINK_URI = "https://speakeazy-ec7b5.web.app/finishSignIn.html"

@@ -18,8 +18,7 @@ fun NavController.navigateToMain(navOptions: NavOptions) =
     navigate(route = MainRoute, navOptions = navOptions)
 
 fun NavGraphBuilder.mainSection(
-    onCocktailClick: (String) -> Unit,
-    cocktailDestination: NavGraphBuilder.() -> Unit
+    onCocktailClick: (String) -> Unit
 ) {
     navigation<MainBaseRoute>(startDestination = MainRoute) {
         composable<MainRoute> {
@@ -27,6 +26,5 @@ fun NavGraphBuilder.mainSection(
                 onCocktailClick = onCocktailClick
             )
         }
-        cocktailDestination()
     }
 }
