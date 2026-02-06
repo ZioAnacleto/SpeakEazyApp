@@ -11,6 +11,7 @@ val Project.libs
     get(): VersionCatalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
 sealed class CoreModule(val name: String) {
+    object Analytics: CoreModule(name = ":core:analytics")
     object Data: CoreModule(name = ":core:data")
     object Database: CoreModule(name = ":core:database")
     object Domain: CoreModule(name = ":core:domain")

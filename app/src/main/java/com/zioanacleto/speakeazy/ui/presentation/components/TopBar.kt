@@ -23,15 +23,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.rememberNavController
 import com.zioanacleto.speakeazy.R
-import com.zioanacleto.speakeazy.SpeakEazyAppState
 import com.zioanacleto.speakeazy.navigation.TopBarDestination
 
 @Composable
 fun MainTopBar(
     modifier: Modifier = Modifier,
-    appState: SpeakEazyAppState
+    onClick: () -> Unit
 ) {
     Row(
         modifier = modifier
@@ -43,9 +41,7 @@ fun MainTopBar(
             modifier = Modifier
                 .size(50.dp)
                 .clip(CircleShape),
-            onClick = {
-                appState.navigateToTopBarDestination(TopBarDestination.USER_SETTINGS)
-            }
+            onClick = onClick
         ) {
             Image(
                 painter = painterResource(R.drawable.default_user_image),
@@ -58,8 +54,8 @@ fun MainTopBar(
 @Composable
 fun CreateCocktailTopBar(
     modifier: Modifier = Modifier,
-    appState: SpeakEazyAppState,
-    title: String = "Create"
+    title: String = "Create",
+    onClick: () -> Unit
 ) {
     Box(
         modifier = modifier
@@ -73,9 +69,7 @@ fun CreateCocktailTopBar(
                 .clip(CircleShape),
             backgroundColor = Color.Transparent,
             contentColor = Color.White,
-            onClick = {
-                appState.navController.popBackStack()
-            }
+            onClick = onClick
         ) {
             Image(
                 imageVector = Icons.Filled.Close,
@@ -98,21 +92,11 @@ fun CreateCocktailTopBar(
 @Preview
 @Composable
 fun MainTopBarPreview() {
-    MainTopBar(
-        appState = SpeakEazyAppState(
-            navController = rememberNavController(),
-            isUserLogged = false
-        )
-    )
+    MainTopBar {}
 }
 
 @Preview
 @Composable
 fun CreateCocktailBarPreview() {
-    CreateCocktailTopBar(
-        appState = SpeakEazyAppState(
-            navController = rememberNavController(),
-            isUserLogged = false
-        )
-    )
+    CreateCocktailTopBar {  }
 }

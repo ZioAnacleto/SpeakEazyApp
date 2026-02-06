@@ -8,6 +8,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
@@ -17,20 +18,25 @@ import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.zioanacleto.buffa.compose.coloredEdgeToEdge
 import com.zioanacleto.buffa.logging.AnacletoLogger
+import com.zioanacleto.speakeazy.core.analytics.NetworkMonitor
 import com.zioanacleto.speakeazy.navigation.SpeakEazyNavHost
+import com.zioanacleto.speakeazy.navigation.TopBarDestination
 import com.zioanacleto.speakeazy.ui.presentation.components.BottomBar
 import com.zioanacleto.speakeazy.ui.presentation.components.CreateCocktailTopBar
 import com.zioanacleto.speakeazy.ui.presentation.components.MainTopBar
+import com.zioanacleto.speakeazy.ui.presentation.components.OfflineBlockingScreen
 import com.zioanacleto.speakeazy.ui.presentation.components.speakEazyGradientBackground
 import com.zioanacleto.speakeazy.ui.presentation.components.withAlpha
 import com.zioanacleto.speakeazy.ui.presentation.user.presentation.UserUiState
@@ -39,12 +45,14 @@ import com.zioanacleto.speakeazy.ui.theme.SpeakEazyTheme
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 class MainActivity : ComponentActivity() {
 
     private val viewModel: MainActivityViewModel by viewModel()
+    private val networkMonitor: NetworkMonitor by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
@@ -74,7 +82,8 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val appState = rememberSpeakEazyAppState(
-                isUserLogged = userState is UserUiState.Success
+                isUserLogged = userState is UserUiState.Success,
+                networkMonitor = networkMonitor
             )
             val showTopBar = appState.currentBottomBarDestination != null
             val showBottomBar = appState.showBottomBar
@@ -98,6 +107,7 @@ class MainActivity : ComponentActivity() {
                             }
                         },
                         topBar = {
+                            // avoid passing appState to components, we pass variables or lambdas
                             AnimatedVisibility(
                                 visible = showTopBar,
                                 enter = fadeIn(),
@@ -108,36 +118,52 @@ class MainActivity : ComponentActivity() {
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .padding(top = 30.dp),
-                                        appState = appState
-                                    )
+                                    ) { appState.navigateToTopBarDestination(TopBarDestination.USER_SETTINGS) }
                                 } else {
                                     CreateCocktailTopBar(
                                         modifier = Modifier
                                             .fillMaxWidth()
-                                            .padding(top = 30.dp),
-                                        appState = appState
-                                    )
+                                            .padding(top = 30.dp)
+                                    ) { appState.navController.popBackStack() }
                                 }
                             }
                         },
                         bottomBar = {
-                            AnimatedVisibility(
-                                visible = showBottomBar
-                            ) {
-                                BottomBar(
-                                    modifier = Modifier
-                                        .padding(horizontal = 50.dp)
-                                        .windowInsetsPadding(WindowInsets.navigationBars),
-                                    appState = appState
-                                )
+                            with(appState) {
+                                AnimatedVisibility(
+                                    visible = showBottomBar,
+                                    enter = fadeIn(),
+                                    exit = fadeOut()
+                                ) {
+                                    BottomBar(
+                                        modifier = Modifier
+                                            .padding(horizontal = 50.dp)
+                                            .windowInsetsPadding(WindowInsets.navigationBars),
+                                        isUserLogged = isUserLogged,
+                                        animateCreateButton = animateCreateButton,
+                                        currentDestination = currentDestination
+                                    ) { navigateToBottomBarDestination(it) }
+                                }
                             }
                         }
                     ) { _ ->
-                        SpeakEazyNavHost(
-                            appState = appState,
-                            modifier = Modifier
-                                .speakEazyGradientBackground()
-                        )
+                        // observe the network status
+                        val isOffline by appState.isOffline.collectAsStateWithLifecycle()
+
+                        // show blocking screen if offline
+                        if (isOffline) {
+                            OfflineBlockingScreen(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .speakEazyGradientBackground()
+                            )
+                        } else {
+                            SpeakEazyNavHost(
+                                appState = appState,
+                                modifier = Modifier
+                                    .speakEazyGradientBackground()
+                            )
+                        }
                     }
                 }
             }

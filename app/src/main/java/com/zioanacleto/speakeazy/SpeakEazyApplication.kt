@@ -3,6 +3,7 @@ package com.zioanacleto.speakeazy
 import android.app.Application
 import android.content.Context
 import com.zioanacleto.buffa.logging.AnacletoLogger
+import com.zioanacleto.speakeazy.core.analytics.di.analyticsModule
 import com.zioanacleto.speakeazy.core.data.di.dataMapperModule
 import com.zioanacleto.speakeazy.core.data.di.dataSourceModule
 import com.zioanacleto.speakeazy.core.data.di.repositoryModule
@@ -31,6 +32,7 @@ class SpeakEazyApplication : Application() {
                     dataMapperModule,
                     dataSourceModule,
                     repositoryModule,
+                    analyticsModule,
                     module {
                         single { this@SpeakEazyApplication } binds arrayOf(
                             Context::class,

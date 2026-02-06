@@ -61,8 +61,8 @@ fun BannerSection(
                 modifier = Modifier
                     .padding(start = 16.dp, top = 30.dp)
                     .border(2.dp, YellowFFE271, RoundedCornerShape(8.dp))
-                    .padding(8.dp)
-                    .clickable { onCtaClick(banner.cocktail.id) },
+                    .clickable { onCtaClick(banner.cocktail.id) }
+                    .padding(8.dp),
                 text = banner.cta.default(),
                 color = YellowFFE271,
                 fontSize = TextUnit(18f, TextUnitType.Sp)
