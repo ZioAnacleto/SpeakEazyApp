@@ -1,9 +1,8 @@
 package com.zioanacleto.speakeazy.ui.presentation.components
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -15,42 +14,58 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
-import com.zioanacleto.speakeazy.SpeakEazyAppState
+import androidx.compose.ui.zIndex
+import androidx.navigation.NavDestination
 import com.zioanacleto.speakeazy.navigation.BottomBarDestination
 import com.zioanacleto.speakeazy.navigation.bottomBarAdditionalDestinations
 import com.zioanacleto.speakeazy.navigation.bottomBarDestinations
 import com.zioanacleto.speakeazy.navigation.isRouteInHierarchy
-import com.zioanacleto.speakeazy.rememberSpeakEazyAppState
 import com.zioanacleto.speakeazy.ui.theme.BottomBarBackground
 
 @Composable
 fun BottomBar(
     modifier: Modifier = Modifier,
-    appState: SpeakEazyAppState
+    isUserLogged: Boolean,
+    currentDestination: NavDestination?,
+    animateCreateButton: Boolean = true,
+    onDestinationChanged: (BottomBarDestination) -> Unit
 ) {
-    if (appState.isUserLogged)
-        BottomBarLogged(modifier, appState)
+    if (isUserLogged)
+        BottomBarLogged(modifier, currentDestination, animateCreateButton, onDestinationChanged)
     else
-        BottomBarNotLogged(modifier, appState)
+        BottomBarNotLogged(modifier, currentDestination, onDestinationChanged)
 }
 
+// todo: change this structure in order to correct animation
 @Composable
 private fun BottomBarLogged(
     modifier: Modifier = Modifier,
-    appState: SpeakEazyAppState
+    currentDestination: NavDestination?,
+    animateCreateButton: Boolean,
+    onDestinationChanged: (BottomBarDestination) -> Unit
 ) {
     val fractionForItems = (3f / 4)
     val fractionForSingleItem = (1f / 4.1f)
     val roundedCornerBig = 20.dp
     val roundedCornerSmall = 4.dp
+
+    var animate by remember { mutableStateOf(!animateCreateButton) }
+
+    LaunchedEffect(Unit) { animate = !animate }
 
     LazyRow(
         modifier = modifier
@@ -59,9 +74,19 @@ private fun BottomBarLogged(
         horizontalArrangement = Arrangement.spacedBy(2.dp)
     ) {
         item {
+            val mainFraction by animateFloatAsState(
+                targetValue = if (animate) fractionForItems else 1f,
+                animationSpec = tween(
+                    durationMillis = 500,
+                    easing = FastOutSlowInEasing
+                ),
+                label = "mainFraction"
+            )
+
             Row(
                 modifier = Modifier
-                    .fillParentMaxWidth(fraction = fractionForItems)
+                    .zIndex(1f)
+                    .fillParentMaxWidth(fraction = mainFraction)
                     .clip(
                         RoundedCornerShape(
                             topStart = roundedCornerBig,
@@ -70,33 +95,51 @@ private fun BottomBarLogged(
                             bottomEnd = roundedCornerSmall
                         )
                     )
-                    .background(color = BottomBarBackground.withAlpha(0.92f)),
+                    .background(color = BottomBarBackground.withAlpha(0.92f))
+                    .animateItem(),
                 verticalAlignment = Alignment.CenterVertically
-            ) { BottomBarNavigationItems(appState, bottomBarDestinations) }
+            ) {
+                BottomBarNavigationItems(
+                    currentDestination,
+                    bottomBarDestinations,
+                    onDestinationChanged
+                )
+            }
         }
         item {
-            AnimatedVisibility(
-                appState.animateCreateButton,
-                enter = slideInHorizontally(
-                    animationSpec = tween(
-                        durationMillis = 1500,
-                        easing = FastOutSlowInEasing
-                    )
-                )
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillParentMaxWidth(fraction = fractionForSingleItem)
-                        .clip(
-                            RoundedCornerShape(
-                                topStart = roundedCornerSmall,
-                                bottomStart = roundedCornerSmall,
-                                topEnd = roundedCornerBig,
-                                bottomEnd = roundedCornerBig
-                            )
+            val translation by animateFloatAsState(
+                targetValue = if (animate) 0f else -120f,
+                animationSpec = tween(
+                    durationMillis = 500,
+                    easing = FastOutSlowInEasing,
+                    delayMillis = 500
+                ),
+                label = "translation"
+            )
+
+            Row(
+                modifier = Modifier
+                    .fillParentMaxWidth(fraction = fractionForSingleItem)
+                    .zIndex(0f)
+                    .graphicsLayer {
+                        translationX = translation
+                    }
+                    .clip(
+                        RoundedCornerShape(
+                            topStart = roundedCornerSmall,
+                            bottomStart = roundedCornerSmall,
+                            topEnd = roundedCornerBig,
+                            bottomEnd = roundedCornerBig
                         )
-                        .background(color = BottomBarBackground.withAlpha(0.92f))
-                ) { BottomBarNavigationItems(appState, bottomBarAdditionalDestinations) }
+                    )
+                    .background(color = BottomBarBackground.withAlpha(0.92f))
+                    .animateItem()
+            ) {
+                BottomBarNavigationItems(
+                    currentDestination,
+                    bottomBarAdditionalDestinations,
+                    onDestinationChanged
+                )
             }
         }
     }
@@ -105,7 +148,8 @@ private fun BottomBarLogged(
 @Composable
 private fun BottomBarNotLogged(
     modifier: Modifier = Modifier,
-    appState: SpeakEazyAppState
+    currentDestination: NavDestination?,
+    onDestinationChanged: (BottomBarDestination) -> Unit
 ) {
     Row(
         modifier = modifier
@@ -116,16 +160,17 @@ private fun BottomBarNotLogged(
             .background(color = BottomBarBackground.withAlpha(0.92f))
             .shadow(elevation = 20.dp),
         verticalAlignment = Alignment.CenterVertically
-    ) { BottomBarNavigationItems(appState, bottomBarDestinations) }
+    ) { BottomBarNavigationItems(currentDestination, bottomBarDestinations, onDestinationChanged) }
 }
 
 @Composable
 private fun RowScope.BottomBarNavigationItems(
-    appState: SpeakEazyAppState,
-    destinationList: List<BottomBarDestination>
+    currentDestination: NavDestination?,
+    destinationList: List<BottomBarDestination>,
+    onDestinationChanged: (BottomBarDestination) -> Unit
 ) {
     destinationList.forEach { destination ->
-        val isSelected = appState.currentDestination.isRouteInHierarchy(destination.baseRoute)
+        val isSelected = currentDestination.isRouteInHierarchy(destination.baseRoute)
 
         with(destination) {
             BottomNavigationItem(
@@ -140,9 +185,7 @@ private fun RowScope.BottomBarNavigationItems(
                         tint = if (isSelected) selectedColor else unselectedColor
                     )
                 },
-                onClick = {
-                    appState.navigateToBottomBarDestination(this)
-                }
+                onClick = { onDestinationChanged(this) }
             )
         }
     }
@@ -155,8 +198,9 @@ fun BottomBarPreview(
 ) {
     BottomBar(
         modifier = Modifier.padding(horizontal = 50.dp),
-        appState = rememberSpeakEazyAppState(isUserLogged = isUserLogged)
-    )
+        isUserLogged = isUserLogged,
+        currentDestination = null
+    ) {}
 }
 
 class BooleanParameterProvider : PreviewParameterProvider<Boolean> {

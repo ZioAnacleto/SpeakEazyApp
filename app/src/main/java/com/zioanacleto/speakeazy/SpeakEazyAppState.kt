@@ -5,12 +5,14 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.zioanacleto.speakeazy.core.analytics.NetworkMonitor
 import com.zioanacleto.speakeazy.navigation.BottomBarDestination
 import com.zioanacleto.speakeazy.navigation.TopBarDestination
 import com.zioanacleto.speakeazy.navigation.bottomBarAllDestinations
@@ -19,19 +21,32 @@ import com.zioanacleto.speakeazy.ui.presentation.favorites.navigation.navigateTo
 import com.zioanacleto.speakeazy.ui.presentation.main.navigation.navigateToMain
 import com.zioanacleto.speakeazy.ui.presentation.search.navigation.navigateToSearch
 import com.zioanacleto.speakeazy.ui.presentation.user.navigation.navigateToUser
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 
 @Composable
 fun rememberSpeakEazyAppState(
     navController: NavHostController = rememberNavController(),
-    isUserLogged: Boolean = false
-) = remember(navController, isUserLogged) {
-    SpeakEazyAppState(navController, isUserLogged)
+    isUserLogged: Boolean = false,
+    networkMonitor: NetworkMonitor,
+    coroutineScope: CoroutineScope = rememberCoroutineScope()
+) = remember(
+    navController,
+    isUserLogged,
+    networkMonitor,
+    coroutineScope
+) {
+    SpeakEazyAppState(navController, isUserLogged, networkMonitor, coroutineScope)
 }
 
 @Stable
 class SpeakEazyAppState(
     val navController: NavHostController,
     val isUserLogged: Boolean,
+    networkMonitor: NetworkMonitor,
+    coroutineScope: CoroutineScope,
     var animateCreateButton: Boolean = true
 ) {
     private val previousDestination = mutableStateOf<NavDestination?>(null)
@@ -62,6 +77,15 @@ class SpeakEazyAppState(
             return currentBottomBarDestination != null &&
                     currentBottomBarDestination != BottomBarDestination.CreateCocktail
         }
+
+    // checks if device is online or not
+    val isOffline = networkMonitor.isOnline
+        .map(Boolean::not)
+        .stateIn(
+            scope = coroutineScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = false
+        )
 
     fun navigateToBottomBarDestination(
         destination: BottomBarDestination,
