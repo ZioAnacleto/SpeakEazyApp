@@ -13,6 +13,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("com.google.gms.google-services")
+    alias(libs.plugins.firebase.crashlytics.plugin)
     alias(libs.plugins.devtools.ksp)
     jacoco
     alias(libs.plugins.zioanacleto.core.convention.plugin)
@@ -129,6 +130,8 @@ dependencies {
     // Firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.analytics)
     implementation(libs.google.play.services.auth)
 
     // Sceneform for 3D modelling
