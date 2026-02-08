@@ -1,11 +1,10 @@
 package com.zioanacleto.speakeazy
 
-import androidx.lifecycle.ViewModel
+import com.zioanacleto.buffa.base.BaseViewModel
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.speakeazy.core.domain.user.UserRepository
 import com.zioanacleto.speakeazy.ui.presentation.user.presentation.UserUiState
 import com.zioanacleto.speakeazy.ui.presentation.user.presentation.mapResourceAsUserUiState
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
@@ -13,9 +12,7 @@ import kotlinx.coroutines.flow.stateIn
 class MainActivityViewModel(
     repository: UserRepository,
     dispatcherProvider: DispatcherProvider
-) : ViewModel() {
-
-    private val coroutineScope = CoroutineScope(dispatcherProvider.io())
+) : BaseViewModel(dispatcherProvider) {
 
     val userUiState: StateFlow<UserUiState> =
         repository.getUser()

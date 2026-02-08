@@ -17,6 +17,7 @@ import androidx.compose.material.Snackbar
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -146,27 +147,30 @@ class MainActivity : ComponentActivity() {
                                 }
                             }
                         }
-                    ) { _ ->
-                        // observe the network status
-                        val isOffline by appState.isOffline.collectAsStateWithLifecycle()
-
-                        // show blocking screen if offline
-                        if (isOffline) {
-                            OfflineBlockingScreen(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .speakEazyGradientBackground()
-                            )
-                        } else {
-                            SpeakEazyNavHost(
-                                appState = appState,
-                                modifier = Modifier
-                                    .speakEazyGradientBackground()
-                            )
-                        }
-                    }
+                    ) { _ -> mainContentOrOfflineView(appState) }
                 }
             }
+        }
+    }
+
+    @Composable
+    private fun mainContentOrOfflineView(appState: SpeakEazyAppState) = with(appState) {
+        // observe the network status
+        val isOffline by isOffline.collectAsStateWithLifecycle()
+
+        // show blocking screen if offline
+        if (isOffline) {
+            OfflineBlockingScreen(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .speakEazyGradientBackground()
+            )
+        } else {
+            SpeakEazyNavHost(
+                appState = this,
+                modifier = Modifier
+                    .speakEazyGradientBackground()
+            )
         }
     }
 }

@@ -3,12 +3,6 @@ package com.zioanacleto.speakeazy.ui.presentation.components
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
@@ -16,7 +10,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.delay
 
 fun Modifier.speakEazyGradientBackground() =
     this.background(
@@ -51,19 +44,6 @@ fun Modifier.parallaxLayoutModifier(scrollState: ScrollState, rate: Int) =
 
 fun Color.withAlpha(alpha: Float = 0.75f): Color =
     this.copy(alpha = alpha)
-
-@Composable
-fun rememberEnabledForButton(
-    delayTime: Long = 200L
-): Boolean {
-    var enabled by remember { mutableStateOf(true) }
-    LaunchedEffect(enabled) {
-        if (enabled) return@LaunchedEffect else delay(delayTime)
-        enabled = true
-    }
-
-    return enabled
-}
 
 fun Modifier.bottomSheetStyle() =
     graphicsLayer {
