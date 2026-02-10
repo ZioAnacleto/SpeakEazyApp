@@ -118,14 +118,16 @@ val dataSourceModule = module {
     ) {
         IngredientNetworkDataSource(
             apiClient = get<ApiClientImpl>(),
-            dataMapper = get(getNamedClass<IngredientsDataMapper>())
+            dataMapper = get(getNamedClass<IngredientsDataMapper>()),
+            performanceTracesManager = get()
         )
     }
     factory<IngredientDataSource>(
         named(DataContext.LOCAL.name)
     ) {
         IngredientLocalDataSource(
-            ingredientDao = get<IngredientDao>()
+            ingredientDao = get<IngredientDao>(),
+            performanceTracesManager = get()
         )
     }
     factory<HomeDataSource>(
@@ -148,14 +150,16 @@ val dataSourceModule = module {
     ) {
         FavoritesNetworkDataSource(
             apiClient = get<ApiClientImpl>(),
-            dataMapper = get(getNamedClass<FavoritesDataMapper>())
+            dataMapper = get(getNamedClass<FavoritesDataMapper>()),
+            performanceTracesManager = get()
         )
     }
     factory<FavoritesDataSource>(
         named(DataContext.LOCAL.name)
     ) {
         FavoritesLocalDataSource(
-            favoritesDao = get<FavoritesDao>()
+            favoritesDao = get<FavoritesDao>(),
+            performanceTracesManager = get()
         )
     }
     factory<SearchDataSource>(
@@ -194,14 +198,16 @@ val repositoryModule = module {
     factory<DetailRepository> {
         DetailRepositoryImpl(
             dataSource = get(named(DataContext.NETWORK.name)),
-            dispatcherProvider = get()
+            dispatcherProvider = get(),
+            performanceTracesManager = get()
         )
     }
     factory<HomeRepository> {
         HomeRepositoryImpl(
             networkDataSource = get(named(DataContext.NETWORK.name)),
             localDataSource = get(named(DataContext.LOCAL.name)),
-            dispatcherProvider = get()
+            dispatcherProvider = get(),
+            performanceTracesManager = get()
         )
     }
     factory<UserRepository> {
@@ -214,7 +220,8 @@ val repositoryModule = module {
         FavoritesRepositoryImpl(
             networkDataSource = get(named(DataContext.NETWORK.name)),
             localDataSource = get(named(DataContext.LOCAL.name)),
-            dispatcherProvider = get()
+            dispatcherProvider = get(),
+            performanceTracesManager = get()
         )
     }
     factory<SearchRepository> {

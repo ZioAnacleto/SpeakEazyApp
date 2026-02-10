@@ -27,6 +27,7 @@ ksp = "2.0.0-1.0.24"
 kotlinx-serialization-json = "1.8.0"
 firebase = "34.9.0"
 firebase_crashlytics = "3.0.6"
+firebase_performance = "2.0.2"
 play-services-auth = "21.4.0"
 gson = "2.13.1"
 mockk = "1.13.16"
@@ -80,6 +81,7 @@ firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "fir
 firebase-auth = { module = "com.google.firebase:firebase-auth" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-performance = { module = "com.google.firebase:firebase-perf" }
 google-play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "play-services-auth" }
 
 # ktor
@@ -112,6 +114,7 @@ devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 firebase-crashlytics-plugin = { id = "com.google.firebase.crashlytics", version.ref = "firebase_crashlytics" }
+firebase-performance-plugin = { id = "com.google.firebase.firebase-perf", version.ref = "firebase_performance" }
 # ZioAnacleto plugins
 zioanacleto-featurefromtemplate-plugin = { id = "com.zioanacleto.featurefromtemplateplugin", version.ref = "featurefromtemplate-plugin" }
 zioanacleto-core-convention-plugin = { id = "com.zioanacleto.speakeazy.core-convention-plugin" }

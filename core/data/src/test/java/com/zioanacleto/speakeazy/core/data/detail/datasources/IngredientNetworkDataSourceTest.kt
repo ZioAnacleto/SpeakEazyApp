@@ -2,6 +2,7 @@ package com.zioanacleto.speakeazy.core.data.detail.datasources
 
 import com.zioanacleto.buffa.datamappers.DataMapper
 import com.zioanacleto.buffa.events.Resource
+import com.zioanacleto.speakeazy.core.analytics.traces.PerformanceTracesManager
 import com.zioanacleto.speakeazy.core.data.createApiClientWithResponse
 import com.zioanacleto.speakeazy.core.data.detail.dto.IngredientsListDTO
 import com.zioanacleto.speakeazy.core.domain.detail.model.IngredientsModel
@@ -9,7 +10,9 @@ import com.zioanacleto.speakeazy.core.network.api.ApiClientImpl
 import io.ktor.http.HttpStatusCode
 import io.mockk.clearAllMocks
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertTrue
@@ -20,10 +23,14 @@ class IngredientNetworkDataSourceTest {
 
     private lateinit var apiClient: ApiClientImpl
     private lateinit var dataMapper: DataMapper<IngredientsListDTO, IngredientsModel>
+    private lateinit var performanceTracesManager: PerformanceTracesManager
 
     @Before
     fun setUp() {
         dataMapper = mockk(relaxed = true)
+        performanceTracesManager = mockk(relaxed = true)
+        every { performanceTracesManager.startTrace(any(), any()) } just runs
+        every { performanceTracesManager.stopTrace(any(), any()) } just runs
     }
 
     @After
@@ -115,6 +122,7 @@ class IngredientNetworkDataSourceTest {
 
     private fun createSut() = IngredientNetworkDataSource(
         apiClient,
-        dataMapper
+        dataMapper,
+        performanceTracesManager
     )
 }

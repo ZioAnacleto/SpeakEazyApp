@@ -12,7 +12,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
-import com.zioanacleto.speakeazy.core.analytics.NetworkMonitor
+import com.zioanacleto.speakeazy.core.analytics.network.NetworkMonitor
 import com.zioanacleto.speakeazy.navigation.BottomBarDestination
 import com.zioanacleto.speakeazy.navigation.TopBarDestination
 import com.zioanacleto.speakeazy.navigation.bottomBarAllDestinations

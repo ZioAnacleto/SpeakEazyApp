@@ -1,11 +1,14 @@
 package com.zioanacleto.speakeazy.core.data.favorites.datasources
 
 import com.zioanacleto.buffa.events.Resource
+import com.zioanacleto.speakeazy.core.analytics.traces.PerformanceTracesManager
 import com.zioanacleto.speakeazy.core.data.assertAllTrue
 import com.zioanacleto.speakeazy.core.database.dao.FavoritesDao
 import io.mockk.clearAllMocks
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -13,9 +16,13 @@ import org.junit.Test
 
 class FavoritesLocalDataSourceTest {
     private lateinit var favoritesDao: FavoritesDao
+    private lateinit var performanceTracesManager: PerformanceTracesManager
 
     @Before
     fun setUp() {
+        performanceTracesManager = mockk(relaxed = true)
+        every { performanceTracesManager.startTrace(any(), any()) } just runs
+        every { performanceTracesManager.stopTrace(any(), any()) } just runs
         favoritesDao = mockk(relaxed = true)
     }
 
@@ -55,6 +62,6 @@ class FavoritesLocalDataSourceTest {
         )
     }
 
-    private fun createSut() = FavoritesLocalDataSource(favoritesDao)
+    private fun createSut() = FavoritesLocalDataSource(favoritesDao, performanceTracesManager)
 
 }

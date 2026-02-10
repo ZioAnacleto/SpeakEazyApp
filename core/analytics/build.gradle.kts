@@ -40,6 +40,10 @@ dependencies {
     implementation(libs.koin.core)
     implementation(libs.koin.android)
 
+    // Firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.performance)
+
     // Zioanacleto Buffa
     implementation(libs.zioanacleto.buffa)
 

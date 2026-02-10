@@ -3,12 +3,16 @@ package com.zioanacleto.speakeazy.core.data.favorites
 import com.zioanacleto.buffa.coroutines.DefaultDispatcherProvider
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.buffa.events.Resource
+import com.zioanacleto.speakeazy.core.analytics.traces.PerformanceTracesManager
 import com.zioanacleto.speakeazy.core.data.favorites.datasources.FavoritesDataSource
 import com.zioanacleto.speakeazy.core.domain.favorites.model.FavoritesModel
 import com.zioanacleto.speakeazy.core.domain.main.model.DrinkModel
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
+import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -21,12 +25,16 @@ class FavoritesRepositoryImplTest {
     private lateinit var localDataSource: FavoritesDataSource
     private lateinit var networkDataSource: FavoritesDataSource
     private lateinit var dispatcherProvider: DispatcherProvider
+    private lateinit var performanceTracesManager: PerformanceTracesManager
 
     @Before
     fun setUp() {
         localDataSource = mockk(relaxed = true)
         networkDataSource = mockk(relaxed = true)
         dispatcherProvider = DefaultDispatcherProvider()
+        performanceTracesManager = mockk(relaxed = true)
+        every { performanceTracesManager.startTrace(any(), any()) } just runs
+        every { performanceTracesManager.stopTrace(any(), any()) } just runs
     }
 
     @After
@@ -103,6 +111,7 @@ class FavoritesRepositoryImplTest {
     private fun createSut() = FavoritesRepositoryImpl(
         networkDataSource,
         localDataSource,
-        dispatcherProvider
+        dispatcherProvider,
+        performanceTracesManager
     )
 }

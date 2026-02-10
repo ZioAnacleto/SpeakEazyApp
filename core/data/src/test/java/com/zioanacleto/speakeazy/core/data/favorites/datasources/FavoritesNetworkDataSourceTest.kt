@@ -2,6 +2,7 @@ package com.zioanacleto.speakeazy.core.data.favorites.datasources
 
 import com.zioanacleto.buffa.datamappers.DataMapper
 import com.zioanacleto.buffa.events.Resource
+import com.zioanacleto.speakeazy.core.analytics.traces.PerformanceTracesManager
 import com.zioanacleto.speakeazy.core.data.assertAllTrue
 import com.zioanacleto.speakeazy.core.data.createApiClientWithResponse
 import com.zioanacleto.speakeazy.core.data.main.dto.MainSpeakEazyBEListResponseDTO
@@ -10,7 +11,9 @@ import com.zioanacleto.speakeazy.core.network.api.ApiClientImpl
 import io.ktor.http.HttpStatusCode
 import io.mockk.clearAllMocks
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertTrue
@@ -21,9 +24,13 @@ class FavoritesNetworkDataSourceTest {
 
     private lateinit var apiClient: ApiClientImpl
     private lateinit var dataMapper: DataMapper<MainSpeakEazyBEListResponseDTO, FavoritesModel>
+    private lateinit var performanceTracesManager: PerformanceTracesManager
 
     @Before
     fun setUp() {
+        performanceTracesManager = mockk(relaxed = true)
+        every { performanceTracesManager.startTrace(any(), any()) } just runs
+        every { performanceTracesManager.stopTrace(any(), any()) } just runs
         dataMapper = mockk(relaxed = true)
     }
 
@@ -79,6 +86,7 @@ class FavoritesNetworkDataSourceTest {
 
     private fun createSut() = FavoritesNetworkDataSource(
         apiClient,
-        dataMapper
+        dataMapper,
+        performanceTracesManager
     )
 }
