@@ -103,14 +103,16 @@ val dataSourceModule = module {
         MainNetworkDataSource(
             apiClient = get<ApiClientImpl>(),
             dataMapper = get(getNamedClass<MainSpeakEazyBEDataMapper>()),
-            listDataMapper = get(getNamedClass<MainSpeakEazyBEListDataMapper>())
+            listDataMapper = get(getNamedClass<MainSpeakEazyBEListDataMapper>()),
+            performanceTracesManager = get()
         )
     }
     factory<MainDataSource>(
         named(DataContext.LOCAL.name)
     ) {
         MainLocalDataSource(
-            favoritesDao = get<FavoritesDao>()
+            favoritesDao = get<FavoritesDao>(),
+            performanceTracesManager = get()
         )
     }
     factory<IngredientDataSource>(
@@ -135,14 +137,16 @@ val dataSourceModule = module {
     ) {
         HomeNetworkDataSource(
             apiClient = get<ApiClientImpl>(),
-            dataMapper = get(getNamedClass<HomeDataMapper>())
+            dataMapper = get(getNamedClass<HomeDataMapper>()),
+            performanceTracesManager = get()
         )
     }
     factory<UserDataSource>(
         named(DataContext.LOCAL.name)
     ) {
         UserLocalDataSource(
-            userDao = get<UserDao>()
+            userDao = get<UserDao>(),
+            performanceTracesManager = get()
         )
     }
     factory<FavoritesDataSource>(
@@ -170,18 +174,21 @@ val dataSourceModule = module {
             requestDataMapper = get(getNamedClass<SearchRequestDataMapper>()),
             responseDataMapper = get(getNamedClass<SearchResponseDataMapper>()),
             tagsDataMapper = get(getNamedClass<TagsDataMapper>()),
-            mainDataMapper = get(getNamedClass<MainSpeakEazyBEListDataMapper>())
+            mainDataMapper = get(getNamedClass<MainSpeakEazyBEListDataMapper>()),
+            performanceTracesManager = get()
         )
     }
     factory<CreateCocktailDataSource> {
         CreateCocktailLocalDataSource(
-            createCocktailDao = get<CreateCocktailDao>()
+            createCocktailDao = get<CreateCocktailDao>(),
+            performanceTracesManager = get()
         )
     }
     factory<CreateCocktailUploadDataSource> {
         CreateCocktailNetworkUploadDataSource(
             apiClient = get<ApiClientImpl>(),
-            requestDataMapper = get(getNamedClass<CreateCocktailDataMapper>())
+            requestDataMapper = get(getNamedClass<CreateCocktailDataMapper>()),
+            performanceTracesManager = get()
         )
     }
 }
@@ -192,7 +199,8 @@ val repositoryModule = module {
         MainRepositoryImpl(
             networkDataSource = get(named(DataContext.NETWORK.name)),
             localDataSource = get(named(DataContext.LOCAL.name)),
-            dispatcherProvider = get()
+            dispatcherProvider = get(),
+            performanceTracesManager = get()
         )
     }
     factory<DetailRepository> {
@@ -213,7 +221,8 @@ val repositoryModule = module {
     factory<UserRepository> {
         UserRepositoryImpl(
             localDataSource = get(named(DataContext.LOCAL.name)),
-            dispatcherProvider = get()
+            dispatcherProvider = get(),
+            performanceTracesManager = get()
         )
     }
     factory<FavoritesRepository> {
@@ -228,7 +237,8 @@ val repositoryModule = module {
         SearchRepositoryImpl(
             searchDataSource = get(named(DataContext.NETWORK.name)),
             ingredientDataSource = get(named(DataContext.NETWORK.name)),
-            dispatcherProvider = get()
+            dispatcherProvider = get(),
+            performanceTracesManager = get()
         )
     }
     factory<CreateCocktailRepository> {
@@ -236,7 +246,8 @@ val repositoryModule = module {
             localDataSource = get(),
             networkDataSource = get(),
             ingredientDataSource = get<IngredientDataSource>(named(DataContext.NETWORK.name)),
-            dispatcherProvider = get()
+            dispatcherProvider = get(),
+            performanceTracesManager = get()
         )
     }
     factory<FirebaseAuthRepository> {

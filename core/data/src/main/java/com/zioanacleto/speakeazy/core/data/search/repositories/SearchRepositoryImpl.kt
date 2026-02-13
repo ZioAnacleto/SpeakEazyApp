@@ -2,6 +2,8 @@ package com.zioanacleto.speakeazy.core.data.search.repositories
 
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.buffa.events.Resource
+import com.zioanacleto.speakeazy.core.analytics.traces.PerformanceTracesManager
+import com.zioanacleto.speakeazy.core.analytics.traces.traceSuspend
 import com.zioanacleto.speakeazy.core.data.detail.datasources.IngredientDataSource
 import com.zioanacleto.speakeazy.core.data.search.datasources.SearchDataSource
 import com.zioanacleto.speakeazy.core.domain.main.model.MainModel
@@ -17,19 +19,39 @@ import kotlinx.coroutines.flow.flowOn
 class SearchRepositoryImpl(
     private val searchDataSource: SearchDataSource,
     private val ingredientDataSource: IngredientDataSource,
-    private val dispatcherProvider: DispatcherProvider
+    private val dispatcherProvider: DispatcherProvider,
+    private val performanceTracesManager: PerformanceTracesManager
 ) : SearchRepository {
     override fun submitQuery(query: String): Flow<Resource<SearchModel>> =
         flow {
-            emit(
-                searchDataSource.querySearch(query)
-            )
+            performanceTracesManager.traceSuspend(
+                this@SearchRepositoryImpl::class,
+                "submitQuery"
+            ) {
+                emit(
+                    searchDataSource.querySearch(query)
+                )
+            }
         }.flowOn(dispatcherProvider.io())
 
     override fun getSearchLandingData(): Flow<Resource<SearchLandingModel>> =
         combine(
-            flow { emit(ingredientDataSource.getIngredientsList()) },
-            flow { emit(searchDataSource.getTags()) }
+            flow {
+                performanceTracesManager.traceSuspend(
+                    this@SearchRepositoryImpl::class,
+                    "ingredientDataSource_getSearchLandingData"
+                ) {
+                    emit(ingredientDataSource.getIngredientsList())
+                }
+            },
+            flow {
+                performanceTracesManager.traceSuspend(
+                    this@SearchRepositoryImpl::class,
+                    "searchDataSource_getSearchLandingData"
+                ) {
+                    emit(searchDataSource.getTags())
+                }
+            }
         ) { ingredients, tags ->
             if (ingredients is Resource.Success && tags is Resource.Success) {
                 Resource.Success(
@@ -49,8 +71,13 @@ class SearchRepositoryImpl(
         filters: Map<SearchFilterModel, List<String>>
     ): Flow<Resource<MainModel>> =
         flow {
-            emit(
-                searchDataSource.queryFilter(filters)
-            )
+            performanceTracesManager.traceSuspend(
+                this@SearchRepositoryImpl::class,
+                "submitFilter"
+            ) {
+                emit(
+                    searchDataSource.queryFilter(filters)
+                )
+            }
         }.flowOn(dispatcherProvider.io())
 }

@@ -29,4 +29,10 @@ class FirebasePerformanceTracesManager : PerformanceTracesManager {
         if (registeredTraces.keys.contains(completeTraceName))
             registeredTraces[completeTraceName]?.stop()
     }
+
+    // todo: understand why deleting this unused method would cause a crash at runtime because of Koin module definition
+    private fun Pair<KClass<*>, String>.computeTraceName(): String {
+        val (clazz, trace) = this
+        return "${clazz::simpleName}_$trace"
+    }
 }

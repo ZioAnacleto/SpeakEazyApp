@@ -3,6 +3,7 @@ package com.zioanacleto.speakeazy.core.data.main.repositories
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.buffa.events.Resource
 import com.zioanacleto.speakeazy.core.analytics.traces.PerformanceTracesManager
+import com.zioanacleto.speakeazy.core.analytics.traces.traceSuspend
 import com.zioanacleto.speakeazy.core.data.main.datasources.HomeDataSource
 import com.zioanacleto.speakeazy.core.data.main.datasources.MainDataSource
 import com.zioanacleto.speakeazy.core.domain.main.HomeRepository
@@ -21,26 +22,16 @@ class HomeRepositoryImpl(
     override fun getHome(): Flow<Resource<HomeModel>> =
         combine(
             flow {
-                performanceTracesManager.startTrace(
+                performanceTracesManager.traceSuspend(
                     this@HomeRepositoryImpl::class,
                     "getHomeSections"
-                )
-                emit(networkDataSource.getHomeSections())
-                performanceTracesManager.stopTrace(
-                    this@HomeRepositoryImpl::class,
-                    "getHomeSections"
-                )
+                ) { emit(networkDataSource.getHomeSections()) }
             },
             flow {
-                performanceTracesManager.startTrace(
+                performanceTracesManager.traceSuspend(
                     this@HomeRepositoryImpl::class,
                     "getMainList"
-                )
-                emit(localDataSource.getMainList())
-                performanceTracesManager.stopTrace(
-                    this@HomeRepositoryImpl::class,
-                    "getMainList"
-                )
+                ) { emit(localDataSource.getMainList()) }
             }
         ) { network, local ->
             if (network is Resource.Success && local is Resource.Success) {

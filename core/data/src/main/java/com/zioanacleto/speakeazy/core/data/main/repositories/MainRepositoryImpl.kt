@@ -2,6 +2,8 @@ package com.zioanacleto.speakeazy.core.data.main.repositories
 
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.buffa.events.Resource
+import com.zioanacleto.speakeazy.core.analytics.traces.PerformanceTracesManager
+import com.zioanacleto.speakeazy.core.analytics.traces.traceSuspend
 import com.zioanacleto.speakeazy.core.data.main.datasources.MainDataSource
 import com.zioanacleto.speakeazy.core.domain.main.MainRepository
 import com.zioanacleto.speakeazy.core.domain.main.model.MainModel
@@ -13,30 +15,74 @@ import kotlinx.coroutines.flow.flowOn
 class MainRepositoryImpl(
     private val networkDataSource: MainDataSource,
     private val localDataSource: MainDataSource,
-    private val dispatcherProvider: DispatcherProvider
+    private val dispatcherProvider: DispatcherProvider,
+    private val performanceTracesManager: PerformanceTracesManager
 ) : MainRepository {
     override fun getMainList(): Flow<Resource<MainModel>> =
         combineAndReturn(
-            flow { emit(networkDataSource.getMainList()) },
-            flow { emit(localDataSource.getMainList()) }
+            flow {
+                performanceTracesManager.traceSuspend(
+                    this@MainRepositoryImpl::class,
+                    "network_getMainList"
+                ) {
+                    emit(networkDataSource.getMainList())
+                }
+            },
+            flow {
+                performanceTracesManager.traceSuspend(
+                    this@MainRepositoryImpl::class,
+                    "local_getMainList"
+                ) {
+                    emit(localDataSource.getMainList())
+                }
+            }
         )
 
     override fun getMainById(id: String): Flow<Resource<MainModel>> =
         combineAndReturn(
-            flow { emit(networkDataSource.getMainById(id)) },
-            flow { emit(localDataSource.getMainById(id)) }
+            flow {
+                performanceTracesManager.traceSuspend(
+                    this::class,
+                    "network_getMainById"
+                ) {
+                    emit(networkDataSource.getMainById(id))
+                }
+            },
+            flow {
+                performanceTracesManager.traceSuspend(
+                    this::class,
+                    "local_getMainById"
+                ) {
+                    emit(localDataSource.getMainById(id))
+                }
+            }
         )
 
     override suspend fun setFavoriteCocktail(cocktailId: String, cocktailName: String) {
-        localDataSource.setFavoriteCocktail(cocktailId, cocktailName)
+        performanceTracesManager.traceSuspend(
+            this::class,
+            "setFavoriteCocktail"
+        ) {
+            localDataSource.setFavoriteCocktail(cocktailId, cocktailName)
+        }
     }
 
     override suspend fun deleteFavoriteCocktail(cocktailId: String) {
-        localDataSource.deleteFavoriteCocktail(cocktailId)
+        performanceTracesManager.traceSuspend(
+            this::class,
+            "deleteFavoriteCocktail"
+        ) {
+            localDataSource.deleteFavoriteCocktail(cocktailId)
+        }
     }
 
     override suspend fun updateVisualizations(cocktailId: String) {
-        networkDataSource.updateVisualizations(cocktailId)
+        performanceTracesManager.traceSuspend(
+            this::class,
+            "updateVisualizations"
+        ) {
+            networkDataSource.updateVisualizations(cocktailId)
+        }
     }
 
     private fun combineAndReturn(

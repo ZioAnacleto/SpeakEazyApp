@@ -2,6 +2,9 @@ package com.zioanacleto.speakeazy.core.data.create.repositories
 
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.buffa.events.Resource
+import com.zioanacleto.speakeazy.core.analytics.traces.PerformanceTracesManager
+import com.zioanacleto.speakeazy.core.analytics.traces.returningTraceSuspend
+import com.zioanacleto.speakeazy.core.analytics.traces.traceSuspend
 import com.zioanacleto.speakeazy.core.data.create.datasources.CreateCocktailDataSource
 import com.zioanacleto.speakeazy.core.data.create.datasources.CreateCocktailUploadDataSource
 import com.zioanacleto.speakeazy.core.data.detail.datasources.IngredientDataSource
@@ -16,34 +19,59 @@ class CreateCocktailRepositoryImpl(
     private val localDataSource: CreateCocktailDataSource,
     private val networkDataSource: CreateCocktailUploadDataSource,
     private val ingredientDataSource: IngredientDataSource,
-    private val dispatcherProvider: DispatcherProvider
+    private val dispatcherProvider: DispatcherProvider,
+    private val performanceTracesManager: PerformanceTracesManager
 ) : CreateCocktailRepository {
 
     override fun getCreateCocktail(): Flow<Resource<List<CreateCocktailModel>>> =
         flow {
-            emit(
-                localDataSource.getLocalCreateCocktail()
-            )
+            performanceTracesManager.traceSuspend(
+                this@CreateCocktailRepositoryImpl::class,
+                "getCreateCocktail"
+            ) {
+                emit(
+                    localDataSource.getLocalCreateCocktail()
+                )
+            }
         }.flowOn(dispatcherProvider.io())
 
     override suspend fun saveCreateCocktail(
         createCocktail: CreateCocktailModel
-    ) = localDataSource.saveLocalCreateCocktail(createCocktail)
+    ) = performanceTracesManager.returningTraceSuspend(
+        this::class,
+        "saveCreateCocktail"
+    ) {
+        localDataSource.saveLocalCreateCocktail(createCocktail)
+    }
 
     override suspend fun deleteCreateCocktail(uniqueId: Int?): Boolean {
-        return localDataSource.deleteLocalCreateCocktail(uniqueId)
+        return performanceTracesManager.returningTraceSuspend(
+            this::class,
+            "deleteCreateCocktail"
+        ) {
+            localDataSource.deleteLocalCreateCocktail(uniqueId)
+        }
     }
 
     override fun getIngredients(): Flow<Resource<IngredientsModel>> =
         flow {
-            emit(
-                ingredientDataSource.getIngredientsList()
-            )
+            performanceTracesManager.traceSuspend(
+                this@CreateCocktailRepositoryImpl::class,
+                "getIngredients"
+            ) {
+                emit(
+                    ingredientDataSource.getIngredientsList()
+                )
+            }
         }.flowOn(dispatcherProvider.io())
 
     override suspend fun uploadCocktail(createCocktail: CreateCocktailModel): Boolean {
-        val response = networkDataSource.uploadCocktail(createCocktail)
-
-        return response is Resource.Success
+        return performanceTracesManager.returningTraceSuspend(
+            this::class,
+            "uploadCocktail"
+        ) {
+            val response = networkDataSource.uploadCocktail(createCocktail)
+            response is Resource.Success
+        }
     }
 }
