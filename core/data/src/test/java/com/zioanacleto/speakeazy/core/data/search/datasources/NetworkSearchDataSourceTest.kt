@@ -2,6 +2,7 @@ package com.zioanacleto.speakeazy.core.data.search.datasources
 
 import com.zioanacleto.buffa.datamappers.DataMapper
 import com.zioanacleto.buffa.events.Resource
+import com.zioanacleto.speakeazy.core.analytics.traces.PerformanceTracesManager
 import com.zioanacleto.speakeazy.core.data.assertAllTrue
 import com.zioanacleto.speakeazy.core.data.createApiClientWithResponse
 import com.zioanacleto.speakeazy.core.data.main.dto.MainSpeakEazyBEListResponseDTO
@@ -15,7 +16,9 @@ import com.zioanacleto.speakeazy.core.network.api.ApiClientImpl
 import io.ktor.http.HttpStatusCode
 import io.mockk.clearAllMocks
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -28,6 +31,7 @@ class NetworkSearchDataSourceTest {
     private lateinit var responseDataMapper: DataMapper<SearchResponseDTO, SearchModel>
     private lateinit var tagsDataMapper: DataMapper<TagsResponseDTO, TagsModel>
     private lateinit var mainDataMapper: DataMapper<MainSpeakEazyBEListResponseDTO, MainModel>
+    private lateinit var performanceTracesManager: PerformanceTracesManager
 
     @Before
     fun setUp() {
@@ -35,6 +39,10 @@ class NetworkSearchDataSourceTest {
         responseDataMapper = mockk(relaxed = true)
         tagsDataMapper = mockk(relaxed = true)
         mainDataMapper = mockk(relaxed = true)
+        performanceTracesManager = mockk(relaxed = true) {
+            every { startTrace(any(), any()) } just runs
+            every { stopTrace(any(), any()) } just runs
+        }
     }
 
     @After
@@ -69,6 +77,7 @@ class NetworkSearchDataSourceTest {
         requestDataMapper,
         responseDataMapper,
         tagsDataMapper,
-        mainDataMapper
+        mainDataMapper,
+        performanceTracesManager
     )
 }

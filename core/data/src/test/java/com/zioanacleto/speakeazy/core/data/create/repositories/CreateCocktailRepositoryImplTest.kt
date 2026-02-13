@@ -3,6 +3,7 @@ package com.zioanacleto.speakeazy.core.data.create.repositories
 import com.zioanacleto.buffa.coroutines.DefaultDispatcherProvider
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.buffa.events.Resource
+import com.zioanacleto.speakeazy.core.analytics.traces.PerformanceTracesManager
 import com.zioanacleto.speakeazy.core.data.assertAllTrue
 import com.zioanacleto.speakeazy.core.data.create.datasources.CreateCocktailDataSource
 import com.zioanacleto.speakeazy.core.data.create.datasources.CreateCocktailUploadDataSource
@@ -11,7 +12,10 @@ import com.zioanacleto.speakeazy.core.domain.create.model.CreateCocktailModel
 import com.zioanacleto.speakeazy.core.domain.detail.model.IngredientsModel
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
+import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -25,6 +29,7 @@ class CreateCocktailRepositoryImplTest {
     private lateinit var networkDataSource: CreateCocktailUploadDataSource
     private lateinit var ingredientDataSource: IngredientDataSource
     private lateinit var dispatcherProvider: DispatcherProvider
+    private lateinit var performanceTracesManager: PerformanceTracesManager
 
     @Before
     fun setUp() {
@@ -32,6 +37,10 @@ class CreateCocktailRepositoryImplTest {
         networkDataSource = mockk(relaxed = true)
         ingredientDataSource = mockk(relaxed = true)
         dispatcherProvider = DefaultDispatcherProvider()
+        performanceTracesManager = mockk(relaxed = true) {
+            every { startTrace(any(), any()) } just runs
+            every { stopTrace(any(), any()) } just runs
+        }
     }
 
     @After
@@ -187,7 +196,8 @@ class CreateCocktailRepositoryImplTest {
         localDataSource,
         networkDataSource,
         ingredientDataSource,
-        dispatcherProvider
+        dispatcherProvider,
+        performanceTracesManager
     )
 
     private fun mockCreateCocktailModel() = CreateCocktailModel(

@@ -2,6 +2,7 @@ package com.zioanacleto.speakeazy.core.data.create.datasources
 
 import com.zioanacleto.buffa.datamappers.DataMapper
 import com.zioanacleto.buffa.events.Resource
+import com.zioanacleto.speakeazy.core.analytics.traces.PerformanceTracesManager
 import com.zioanacleto.speakeazy.core.data.assertAllTrue
 import com.zioanacleto.speakeazy.core.data.create.dto.CreateCocktailRequestDTO
 import com.zioanacleto.speakeazy.core.data.create.dto.TagsRequestDTO
@@ -13,7 +14,9 @@ import com.zioanacleto.speakeazy.core.network.api.ApiClientImpl
 import io.ktor.http.HttpStatusCode
 import io.mockk.clearAllMocks
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -24,10 +27,15 @@ class CreateCocktailNetworkUploadDataSourceTest {
 
     private lateinit var apiClientImpl: ApiClientImpl
     private lateinit var dataMapper: DataMapper<CreateCocktailModel, CreateCocktailRequestDTO>
+    private lateinit var performanceTracesManager: PerformanceTracesManager
 
     @Before
     fun setUp() {
         dataMapper = mockk(relaxed = true)
+        performanceTracesManager = mockk(relaxed = true) {
+            every { startTrace(any(), any()) } just runs
+            every { stopTrace(any(), any()) } just runs
+        }
     }
 
     @After
@@ -62,7 +70,8 @@ class CreateCocktailNetworkUploadDataSourceTest {
         )
     }
 
-    private fun createSut() = CreateCocktailNetworkUploadDataSource(apiClientImpl, dataMapper)
+    private fun createSut() =
+        CreateCocktailNetworkUploadDataSource(apiClientImpl, dataMapper, performanceTracesManager)
 
     private fun mockCreateCocktailRequestDTO() = CreateCocktailRequestDTO(
         id = "1",

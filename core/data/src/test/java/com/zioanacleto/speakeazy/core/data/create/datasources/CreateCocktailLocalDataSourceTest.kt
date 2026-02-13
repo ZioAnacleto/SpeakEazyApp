@@ -1,6 +1,7 @@
 package com.zioanacleto.speakeazy.core.data.create.datasources
 
 import com.zioanacleto.buffa.events.Resource
+import com.zioanacleto.speakeazy.core.analytics.traces.PerformanceTracesManager
 import com.zioanacleto.speakeazy.core.data.assertAllTrue
 import com.zioanacleto.speakeazy.core.database.dao.CreateCocktailDao
 import com.zioanacleto.speakeazy.core.domain.create.model.CreateCocktailModel
@@ -18,10 +19,15 @@ import java.util.Date
 class CreateCocktailLocalDataSourceTest {
 
     private lateinit var createCocktailDao: CreateCocktailDao
+    private lateinit var performanceTracesManager: PerformanceTracesManager
 
     @Before
     fun setUp() {
         createCocktailDao = mockk(relaxed = true)
+        performanceTracesManager = mockk(relaxed = true) {
+            every { startTrace(any(), any()) } just runs
+            every { stopTrace(any(), any()) } just runs
+        }
     }
 
     @After
@@ -115,6 +121,6 @@ class CreateCocktailLocalDataSourceTest {
         assert(!response)
     }
 
-    private fun createSut() = CreateCocktailLocalDataSource(createCocktailDao)
+    private fun createSut() = CreateCocktailLocalDataSource(createCocktailDao, performanceTracesManager)
 
 }
