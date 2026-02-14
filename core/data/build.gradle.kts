@@ -45,6 +45,7 @@ android {
 }
 
 dependencies {
+    api(coreModule(CoreModule.Analytics))
     api(coreModule(CoreModule.Domain))
     api(coreModule(CoreModule.Database))
     api(coreModule(CoreModule.Network))

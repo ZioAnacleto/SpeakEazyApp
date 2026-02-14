@@ -2,6 +2,7 @@ package com.zioanacleto.speakeazy.core.data.main.datasources
 
 import com.zioanacleto.buffa.datamappers.DataMapper
 import com.zioanacleto.buffa.events.Resource
+import com.zioanacleto.speakeazy.core.analytics.traces.PerformanceTracesManager
 import com.zioanacleto.speakeazy.core.data.assertAllTrue
 import com.zioanacleto.speakeazy.core.data.createApiClientWithResponse
 import com.zioanacleto.speakeazy.core.data.main.dto.MainSpeakEazyBEListResponseDTO
@@ -11,7 +12,9 @@ import com.zioanacleto.speakeazy.core.network.api.ApiClientImpl
 import io.ktor.http.HttpStatusCode
 import io.mockk.clearAllMocks
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -23,11 +26,16 @@ class MainNetworkDataSourceTest {
     private lateinit var apiClient: ApiClientImpl
     private lateinit var dataMapper: DataMapper<MainSpeakEazyBEResponseDTO, MainModel>
     private lateinit var listDataMapper: DataMapper<MainSpeakEazyBEListResponseDTO, MainModel>
+    private lateinit var performanceTracesManager: PerformanceTracesManager
 
     @Before
     fun setUp() {
         dataMapper = mockk(relaxed = true)
         listDataMapper = mockk(relaxed = true)
+        performanceTracesManager = mockk(relaxed = true) {
+            every { startTrace(any(), any()) } just runs
+            every { stopTrace(any(), any()) } just runs
+        }
     }
 
     @After
@@ -157,6 +165,7 @@ class MainNetworkDataSourceTest {
         sut.updateVisualizations(cocktailId)
     }
 
-    private fun createSut() = MainNetworkDataSource(apiClient, dataMapper, listDataMapper)
+    private fun createSut() =
+        MainNetworkDataSource(apiClient, dataMapper, listDataMapper, performanceTracesManager)
 
 }

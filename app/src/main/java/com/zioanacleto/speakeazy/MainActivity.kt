@@ -31,7 +31,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.zioanacleto.buffa.compose.coloredEdgeToEdge
 import com.zioanacleto.buffa.logging.AnacletoLogger
-import com.zioanacleto.speakeazy.core.analytics.NetworkMonitor
+import com.zioanacleto.speakeazy.core.analytics.network.NetworkMonitor
 import com.zioanacleto.speakeazy.navigation.SpeakEazyNavHost
 import com.zioanacleto.speakeazy.navigation.TopBarDestination
 import com.zioanacleto.speakeazy.ui.presentation.components.BottomBar

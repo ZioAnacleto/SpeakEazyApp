@@ -1,11 +1,14 @@
 package com.zioanacleto.speakeazy.core.data.detail.datasources
 
 import com.zioanacleto.buffa.events.Resource
+import com.zioanacleto.speakeazy.core.analytics.traces.PerformanceTracesManager
 import com.zioanacleto.speakeazy.core.data.assertAllTrue
 import com.zioanacleto.speakeazy.core.database.dao.IngredientDao
 import io.mockk.clearAllMocks
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -13,9 +16,13 @@ import org.junit.Test
 
 class IngredientLocalDataSourceTest {
     private lateinit var ingredientDao: IngredientDao
+    private lateinit var performanceTracesManager: PerformanceTracesManager
 
     @Before
     fun setUp() {
+        performanceTracesManager = mockk(relaxed = true)
+        every { performanceTracesManager.startTrace(any(), any()) } just runs
+        every { performanceTracesManager.stopTrace(any(), any()) } just runs
         ingredientDao = mockk(relaxed = true)
     }
 
@@ -88,5 +95,5 @@ class IngredientLocalDataSourceTest {
         )
     }
 
-    private fun createSut() = IngredientLocalDataSource(ingredientDao)
+    private fun createSut() = IngredientLocalDataSource(ingredientDao, performanceTracesManager)
 }

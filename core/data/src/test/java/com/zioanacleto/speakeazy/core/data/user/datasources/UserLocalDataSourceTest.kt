@@ -1,6 +1,7 @@
 package com.zioanacleto.speakeazy.core.data.user.datasources
 
 import com.zioanacleto.buffa.events.Resource
+import com.zioanacleto.speakeazy.core.analytics.traces.PerformanceTracesManager
 import com.zioanacleto.speakeazy.core.data.assertAllTrue
 import com.zioanacleto.speakeazy.core.database.dao.UserDao
 import com.zioanacleto.speakeazy.core.database.entities.UserEntity
@@ -18,10 +19,15 @@ import org.junit.Test
 
 class UserLocalDataSourceTest {
     private lateinit var userDao: UserDao
+    private lateinit var performanceTracesManager: PerformanceTracesManager
 
     @Before
     fun setUp() {
         userDao = mockk(relaxed = true)
+        performanceTracesManager = mockk(relaxed = true) {
+            every { startTrace(any(), any()) } just runs
+            every { stopTrace(any(), any()) } just runs
+        }
     }
 
     @After
@@ -100,7 +106,7 @@ class UserLocalDataSourceTest {
         assert(onError)
     }
 
-    private fun createSut() = UserLocalDataSource(userDao)
+    private fun createSut() = UserLocalDataSource(userDao, performanceTracesManager)
 
     private fun mockUserEntity() = UserEntity(
         name = "test name",

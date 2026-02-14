@@ -71,6 +71,7 @@ fun BannerSection(
         Image(
             modifier = Modifier
                 .align(Alignment.CenterEnd)
+                .padding(start = 200.dp)
                 .fillMaxSize(),
             painter = rememberAsyncImagePainter(
                 model = banner.cocktail.imageUrl

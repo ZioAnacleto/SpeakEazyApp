@@ -3,13 +3,17 @@ package com.zioanacleto.speakeazy.core.data.main.repositories
 import com.zioanacleto.buffa.coroutines.DefaultDispatcherProvider
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.buffa.events.Resource
+import com.zioanacleto.speakeazy.core.analytics.traces.PerformanceTracesManager
 import com.zioanacleto.speakeazy.core.data.assertAllTrue
 import com.zioanacleto.speakeazy.core.data.main.datasources.MainDataSource
 import com.zioanacleto.speakeazy.core.domain.main.model.MainModel
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -21,12 +25,17 @@ class MainRepositoryImplTest {
     private lateinit var networkDataSource: MainDataSource
     private lateinit var localDataSource: MainDataSource
     private lateinit var dispatcherProvider: DispatcherProvider
+    private lateinit var performanceTracesManager: PerformanceTracesManager
 
     @Before
     fun setUp() {
         networkDataSource = mockk(relaxed = true)
         localDataSource = mockk(relaxed = true)
         dispatcherProvider = DefaultDispatcherProvider()
+        performanceTracesManager = mockk(relaxed = true) {
+            every { startTrace(any(), any()) } just runs
+            every { stopTrace(any(), any()) } just runs
+        }
     }
 
     @After
@@ -161,5 +170,10 @@ class MainRepositoryImplTest {
     }
 
     private fun createSut() =
-        MainRepositoryImpl(networkDataSource, localDataSource, dispatcherProvider)
+        MainRepositoryImpl(
+            networkDataSource,
+            localDataSource,
+            dispatcherProvider,
+            performanceTracesManager
+        )
 }

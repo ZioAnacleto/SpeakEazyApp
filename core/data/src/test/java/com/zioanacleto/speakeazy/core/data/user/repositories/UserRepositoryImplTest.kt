@@ -3,12 +3,16 @@ package com.zioanacleto.speakeazy.core.data.user.repositories
 import com.zioanacleto.buffa.coroutines.DefaultDispatcherProvider
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.buffa.events.Resource
+import com.zioanacleto.speakeazy.core.analytics.traces.PerformanceTracesManager
 import com.zioanacleto.speakeazy.core.data.user.datasources.UserDataSource
 import com.zioanacleto.speakeazy.core.domain.user.model.UserModel
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
+import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.runs
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -19,11 +23,16 @@ class UserRepositoryImplTest {
 
     private lateinit var dataSource: UserDataSource
     private lateinit var dispatcherProvider: DispatcherProvider
+    private lateinit var performanceTracesManager: PerformanceTracesManager
 
     @Before
     fun setUp() {
         dataSource = mockk(relaxed = true)
         dispatcherProvider = DefaultDispatcherProvider()
+        performanceTracesManager = mockk(relaxed = true) {
+            every { startTrace(any(), any()) } just runs
+            every { stopTrace(any(), any()) } just runs
+        }
     }
 
     @After
@@ -86,5 +95,6 @@ class UserRepositoryImplTest {
         coVerify { dataSource.deleteUser(input) }
     }
 
-    private fun createSut() = UserRepositoryImpl(dataSource, dispatcherProvider)
+    private fun createSut() =
+        UserRepositoryImpl(dataSource, dispatcherProvider, performanceTracesManager)
 }
