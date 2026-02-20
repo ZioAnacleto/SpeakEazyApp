@@ -16,6 +16,7 @@ data class DrinkModel(
     val isAlcoholic: Boolean = false,
     var ingredients: List<IngredientModel> = listOf(),
     val imageUrl: String = "",
+    val videoUrl: String = "",
     val type: String = "",
     val method: String = "",
     val favorite: Boolean = false,

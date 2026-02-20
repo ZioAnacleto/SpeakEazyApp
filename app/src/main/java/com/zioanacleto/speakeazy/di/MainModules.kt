@@ -1,5 +1,9 @@
 package com.zioanacleto.speakeazy.di
 
+import android.annotation.SuppressLint
+import androidx.media3.database.StandaloneDatabaseProvider
+import androidx.media3.datasource.cache.LeastRecentlyUsedCacheEvictor
+import androidx.media3.datasource.cache.SimpleCache
 import com.zioanacleto.buffa.coroutines.DefaultDispatcherProvider
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.speakeazy.MainActivityViewModel
@@ -17,9 +21,12 @@ import com.zioanacleto.speakeazy.ui.presentation.main.presentation.MainViewModel
 import com.zioanacleto.speakeazy.ui.presentation.search.presentation.SearchViewModel
 import com.zioanacleto.speakeazy.ui.presentation.user.presentation.UserViewModel
 import com.zioanacleto.speakeazy.ui.presentation.user.provider.FirebaseActionCodeSettingsProviderImpl
+import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
+import java.io.File
 
 // Singleton
+@SuppressLint("UnsafeOptInUsageError")
 val singletonModule = module {
     single { ApiClientImpl() }
     single<DispatcherProvider> { DefaultDispatcherProvider() }
@@ -28,6 +35,13 @@ val singletonModule = module {
             get(),
             get(getNamedClass<Cocktail3DModelDataMapper>()),
             get(getNamedClass<CocktailSceneDataMapper>())
+        )
+    }
+    single {
+        SimpleCache(
+            File(androidContext().cacheDir, "media_cache"),
+            LeastRecentlyUsedCacheEvictor(20L * 1024 * 1024),
+            StandaloneDatabaseProvider(androidContext())
         )
     }
     factory<FirebaseActionCodeSettingsProvider> { FirebaseActionCodeSettingsProviderImpl() }

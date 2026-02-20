@@ -49,12 +49,7 @@ dependencies {
     implementation(libs.androidx.core.ktx)
 
     // Ktor
-    implementation(libs.ktor.client)
-    implementation(libs.ktor.client.cio)
-    implementation(libs.ktor.client.negotiation)
-    implementation(libs.ktor.client.android)
-    implementation(libs.ktor.serialization)
-    implementation(libs.ktor.client.logging)
+    implementation(libs.bundles.ktor)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -1,7 +1,9 @@
 package com.zioanacleto.speakeazy.ui.presentation.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -17,7 +19,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
@@ -26,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil3.compose.rememberAsyncImagePainter
 import com.zioanacleto.buffa.compose.safeClickable
+import com.zioanacleto.buffa.default
 import com.zioanacleto.speakeazy.ui.theme.YellowFFE271
 
 @Composable
@@ -35,6 +37,7 @@ fun MainDrinkCard(
     name: String,
     category: String,
     imageString: String,
+    videoUrl: String = "",
     isFavorite: Boolean,
     userName: String? = null,
     onClick: (String) -> Unit = {}
@@ -50,16 +53,31 @@ fun MainDrinkCard(
             backgroundColor = Color.DarkGray,
             elevation = 6.dp
         ) {
-            val painter = rememberAsyncImagePainter(
-                model = imageString
-            )
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .safeClickable { onClick(id) }
+            ) {
+                if (videoUrl.isEmpty()) {
+                    val painter = rememberAsyncImagePainter(
+                        model = imageString
+                    )
+                    Image(
+                        painter = painter,
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                } else {
+                    VideoPlayer(
+                        modifier = Modifier.fillMaxSize(),
+                        videoUrl = videoUrl.default()
+                    )
+                }
+            }
             Box(
                 modifier = Modifier
                     .safeClickable { onClick(id) }
-                    .paint(
-                        painter = painter,
-                        contentScale = ContentScale.Crop
-                    )
                     .padding(16.dp)
             ) {
                 Text(

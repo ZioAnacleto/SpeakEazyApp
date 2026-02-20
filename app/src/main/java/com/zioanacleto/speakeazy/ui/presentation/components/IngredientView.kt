@@ -1,5 +1,6 @@
 package com.zioanacleto.speakeazy.ui.presentation.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,6 +20,7 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.zioanacleto.speakeazy.core.domain.main.model.IngredientModel
+import com.zioanacleto.speakeazy.ui.theme.BottomBarBackground
 
 // todo: detail?
 @Composable
@@ -31,7 +33,8 @@ fun IngredientView(ingredient: IngredientModel) {
         AsyncImage(
             modifier = Modifier
                 .size(width = 80.dp, height = 120.dp)
-                .clip(RoundedCornerShape(16.dp)),
+                .clip(RoundedCornerShape(16.dp))
+                .background(BottomBarBackground),
             contentDescription = "Ingredient image",
             model = ingredient.imageUrl,
             contentScale = ContentScale.Crop

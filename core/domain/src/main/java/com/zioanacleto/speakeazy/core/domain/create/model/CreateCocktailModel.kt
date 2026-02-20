@@ -16,6 +16,7 @@ data class CreateCocktailModel(
     val instructions: String? = null,
     val instructionsIt: String = "",
     val imageUrl: String? = null,
+    val videoUrl: String? = null,
     val userId: String = "1",
     val username: String = ""
 )

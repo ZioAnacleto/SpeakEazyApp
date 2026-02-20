@@ -43,6 +43,7 @@ class HomeDataMapper : DataMapper<HomeSectionResponseDTO, HomeModel> {
         glass = glass.default(),
         isAlcoholic = isAlcoholic.default(false),
         imageUrl = imageLink.default(),
+        videoUrl = videoLink.default(),
         type = type.default(),
         method = method.toMethod(),
         ingredients = ingredients?.ingredients?.map {

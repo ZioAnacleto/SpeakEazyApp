@@ -22,6 +22,7 @@ class MainSpeakEazyBEDataMapper : DataMapper<MainSpeakEazyBEResponseDTO, MainMod
                     glass = input.glass.default(),
                     isAlcoholic = input.isAlcoholic.default(false),
                     imageUrl = input.imageLink.default(),
+                    videoUrl = input.videoLink.default(),
                     type = input.type.default(),
                     method = input.method.toMethod(),
                     ingredients = input.ingredients?.ingredients?.map {

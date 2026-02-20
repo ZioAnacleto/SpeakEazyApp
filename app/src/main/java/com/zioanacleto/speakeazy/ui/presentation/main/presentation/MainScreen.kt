@@ -115,6 +115,7 @@ fun MainScreenHomeSuccessView(
                             name = name,
                             category = category,
                             imageString = imageUrl,
+                            videoUrl = videoUrl,
                             isFavorite = favorite,
                             userName = username,
                             onClick = onCocktailClick

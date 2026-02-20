@@ -104,12 +104,7 @@ dependencies {
     implementation(libs.timber)
 
     // Ktor
-    implementation(libs.ktor.client)
-    implementation(libs.ktor.client.cio)
-    implementation(libs.ktor.client.negotiation)
-    implementation(libs.ktor.client.android)
-    implementation(libs.ktor.serialization)
-    implementation(libs.ktor.client.logging)
+    implementation(libs.bundles.ktor)
 
     // Coil
     implementation(libs.coil.compose)
@@ -136,6 +131,9 @@ dependencies {
 
     // Sceneform for 3D modelling
     implementation(libs.sceneform)
+
+    // ExoPlayer
+    implementation(libs.bundles.media3)
 
     // Unit tests
     testImplementation(libs.junit)

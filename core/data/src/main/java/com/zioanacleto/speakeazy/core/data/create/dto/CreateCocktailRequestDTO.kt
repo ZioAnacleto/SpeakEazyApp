@@ -15,6 +15,7 @@ data class CreateCocktailRequestDTO(
     @SerialName("glass") val glass: String,
     @SerialName("isAlcoholic") val isAlcoholic: Boolean,
     @SerialName("imageLink") val imageLink: String,
+    @SerialName("videoLink") val videoLink: String,
     @SerialName("type") val type: String,
     @SerialName("method") val method: String,
     @SerialName("ingredients") val ingredients: MainSpeakEazyBEIngredientsListDTO,
