@@ -40,6 +40,7 @@ jetbrainsKotlinJvm = "2.0.0"
 androidxTestCore = "1.7.0-rc01"
 sceneform = "2.3.0"
 kotlin-math = "1.6.0"
+exoplayer = "1.9.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -106,6 +107,12 @@ android-gradleApiPlugin = { group = "com.android.tools.build", name = "gradle-ap
 # Sceneform
 sceneform = { module = "io.github.sceneview:sceneview", version.ref = "sceneform" }
 
+# Exoplayer
+media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "exoplayer" }
+media3-ui-compose = { module = "androidx.media3:media3-ui-compose", version.ref = "exoplayer" }
+media3-ui-compose-material = { module = "androidx.media3:media3-ui-compose-material3", version.ref = "exoplayer" }
+media3-common = { module = "androidx.media3:media3-common-ktx", version.ref = "exoplayer" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
@@ -121,3 +128,19 @@ zioanacleto-core-convention-plugin = { id = "com.zioanacleto.speakeazy.core-conv
 zioanacleto-jacoco-library-plugin = { id = "com.zioanacleto.speakeazy.jacoco-library-settings-plugin" }
 zioanacleto-jacoco-application-plugin = { id = "com.zioanacleto.speakeazy.jacoco-application-settings-plugin"}
 zioanacleto-jacoco-aggregate-plugin = { id = "com.zioanacleto.speakeazy.jacoco-aggregate-report-plugin" }
+
+[bundles]
+ktor = [
+    "ktor-client",
+    "ktor-client-android",
+    "ktor-client-cio",
+    "ktor-client-logging",
+    "ktor-client-negotiation",
+    "ktor-serialization"
+]
+media3 = [
+    "media3-common",
+    "media3-exoplayer",
+    "media3-ui-compose",
+    "media3-ui-compose-material"
+]

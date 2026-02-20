@@ -30,6 +30,7 @@ class CreateCocktailDataMapperTest {
             instructions = "testInstructions",
             instructionsIt = "testInstructionsIt",
             imageUrl = "testImageUrl",
+            videoUrl = "testVideoUrl",
             userId = "testUserId",
             username = "testUsername"
         )
@@ -51,6 +52,7 @@ class CreateCocktailDataMapperTest {
                 instructions.first().instruction == "testInstructions",
                 instructionsIt.first().instruction == "testInstructionsIt",
                 imageLink == "testImageUrl",
+                videoLink == "testVideoUrl",
                 userId == "testUserId",
                 username == "testUsername"
             )

@@ -35,6 +35,7 @@ class MainSpeakEazyBEDataMapperTest {
             response.drinks.first().glass == "testGlass",
             response.drinks.first().isAlcoholic,
             response.drinks.first().imageUrl == "testImageLink",
+            response.drinks.first().videoUrl == "testVideoLink",
             response.drinks.first().type == "testType",
             response.drinks.first().method == "testMethod",
             response.drinks.first().ingredients.isEmpty(),
@@ -124,6 +125,7 @@ class MainSpeakEazyBEDataMapperTest {
             glass = "testGlass",
             isAlcoholic = true,
             imageLink = "testImageLink",
+            videoLink = "testVideoLink",
             type = "testType",
             method = "testMethod",
             ingredients = MainSpeakEazyBEIngredientsListDTO(

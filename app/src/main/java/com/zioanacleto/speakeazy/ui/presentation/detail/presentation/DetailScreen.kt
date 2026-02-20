@@ -71,6 +71,7 @@ import com.zioanacleto.speakeazy.ui.presentation.components.CocktailDetailInform
 import com.zioanacleto.speakeazy.ui.presentation.components.CocktailLoadingAnimation
 import com.zioanacleto.speakeazy.ui.presentation.components.GradientCircularShadowBox
 import com.zioanacleto.speakeazy.ui.presentation.components.IngredientView
+import com.zioanacleto.speakeazy.ui.presentation.components.VideoPlayer
 import com.zioanacleto.speakeazy.ui.presentation.components.bottomSheetStyle
 import com.zioanacleto.speakeazy.ui.presentation.components.parallaxLayoutModifier
 import com.zioanacleto.speakeazy.ui.presentation.components.speakEazyGradientBackground
@@ -163,6 +164,7 @@ private fun DetailScreenSuccessView(
     var titleY by remember { mutableFloatStateOf(0f) }
     var showCollapsedToolbar by remember { mutableStateOf(false) }
     val toolbarHeightPx = with(LocalDensity.current) { 60.dp.toPx() }
+    val viewModel: DetailViewModel = getViewModel()
 
     LaunchedEffect(scrollState.value, titleY) {
         showCollapsedToolbar = titleY <= toolbarHeightPx
@@ -178,14 +180,23 @@ private fun DetailScreenSuccessView(
                 .verticalScroll(scrollState),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            AsyncImage(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .parallaxLayoutModifier(scrollState, 2),
-                contentDescription = "Cocktail Detail",
-                model = cocktail.imageUrl,
-                contentScale = ContentScale.FillWidth
-            )
+            // if video is present show video view (without parallax), otherwise image view
+            if (cocktail.videoUrl.isEmpty())
+                AsyncImage(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .parallaxLayoutModifier(scrollState, 2),
+                    contentDescription = "Cocktail Detail",
+                    model = cocktail.imageUrl,
+                    contentScale = ContentScale.FillWidth
+                )
+            else
+                VideoPlayer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(360.dp),
+                    videoUrl = cocktail.videoUrl
+                )
 
             AnimatedVisibility(
                 visible = startAnimation,

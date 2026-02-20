@@ -92,6 +92,7 @@ class CreateCocktailNetworkUploadDataSourceTest {
         ),
         isAlcoholic = true,
         imageLink = "testImageLink",
+        videoLink = "testVideoLink",
         type = "testType",
         method = "testMethod",
         ingredients = MainSpeakEazyBEIngredientsListDTO(ingredients = null),

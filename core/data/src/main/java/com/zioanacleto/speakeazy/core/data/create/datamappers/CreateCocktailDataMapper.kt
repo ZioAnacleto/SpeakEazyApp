@@ -29,8 +29,8 @@ class CreateCocktailDataMapper : DataMapper<CreateCocktailModel, CreateCocktailR
             ),
             glass = input.glass.default(),
             isAlcoholic = input.isAlcoholic,
-            // todo: upload a default image for now
             imageLink = input.imageUrl.default(DEFAULT_IMAGE_LINK),
+            videoLink = input.videoUrl.default(),
             type = input.type.default(),
             method = input.method.default(),
             ingredients = MainSpeakEazyBEIngredientsListDTO(
@@ -56,6 +56,6 @@ class CreateCocktailDataMapper : DataMapper<CreateCocktailModel, CreateCocktailR
     companion object {
         private const val SPEAKEAZY_CATEGORY = "SpeakEazy Original"
         private const val DEFAULT_IMAGE_LINK =
-            "https://res.cloudinary.com/dyhi3yudn/image/upload/v1743712987/mojito.png"
+            "https://ik.imagekit.io/zioanacleto92/SpeakEazy/default_cocktail.png"
     }
 }

@@ -32,6 +32,7 @@ class MainSpeakEazyBEListDataMapperTest {
             response.drinks.first().name == "testName",
             response.drinks.first().method == "testMethod & other",
             response.drinks.first().imageUrl == "testImageLink",
+            response.drinks.first().videoUrl == "testVideoLink",
             response.drinks.first().isAlcoholic
         )
     }
@@ -80,6 +81,7 @@ class MainSpeakEazyBEListDataMapperTest {
                     glass = "testGlass",
                     isAlcoholic = true,
                     imageLink = "testImageLink",
+                    videoLink = "testVideoLink",
                     type = "testType",
                     method = method,
                     ingredients = MainSpeakEazyBEIngredientsListDTO(
