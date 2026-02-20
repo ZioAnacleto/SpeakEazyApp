@@ -39,6 +39,7 @@ class FavoritesDataMapperTest {
                     glass = "testGlass",
                     isAlcoholic = true,
                     imageLink = "testImageLink",
+                    videoLink = "testVideoLink",
                     type = "testType",
                     method = "testMethod and test",
                     ingredients = null,
