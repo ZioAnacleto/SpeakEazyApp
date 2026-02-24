@@ -26,7 +26,7 @@ import com.zioanacleto.speakeazy.core.domain.main.model.HomeSectionModel
 import com.zioanacleto.speakeazy.ui.presentation.components.BannerSection
 import com.zioanacleto.speakeazy.ui.presentation.components.CocktailLoadingAnimation
 import com.zioanacleto.speakeazy.ui.presentation.components.MainDrinkCard
-import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MainScreen(
@@ -41,7 +41,7 @@ private fun MainScreenContent(
     modifier: Modifier = Modifier,
     onCocktailClick: (String) -> Unit
 ) {
-    val viewModel: MainViewModel = getViewModel()
+    val viewModel: MainViewModel = koinViewModel()
 
     Column(
         modifier = Modifier

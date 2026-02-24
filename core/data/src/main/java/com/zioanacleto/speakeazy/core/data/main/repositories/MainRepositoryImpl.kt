@@ -42,7 +42,7 @@ class MainRepositoryImpl(
         combineAndReturn(
             flow {
                 performanceTracesManager.traceSuspend(
-                    this::class,
+                    this@MainRepositoryImpl::class,
                     "network_getMainById"
                 ) {
                     emit(networkDataSource.getMainById(id))
@@ -50,7 +50,7 @@ class MainRepositoryImpl(
             },
             flow {
                 performanceTracesManager.traceSuspend(
-                    this::class,
+                    this@MainRepositoryImpl::class,
                     "local_getMainById"
                 ) {
                     emit(localDataSource.getMainById(id))

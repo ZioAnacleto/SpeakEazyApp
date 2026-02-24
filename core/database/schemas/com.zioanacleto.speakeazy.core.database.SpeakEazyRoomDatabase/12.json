@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 12,
-    "identityHash": "e46b0072a7cd3d2005d6e9b5fceb745b",
+    "identityHash": "0c68b0db56caa3e72dd616dff5fc5658",
     "entities": [
       {
         "tableName": "IngredientEntity",
@@ -171,11 +171,35 @@
             "uniqueId"
           ]
         }
+      },
+      {
+        "tableName": "SearchQueryEntity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name` TEXT NOT NULL, `lastUsed` INTEGER NOT NULL, PRIMARY KEY(`name`))",
+        "fields": [
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastUsed",
+            "columnName": "lastUsed",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "name"
+          ]
+        }
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e46b0072a7cd3d2005d6e9b5fceb745b')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0c68b0db56caa3e72dd616dff5fc5658')"
     ]
   }
 }

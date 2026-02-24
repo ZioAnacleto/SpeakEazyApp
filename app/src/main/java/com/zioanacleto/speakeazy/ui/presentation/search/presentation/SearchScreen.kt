@@ -1,25 +1,43 @@
 package com.zioanacleto.speakeazy.ui.presentation.search.presentation
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Clear
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
@@ -27,37 +45,46 @@ import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zioanacleto.buffa.compose.hideKeyboardOnTouch
+import com.zioanacleto.speakeazy.core.domain.search.model.QueryModel
+import com.zioanacleto.speakeazy.core.domain.search.model.SearchItem
 import com.zioanacleto.speakeazy.core.domain.search.model.SearchLandingModel
+import com.zioanacleto.speakeazy.core.domain.search.model.SearchModel
 import com.zioanacleto.speakeazy.ui.presentation.components.CocktailLoadingAnimation
+import com.zioanacleto.speakeazy.ui.presentation.components.MainDrinkCard
+import com.zioanacleto.speakeazy.ui.presentation.components.NewsBanner
 import com.zioanacleto.speakeazy.ui.presentation.components.SearchFilterSection
+import com.zioanacleto.speakeazy.ui.presentation.components.SearchInputText
 import com.zioanacleto.speakeazy.ui.presentation.components.SelectedFilter
-import com.zioanacleto.speakeazy.ui.theme.YellowFFE271
-import org.koin.androidx.compose.getViewModel
+import kotlinx.coroutines.delay
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SearchScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onCocktailClick: (String) -> Unit
 ) {
-    SearchScreenContent(modifier)
+    SearchScreenContent(modifier, onCocktailClick)
 }
 
 @Composable
 private fun SearchScreenContent(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onCocktailClick: (String) -> Unit
 ) {
-    val viewModel: SearchViewModel = getViewModel()
+    val viewModel: SearchViewModel = koinViewModel()
 
-    val landingState = remember { viewModel.landingUiState }
+    val landingState by viewModel.landingUiState.collectAsState()
 
-    when (val uiState = landingState.collectAsStateWithLifecycle().value) {
+    when (landingState) {
         is SearchLandingUiState.Success -> {
             SearchScreenWithFilter(
                 modifier = modifier,
-                viewModel = viewModel,
-                data = uiState.data,
-                onButtonSearchClick = {
-                    viewModel.search(it)
-                }
+                data = (landingState as SearchLandingUiState.Success).data,
+                onButtonSearchClick = { isAiModeSearch, query ->
+                    viewModel.search(isAiModeSearch, query)
+                    viewModel.addQueryToDatabase(query)
+                },
+                onCocktailClick = onCocktailClick
             )
         }
 
@@ -83,10 +110,14 @@ private fun SearchScreenContent(
 @Composable
 private fun SearchScreenWithFilter(
     modifier: Modifier = Modifier,
-    viewModel: SearchViewModel,
     data: SearchLandingModel,
-    onButtonSearchClick: (String) -> Unit
+    onButtonSearchClick: (Boolean, String) -> Unit,
+    onCocktailClick: (String) -> Unit
 ) {
+    val viewModel: SearchViewModel = koinViewModel()
+    val focusManager = LocalFocusManager.current
+
+    val scrollState = rememberScrollState()
     val filterState = viewModel.filterUiState.collectAsStateWithLifecycle()
     val queryState = viewModel.queryUiState.collectAsStateWithLifecycle()
     val queryTextState = remember {
@@ -98,153 +129,236 @@ private fun SearchScreenWithFilter(
     var selectedFilters by remember {
         mutableStateOf<Map<SearchFilterItem, List<SelectedFilter>>>(emptyMap())
     }
+    var isTextFieldFocused by remember { mutableStateOf(false) }
+    var isAiSearchMode by remember { mutableStateOf(false) }
+    var showBanner by remember { mutableStateOf(true) }
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .hideKeyboardOnTouch()
-            .padding(top = 60.dp)
-    ) {
-        Text(
-            modifier = Modifier
-                .padding(start = 20.dp, bottom = 16.dp),
-            text = "Search cocktails",
-            color = Color.White,
-            fontSize = TextUnit(36f, TextUnitType.Sp),
-            fontWeight = FontWeight.SemiBold,
-            lineHeight = TextUnit(42f, TextUnitType.Sp)
-        )
+    LaunchedEffect(Unit) {
+        delay(5000)
+        showBanner = false
+    }
 
-        OutlinedTextField(
+    Box(modifier = modifier.fillMaxSize()) {
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp),
-            value = queryTextState.value,
-            onValueChange = { query ->
-                queryTextState.value = query
-            },
-            label = {
-                Text(
-                    color = Color.White,
-                    text = "Search"
-                )
-            },
-            placeholder = {
-                Text(
-                    color = Color.White,
-                    text = "Ask to our AI assistant"
-                )
-            },
-            singleLine = true,
-            textStyle = TextStyle(
+                .fillMaxSize()
+                .hideKeyboardOnTouch()
+                .verticalScroll(scrollState)
+                .padding(top = 60.dp)
+        ) {
+            Text(
+                modifier = Modifier
+                    .padding(start = 20.dp, bottom = 10.dp),
+                text = "Search cocktails",
                 color = Color.White,
-                fontSize = TextUnit(14f, TextUnitType.Sp)
-            ),
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Search
-            ),
-            keyboardActions = KeyboardActions(
-                onSearch = {
-                    onButtonSearchClick(queryTextState.value.text)
-                }
-            ),
-            shape = RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = YellowFFE271,
-                unfocusedBorderColor = Color.DarkGray,
-                cursorColor = YellowFFE271
+                fontSize = TextUnit(36f, TextUnitType.Sp),
+                fontWeight = FontWeight.SemiBold,
+                lineHeight = TextUnit(42f, TextUnitType.Sp)
             )
-        )
 
-        SearchFilterSection(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 20.dp, end = 20.dp, top = 2.dp),
-            list = listOf(SearchFilterItem.Ingredients, SearchFilterItem.Tags),
-            onFilterSelectClick = { searchFilterItem ->
-                val filters = if (searchFilterItem == selectedSearchFilterItem)
-                    selectedFilters[searchFilterItem].orEmpty()
-                else when (searchFilterItem) {
-                    is SearchFilterItem.Ingredients -> {
-                        data.ingredients.map {
-                            SelectedFilter(it.name, false)
+            FadeAndSlideAnimatedVisibility(showBanner) {
+                NewsBanner(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(max = 110.dp),
+                    text = "Try our AI assistant, tap on the input field's leading icon!"
+                )
+            }
+
+            SearchInputText(
+                Modifier
+                    .fillMaxWidth()
+                    .padding(start = 20.dp, end = 20.dp, top = 10.dp),
+                queryTextState = queryTextState.value,
+                onQueryChange = { queryTextState.value = it },
+                onTextFieldFocused = { isTextFieldFocused = it },
+                onLeadingIconClick = { isAiSearchMode = it },
+                onButtonSearchClick
+            )
+
+            SearchFilterSection(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 20.dp, end = 20.dp, top = 2.dp),
+                list = listOf(SearchFilterItem.Ingredients, SearchFilterItem.Tags),
+                onFilterSelectClick = { searchFilterItem ->
+                    val filters = if (searchFilterItem == selectedSearchFilterItem)
+                        selectedFilters[searchFilterItem].orEmpty()
+                    else when (searchFilterItem) {
+                        is SearchFilterItem.Ingredients -> {
+                            data.ingredients.map {
+                                SelectedFilter(it.name, false)
+                            }
                         }
+
+                        is SearchFilterItem.Tags -> {
+                            data.tags.map {
+                                SelectedFilter(it.name, false)
+                            }
+                        }
+
+                        else -> listOf()
                     }
 
-                    is SearchFilterItem.Tags -> {
-                        data.tags.map {
-                            SelectedFilter(it.name, false)
-                        }
-                    }
+                    selectedSearchFilterItem = searchFilterItem
+                    filters
+                },
+                onFilterDoneClick = { map ->
+                    selectedFilters = map
+                    viewModel.filter(selectedFilters)
+                }
+            )
 
-                    else -> listOf()
+            FadeAndSlideAnimatedVisibility(isTextFieldFocused) {
+                LastQueriesSection(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 20.dp)
+                        .imePadding(),
+                    lastQueries = data.lastQueries
+                ) {
+                    queryTextState.value = TextFieldValue(it)
+                    isTextFieldFocused = false
+                    focusManager.clearFocus()
+                    onButtonSearchClick(isAiSearchMode, it)
+                }
+            }
+
+            when (queryState.value) {
+                is SearchUiState.Success -> {
+                    SearchSuccessView(
+                        result = (queryState.value as SearchUiState.Success).search,
+                        onCocktailClick = onCocktailClick
+                    )
                 }
 
-                selectedSearchFilterItem = searchFilterItem
-                filters
-            },
-            onFilterDoneClick = { map ->
-                selectedFilters = map
-                viewModel.filter(selectedFilters)
-            }
-        )
+                is SearchUiState.Error -> {
+                    Text(
+                        modifier = Modifier
+                            .padding(top = 10.dp),
+                        color = Color.White,
+                        text = "Query Error"
+                    )
+                }
 
-        when (queryState.value) {
-            is SearchUiState.Success -> {
-                Text(
-                    modifier = Modifier
-                        .padding(top = 10.dp),
-                    color = Color.White,
-                    text = "Query Success"
-                )
+                else -> {}
             }
 
-            is SearchUiState.Error -> {
-                Text(
-                    modifier = Modifier
-                        .padding(top = 10.dp),
-                    color = Color.White,
-                    text = "Query Error"
-                )
-            }
+            when (filterState.value) {
+                is FilterUiState.Success -> {
+                    // todo: add here filter success view
+                    Text(
+                        modifier = Modifier
+                            .padding(top = 10.dp),
+                        color = Color.White,
+                        text = "Filter Success"
+                    )
+                }
 
-            is SearchUiState.Loading -> {
-                CocktailLoadingAnimation(
-                    modifier = Modifier
-                        .fillMaxSize()
-                )
-            }
+                is FilterUiState.Error -> {
+                    Text(
+                        modifier = Modifier
+                            .padding(top = 10.dp),
+                        color = Color.White,
+                        text = "Filter Error"
+                    )
+                }
 
-            else -> {}
+                else -> {}
+            }
         }
 
-        when (filterState.value) {
-            is FilterUiState.Success -> {
+        // we put it here since it must be out of a scrollable component
+        if (queryState.value is SearchUiState.Loading || filterState.value is FilterUiState.Loading) {
+            CocktailLoadingAnimation(
+                modifier = Modifier
+                    .size(400.dp)
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 150.dp)
+            )
+        }
+    }
+}
+
+@Composable
+private fun LastQueriesSection(
+    modifier: Modifier = Modifier,
+    lastQueries: List<QueryModel>,
+    onQueryClicked: (String) -> Unit
+) {
+    Column(
+        modifier = modifier
+    ) {
+        lastQueries.forEach {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 36.dp, end = 24.dp, bottom = 12.dp)
+                    .clickable { onQueryClicked(it.query) },
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
                 Text(
-                    modifier = Modifier
-                        .padding(top = 10.dp),
+                    text = it.query,
                     color = Color.White,
-                    text = "Filter Success"
+                    fontSize = TextUnit(16f, TextUnitType.Sp)
+                )
+                Icon(
+                    painter = rememberVectorPainter(Icons.Rounded.Clear),
+                    contentDescription = "Delete query",
+                    tint = Color.White
                 )
             }
+        }
+    }
+}
 
-            is FilterUiState.Error -> {
-                Text(
-                    modifier = Modifier
-                        .padding(top = 10.dp),
-                    color = Color.White,
-                    text = "Filter Error"
-                )
+@Composable
+private fun FadeAndSlideAnimatedVisibility(
+    condition: Boolean,
+    content: @Composable (AnimatedVisibilityScope.() -> Unit)
+) = AnimatedVisibility(
+    visible = condition,
+    enter = fadeIn() + slideInVertically(),
+    exit = fadeOut() + slideOutVertically(),
+    content = content
+)
+
+@Composable
+private fun SearchSuccessView(
+    result: SearchModel,
+    onCocktailClick: (String) -> Unit
+) {
+    result.results.forEach { drink ->
+        Column(
+            Modifier
+                .fillMaxWidth()
+                .padding(top = 10.dp, start = 16.dp, end = 16.dp)
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 10.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                with(drink as SearchItem.Cocktail) {
+                    MainDrinkCard(
+                        modifier = Modifier
+                            .padding(6.dp),
+                        id = id,
+                        name = name,
+                        category = category,
+                        imageString = imageUrl,
+                        isFavorite = favorite,
+                        userName = username,
+                        onClick = onCocktailClick
+                    )
+                }
             }
-
-            is FilterUiState.Loading -> {
-                CocktailLoadingAnimation(
-                    modifier = Modifier
-                        .fillMaxSize()
-                )
-            }
-
-            else -> {}
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(100.dp)
+            )
         }
     }
 }
@@ -252,5 +366,5 @@ private fun SearchScreenWithFilter(
 @Preview
 @Composable
 fun SearchScreenPreview() {
-    SearchScreenContent()
+    SearchScreenContent {}
 }

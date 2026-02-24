@@ -17,10 +17,12 @@ object SearchBaseRoute
 fun NavController.navigateToSearch(navOptions: NavOptions) =
     navigate(route = SearchRoute, navOptions = navOptions)
 
-fun NavGraphBuilder.searchSection() {
+fun NavGraphBuilder.searchSection(
+    onCocktailClick: (String) -> Unit
+) {
     navigation<SearchBaseRoute>(startDestination = SearchRoute) {
         composable<SearchRoute> {
-            SearchScreen()
+            SearchScreen(onCocktailClick = onCocktailClick)
         }
     }
 }

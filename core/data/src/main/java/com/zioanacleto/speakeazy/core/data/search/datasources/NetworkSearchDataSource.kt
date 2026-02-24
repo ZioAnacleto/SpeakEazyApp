@@ -26,20 +26,29 @@ class NetworkSearchDataSource(
     private val mainDataMapper: DataMapper<MainSpeakEazyBEListResponseDTO, MainModel>,
     private val performanceTracesManager: PerformanceTracesManager
 ) : SearchDataSource {
-    override suspend fun querySearch(query: String): Resource<SearchModel> {
+    override suspend fun querySearch(isAiSearchMode: Boolean, query: String): Resource<SearchModel> {
         return performanceTracesManager.returningTraceSuspend(
             this::class,
             "querySearch"
         ) {
             getResponseOrCatchError(responseDataMapper) {
-                apiClient.executePostRequest(
-                    url = SpeakEazyBEUrlBuilder.buildUrl(
-                        SpeakEazyBEUrlBuilder.Endpoint.Search
-                    ),
-                    body = requestDataMapper.mapInto(query),
-                    bodySerializer = SearchRequestDTO.serializer(),
-                    responseSerializer = SearchResponseDTO.serializer()
-                )
+                if(isAiSearchMode) {
+                    apiClient.executePostRequest(
+                        url = SpeakEazyBEUrlBuilder.buildUrl(
+                            SpeakEazyBEUrlBuilder.Endpoint.Search()
+                        ),
+                        body = requestDataMapper.mapInto(query),
+                        bodySerializer = SearchRequestDTO.serializer(),
+                        responseSerializer = SearchResponseDTO.serializer()
+                    )
+                } else {
+                    apiClient.executeGetRequest(
+                        url = SpeakEazyBEUrlBuilder.buildUrl(
+                            SpeakEazyBEUrlBuilder.Endpoint.Search(query)
+                        ),
+                        responseType = SearchResponseDTO::class
+                    )
+                }
             }
         }
     }

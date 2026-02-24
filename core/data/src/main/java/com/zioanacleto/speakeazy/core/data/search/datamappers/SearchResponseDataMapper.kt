@@ -13,7 +13,10 @@ class SearchResponseDataMapper : DataMapper<SearchResponseDTO, SearchModel> {
                 SearchItem.Cocktail(
                     id = drink.id.default(),
                     name = drink.name.default(),
-                    imageUrl = drink.imageLink.default()
+                    imageUrl = drink.imageLink.default(),
+                    category = drink.category.default(),
+                    favorite = false, // TODO
+                    username = drink.username.default()
                 )
             } as List<SearchItem>
         )

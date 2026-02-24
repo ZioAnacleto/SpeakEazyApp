@@ -8,9 +8,10 @@ import com.zioanacleto.speakeazy.core.domain.search.model.SearchModel
 import kotlinx.coroutines.flow.Flow
 
 interface SearchRepository {
-    fun submitQuery(query: String): Flow<Resource<SearchModel>>
+    fun submitQuery(aiSearchMode: Boolean, query: String): Flow<Resource<SearchModel>>
     fun getSearchLandingData(): Flow<Resource<SearchLandingModel>>
     fun submitFilter(
         filters: Map<SearchFilterModel, List<String>>
     ): Flow<Resource<MainModel>>
+    suspend fun addQueryToLocalDatabase(query: String)
 }
