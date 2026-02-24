@@ -9,6 +9,7 @@ import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.speakeazy.MainActivityViewModel
 import com.zioanacleto.speakeazy.core.data.cocktail3d.datamapper.Cocktail3DModelDataMapper
 import com.zioanacleto.speakeazy.core.data.cocktail3d.datamapper.CocktailSceneDataMapper
+import com.zioanacleto.speakeazy.core.data.search.SearchQueriesCleanUpWorker
 import com.zioanacleto.speakeazy.core.data.user.provider.FirebaseActionCodeSettingsProvider
 import com.zioanacleto.speakeazy.core.domain.user.UserRepository
 import com.zioanacleto.speakeazy.core.network.api.ApiClientImpl
@@ -22,6 +23,7 @@ import com.zioanacleto.speakeazy.ui.presentation.search.presentation.SearchViewM
 import com.zioanacleto.speakeazy.ui.presentation.user.presentation.UserViewModel
 import com.zioanacleto.speakeazy.ui.presentation.user.provider.FirebaseActionCodeSettingsProviderImpl
 import org.koin.android.ext.koin.androidContext
+import org.koin.androidx.workmanager.dsl.worker
 import org.koin.dsl.module
 import java.io.File
 
@@ -45,6 +47,13 @@ val singletonModule = module {
         )
     }
     factory<FirebaseActionCodeSettingsProvider> { FirebaseActionCodeSettingsProviderImpl() }
+    worker {
+        SearchQueriesCleanUpWorker(
+            get(),
+            get(),
+            get()
+        )
+    }
 }
 
 // ViewModels
