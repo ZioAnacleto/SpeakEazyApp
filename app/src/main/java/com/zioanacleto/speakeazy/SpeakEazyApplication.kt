@@ -11,11 +11,11 @@ import com.zioanacleto.speakeazy.core.analytics.di.analyticsModule
 import com.zioanacleto.speakeazy.core.data.di.dataMapperModule
 import com.zioanacleto.speakeazy.core.data.di.dataSourceModule
 import com.zioanacleto.speakeazy.core.data.di.repositoryModule
-import com.zioanacleto.speakeazy.core.data.search.SearchQueriesCleanUpWorker
 import com.zioanacleto.speakeazy.core.database.di.databaseModule
 import com.zioanacleto.speakeazy.di.singletonModule
 import com.zioanacleto.speakeazy.di.viewModelModule
 import com.zioanacleto.speakeazy.logger.LocalLogger
+import com.zioanacleto.speakeazy.work.SearchQueriesCleanUpWorker
 import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.koin.androidLogger
 import org.koin.androidx.workmanager.koin.workManagerFactory

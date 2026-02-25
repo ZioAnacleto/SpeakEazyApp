@@ -1,4 +1,4 @@
-package com.zioanacleto.speakeazy.core.data.search
+package com.zioanacleto.speakeazy.work
 
 import android.content.Context
 import androidx.work.CoroutineWorker

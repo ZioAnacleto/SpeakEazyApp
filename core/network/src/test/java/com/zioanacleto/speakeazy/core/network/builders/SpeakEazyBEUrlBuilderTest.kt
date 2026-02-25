@@ -32,7 +32,7 @@ class SpeakEazyBEUrlBuilderTest(
             arrayOf(SpeakEazyBEUrlBuilder.Endpoint.Ingredients, "ingredients"),
             arrayOf(SpeakEazyBEUrlBuilder.Endpoint.SingleIngredient(STATIC_ID), STATIC_ID),
             arrayOf(SpeakEazyBEUrlBuilder.Endpoint.Home, "home"),
-            arrayOf(SpeakEazyBEUrlBuilder.Endpoint.Search, "search"),
+            arrayOf(SpeakEazyBEUrlBuilder.Endpoint.Search(), "search"),
             arrayOf(SpeakEazyBEUrlBuilder.Endpoint.Tags, "tags")
         )
     }

@@ -57,13 +57,14 @@ class NetworkSearchDataSourceTest {
             status = HttpStatusCode.OK,
             response = """{"cocktails": []}"""
         )
+        val aiMode = false
         val query = "test"
         every { requestDataMapper.mapInto(any()) } returns SearchRequestDTO(query)
         every { responseDataMapper.mapInto(any()) } returns SearchModel()
 
         // when
         val sut = createSut()
-        val result = sut.querySearch(query)
+        val result = sut.querySearch(aiMode, query)
 
         // then
         assertAllTrue(

@@ -6,6 +6,7 @@ import com.zioanacleto.buffa.events.Resource
 import com.zioanacleto.speakeazy.core.analytics.traces.PerformanceTracesManager
 import com.zioanacleto.speakeazy.core.data.detail.datasources.IngredientDataSource
 import com.zioanacleto.speakeazy.core.data.search.datasources.SearchDataSource
+import com.zioanacleto.speakeazy.core.data.search.datasources.SearchQueriesDataSource
 import com.zioanacleto.speakeazy.core.domain.main.model.MainModel
 import com.zioanacleto.speakeazy.core.domain.search.model.SearchModel
 import io.mockk.clearAllMocks
@@ -23,6 +24,7 @@ import org.junit.Test
 class SearchRepositoryImplTest {
 
     private lateinit var searchDataSource: SearchDataSource
+    private lateinit var searchQueriesDataSource: SearchQueriesDataSource
     private lateinit var ingredientDataSource: IngredientDataSource
     private lateinit var dispatcherProvider: DispatcherProvider
     private lateinit var performanceTracesManager: PerformanceTracesManager
@@ -30,6 +32,7 @@ class SearchRepositoryImplTest {
     @Before
     fun setUp() {
         searchDataSource = mockk(relaxed = true)
+        searchQueriesDataSource = mockk(relaxed = true)
         ingredientDataSource = mockk(relaxed = true)
         dispatcherProvider = DefaultDispatcherProvider()
         performanceTracesManager = mockk(relaxed = true) {
@@ -46,13 +49,13 @@ class SearchRepositoryImplTest {
     @Test
     fun test_submitQuery() = runBlocking {
         // given
-        coEvery { searchDataSource.querySearch(any()) } returns Resource.Success(
+        coEvery { searchDataSource.querySearch(any(), any()) } returns Resource.Success(
             SearchModel()
         )
 
         // when
         val sut = createSut()
-        val response = sut.submitQuery("testQuery").first()
+        val response = sut.submitQuery(false, "testQuery").first()
 
         // then
         assert(response is Resource.Success<SearchModel>)
@@ -77,6 +80,7 @@ class SearchRepositoryImplTest {
         SearchRepositoryImpl(
             searchDataSource,
             ingredientDataSource,
+            searchQueriesDataSource,
             dispatcherProvider,
             performanceTracesManager
         )

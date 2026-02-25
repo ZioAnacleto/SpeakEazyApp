@@ -3,7 +3,6 @@ package com.zioanacleto.speakeazy.ui.presentation.search.presentation
 import com.zioanacleto.buffa.coroutines.DefaultDispatcherProvider
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.buffa.events.Resource
-import com.zioanacleto.speakeazy.TestDispatcherProvider
 import com.zioanacleto.speakeazy.assertAllTrue
 import com.zioanacleto.speakeazy.core.domain.main.model.MainModel
 import com.zioanacleto.speakeazy.core.domain.search.SearchRepository
@@ -17,7 +16,6 @@ import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -49,7 +47,8 @@ class SearchViewModelTest {
             Resource.Success(
                 SearchLandingModel(
                     ingredients = listOf(),
-                    tags = listOf()
+                    tags = listOf(),
+                    lastQueries = listOf()
                 )
             )
         )
@@ -89,9 +88,10 @@ class SearchViewModelTest {
     @Test
     fun test_search_whenRepositoryIsSuccess_queryUiStateIsSuccess() = runTest {
         // given
-        dispatcherProvider = TestDispatcherProvider(StandardTestDispatcher(testScheduler))
+        dispatcherProvider = testDispatcher()
+        val aiMode = false
         val query = "test"
-        every { repository.submitQuery(query) } returns flowOf(
+        every { repository.submitQuery(aiMode, query) } returns flowOf(
             Resource.Success(
                 SearchModel()
             )
@@ -99,7 +99,7 @@ class SearchViewModelTest {
 
         // when
         val sut = createSut()
-        sut.search(query)
+        sut.search(aiMode, query)
         advanceUntilIdle()
 
         // then
@@ -110,9 +110,10 @@ class SearchViewModelTest {
     @Test
     fun test_search_whenRepositoryIsError_queryUiStateIsError() = runTest {
         // given
-        dispatcherProvider = TestDispatcherProvider(StandardTestDispatcher(testScheduler))
+        dispatcherProvider = testDispatcher()
+        val aiMode = false
         val query = "test"
-        every { repository.submitQuery(query) } returns flowOf(
+        every { repository.submitQuery(aiMode, query) } returns flowOf(
             Resource.Error(
                 Exception("testException")
             )
@@ -120,7 +121,7 @@ class SearchViewModelTest {
 
         // when
         val sut = createSut()
-        sut.search(query)
+        sut.search(aiMode, query)
         advanceUntilIdle()
 
         // then
@@ -131,7 +132,7 @@ class SearchViewModelTest {
     @Test
     fun test_filter_whenRepositoryIsSuccess_filterUiStateIsSuccess() = runTest {
         // given
-        dispatcherProvider = TestDispatcherProvider(StandardTestDispatcher(testScheduler))
+        dispatcherProvider = testDispatcher()
         every { repository.submitFilter(any()) } returns flowOf(
             Resource.Success(
                 MainModel(listOf())
@@ -151,7 +152,7 @@ class SearchViewModelTest {
     @Test
     fun test_filter_whenRepositoryIsError_filterUiStateIsError() = runTest {
         // given
-        dispatcherProvider = TestDispatcherProvider(StandardTestDispatcher(testScheduler))
+        dispatcherProvider = testDispatcher()
         every { repository.submitFilter(any()) } returns flowOf(
             Resource.Error(
                 Exception("testException")
