@@ -1,8 +1,15 @@
 package com.zioanacleto.speakeazy.ui.presentation.components
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
@@ -50,3 +57,14 @@ fun Modifier.bottomSheetStyle() =
         translationY = (-16).dp.toPx()
     }
         .clip(RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
+
+@Composable
+fun FadeAndSlideAnimatedVisibility(
+    condition: Boolean,
+    content: @Composable (AnimatedVisibilityScope.() -> Unit)
+) = AnimatedVisibility(
+    visible = condition,
+    enter = fadeIn() + slideInVertically(),
+    exit = fadeOut() + slideOutVertically(),
+    content = content
+)

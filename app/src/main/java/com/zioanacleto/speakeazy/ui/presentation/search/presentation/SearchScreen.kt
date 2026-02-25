@@ -1,11 +1,5 @@
 package com.zioanacleto.speakeazy.ui.presentation.search.presentation
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.AnimatedVisibilityScope
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,7 +9,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -26,7 +19,6 @@ import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -50,12 +42,12 @@ import com.zioanacleto.speakeazy.core.domain.search.model.SearchItem
 import com.zioanacleto.speakeazy.core.domain.search.model.SearchLandingModel
 import com.zioanacleto.speakeazy.core.domain.search.model.SearchModel
 import com.zioanacleto.speakeazy.ui.presentation.components.CocktailLoadingAnimation
+import com.zioanacleto.speakeazy.ui.presentation.components.FadeAndSlideAnimatedVisibility
 import com.zioanacleto.speakeazy.ui.presentation.components.MainDrinkCard
 import com.zioanacleto.speakeazy.ui.presentation.components.NewsBanner
 import com.zioanacleto.speakeazy.ui.presentation.components.SearchFilterSection
 import com.zioanacleto.speakeazy.ui.presentation.components.SearchInputText
 import com.zioanacleto.speakeazy.ui.presentation.components.SelectedFilter
-import kotlinx.coroutines.delay
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -131,12 +123,6 @@ private fun SearchScreenWithFilter(
     }
     var isTextFieldFocused by remember { mutableStateOf(false) }
     var isAiSearchMode by remember { mutableStateOf(false) }
-    var showBanner by remember { mutableStateOf(true) }
-
-    LaunchedEffect(Unit) {
-        delay(5000)
-        showBanner = false
-    }
 
     Box(modifier = modifier.fillMaxSize()) {
         Column(
@@ -156,14 +142,12 @@ private fun SearchScreenWithFilter(
                 lineHeight = TextUnit(42f, TextUnitType.Sp)
             )
 
-            FadeAndSlideAnimatedVisibility(showBanner) {
-                NewsBanner(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(max = 110.dp),
-                    text = "Try our AI assistant, tap on the input field's leading icon!"
-                )
-            }
+            NewsBanner(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                text = "Try our AI assistant, tap on the input field's leading icon!",
+                timed = true
+            )
 
             SearchInputText(
                 Modifier
@@ -311,17 +295,6 @@ private fun LastQueriesSection(
         }
     }
 }
-
-@Composable
-private fun FadeAndSlideAnimatedVisibility(
-    condition: Boolean,
-    content: @Composable (AnimatedVisibilityScope.() -> Unit)
-) = AnimatedVisibility(
-    visible = condition,
-    enter = fadeIn() + slideInVertically(),
-    exit = fadeOut() + slideOutVertically(),
-    content = content
-)
 
 @Composable
 private fun SearchSuccessView(
