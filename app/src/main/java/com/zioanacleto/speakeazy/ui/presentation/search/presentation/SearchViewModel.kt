@@ -37,6 +37,7 @@ class SearchViewModel(
 
     fun search(isAiSearchMode: Boolean, queryString: String) {
         coroutineScope.launch(dispatcherProvider.io()) {
+            _filterUiState.value = FilterUiState.None
             repository.submitQuery(isAiSearchMode, queryString)
                 .mapResourceAsSearchUiState()
                 .onStart { emit(SearchUiState.Loading) }
@@ -56,6 +57,7 @@ class SearchViewModel(
             mumble = "selectedFilters: $selectedFilters, filters: $filters"
         )
         coroutineScope.launch(dispatcherProvider.io()) {
+            _queryUiState.value = SearchUiState.None
             repository.submitFilter(filters)
                 .mapResourceAsFilterUiState()
                 .onStart { emit(FilterUiState.Loading) }

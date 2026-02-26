@@ -24,23 +24,24 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zioanacleto.buffa.compose.hideKeyboardOnTouch
+import com.zioanacleto.buffa.default
+import com.zioanacleto.speakeazy.core.domain.main.model.DrinkModel
 import com.zioanacleto.speakeazy.core.domain.search.model.QueryModel
 import com.zioanacleto.speakeazy.core.domain.search.model.SearchItem
 import com.zioanacleto.speakeazy.core.domain.search.model.SearchLandingModel
-import com.zioanacleto.speakeazy.core.domain.search.model.SearchModel
 import com.zioanacleto.speakeazy.ui.presentation.components.CocktailLoadingAnimation
 import com.zioanacleto.speakeazy.ui.presentation.components.FadeAndSlideAnimatedVisibility
 import com.zioanacleto.speakeazy.ui.presentation.components.MainDrinkCard
@@ -99,6 +100,7 @@ private fun SearchScreenContent(
     }
 }
 
+// todo: maybe create a single UiState with both Filter and Search models
 @Composable
 private fun SearchScreenWithFilter(
     modifier: Modifier = Modifier,
@@ -112,11 +114,7 @@ private fun SearchScreenWithFilter(
     val scrollState = rememberScrollState()
     val filterState = viewModel.filterUiState.collectAsStateWithLifecycle()
     val queryState = viewModel.queryUiState.collectAsStateWithLifecycle()
-    val queryTextState = remember {
-        mutableStateOf(
-            TextFieldValue("")
-        )
-    }
+    val queryTextState = remember { mutableStateOf(TextFieldValue("")) }
     var selectedSearchFilterItem: SearchFilterItem? by remember { mutableStateOf(null) }
     var selectedFilters by remember {
         mutableStateOf<Map<SearchFilterItem, List<SelectedFilter>>>(emptyMap())
@@ -208,58 +206,61 @@ private fun SearchScreenWithFilter(
                 }
             }
 
-            when (queryState.value) {
-                is SearchUiState.Success -> {
+            when {
+                // query success result is displayed
+                queryState.value is SearchUiState.Success ->
                     SearchSuccessView(
-                        result = (queryState.value as SearchUiState.Success).search,
+                        convertedModel = {
+                            (queryState.value as SearchUiState.Success).search.results.map {
+                                with(it as SearchItem.Cocktail) {
+                                    DrinkModel(
+                                        id = id,
+                                        name = name,
+                                        imageUrl = imageUrl,
+                                        category = category,
+                                        favorite = favorite,
+                                        username = username.default()
+                                    )
+                                }
+                            }
+                        },
                         onCocktailClick = onCocktailClick
                     )
-                }
-
-                is SearchUiState.Error -> {
+                // query error result is displayed as error message
+                queryState.value is SearchUiState.Error ->
                     Text(
                         modifier = Modifier
-                            .padding(top = 10.dp),
+                            .padding(top = 40.dp),
+                        text = "No results found by query search.",
                         color = Color.White,
-                        text = "Query Error"
+                        fontSize = TextUnit(28f, TextUnitType.Sp),
+                        textAlign = TextAlign.Center
                     )
-                }
-
-                else -> {}
+                // filter success result is displayed
+                filterState.value is FilterUiState.Success ->
+                    SearchSuccessView(
+                        convertedModel = {
+                            (filterState.value as FilterUiState.Success).filter.drinks
+                        },
+                        onCocktailClick = onCocktailClick
+                    )
+                // filter error result is displayed as error message
+                filterState.value is FilterUiState.Error ->
+                    Text(
+                        modifier = Modifier
+                            .padding(top = 40.dp),
+                        text = "No results found by filter search.",
+                        color = Color.White,
+                        fontSize = TextUnit(28f, TextUnitType.Sp),
+                        textAlign = TextAlign.Center
+                    )
+                // loading state for both queries is displayed
+                queryState.value is SearchUiState.Loading || filterState.value is FilterUiState.Loading ->
+                    CocktailLoadingAnimation(
+                        modifier = Modifier
+                            .size(400.dp)
+                    )
             }
-
-            when (filterState.value) {
-                is FilterUiState.Success -> {
-                    // todo: add here filter success view
-                    Text(
-                        modifier = Modifier
-                            .padding(top = 10.dp),
-                        color = Color.White,
-                        text = "Filter Success"
-                    )
-                }
-
-                is FilterUiState.Error -> {
-                    Text(
-                        modifier = Modifier
-                            .padding(top = 10.dp),
-                        color = Color.White,
-                        text = "Filter Error"
-                    )
-                }
-
-                else -> {}
-            }
-        }
-
-        // we put it here since it must be out of a scrollable component
-        if (queryState.value is SearchUiState.Loading || filterState.value is FilterUiState.Loading) {
-            CocktailLoadingAnimation(
-                modifier = Modifier
-                    .size(400.dp)
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 150.dp)
-            )
         }
     }
 }
@@ -298,41 +299,48 @@ private fun LastQueriesSection(
 
 @Composable
 private fun SearchSuccessView(
-    result: SearchModel,
+    convertedModel: () -> List<DrinkModel>,
     onCocktailClick: (String) -> Unit
 ) {
-    result.results.forEach { drink ->
-        Column(
-            Modifier
-                .fillMaxWidth()
-                .padding(top = 10.dp, start = 16.dp, end = 16.dp)
-        ) {
+    val drinks = convertedModel()
+
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .padding(top = 10.dp, start = 16.dp, end = 16.dp)
+    ) {
+        drinks.chunked(2).forEach { rowItems ->
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 10.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                with(drink as SearchItem.Cocktail) {
+                rowItems.forEach { drink ->
                     MainDrinkCard(
-                        modifier = Modifier
-                            .padding(6.dp),
-                        id = id,
-                        name = name,
-                        category = category,
-                        imageString = imageUrl,
-                        isFavorite = favorite,
-                        userName = username,
+                        modifier = Modifier.weight(1f),
+                        id = drink.id,
+                        name = drink.name,
+                        category = drink.category,
+                        imageString = drink.imageUrl,
+                        isFavorite = drink.favorite,
+                        userName = drink.username,
                         onClick = onCocktailClick
                     )
                 }
+
+                // If only one item is available, we fill remaining space
+                if (rowItems.size == 1) {
+                    Spacer(modifier = Modifier.weight(1f))
+                }
             }
-            Spacer(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(100.dp)
-            )
         }
+
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(100.dp)
+        )
     }
 }
 
