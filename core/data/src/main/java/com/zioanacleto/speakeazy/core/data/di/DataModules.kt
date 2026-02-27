@@ -43,8 +43,10 @@ import com.zioanacleto.speakeazy.core.data.main.repositories.MainRepositoryImpl
 import com.zioanacleto.speakeazy.core.data.search.datamappers.SearchRequestDataMapper
 import com.zioanacleto.speakeazy.core.data.search.datamappers.SearchResponseDataMapper
 import com.zioanacleto.speakeazy.core.data.search.datamappers.TagsDataMapper
+import com.zioanacleto.speakeazy.core.data.search.datasources.LocalSearchQueriesDataSource
 import com.zioanacleto.speakeazy.core.data.search.datasources.NetworkSearchDataSource
 import com.zioanacleto.speakeazy.core.data.search.datasources.SearchDataSource
+import com.zioanacleto.speakeazy.core.data.search.datasources.SearchQueriesDataSource
 import com.zioanacleto.speakeazy.core.data.search.dto.SearchRequestDTO
 import com.zioanacleto.speakeazy.core.data.search.dto.SearchResponseDTO
 import com.zioanacleto.speakeazy.core.data.search.dto.TagsResponseDTO
@@ -56,6 +58,7 @@ import com.zioanacleto.speakeazy.core.data.user.repositories.UserRepositoryImpl
 import com.zioanacleto.speakeazy.core.database.dao.CreateCocktailDao
 import com.zioanacleto.speakeazy.core.database.dao.FavoritesDao
 import com.zioanacleto.speakeazy.core.database.dao.IngredientDao
+import com.zioanacleto.speakeazy.core.database.dao.SearchDao
 import com.zioanacleto.speakeazy.core.database.dao.UserDao
 import com.zioanacleto.speakeazy.core.domain.cocktail3d.model.Cocktail3DModel
 import com.zioanacleto.speakeazy.core.domain.cocktail3d.model.CocktailScene
@@ -191,6 +194,14 @@ val dataSourceModule = module {
             performanceTracesManager = get()
         )
     }
+    factory<SearchQueriesDataSource>(
+        named(DataContext.LOCAL.name)
+    ) {
+        LocalSearchQueriesDataSource(
+            searchDao = get<SearchDao>(),
+            performanceTracesManager = get()
+        )
+    }
 }
 
 // Repositories
@@ -237,6 +248,7 @@ val repositoryModule = module {
         SearchRepositoryImpl(
             searchDataSource = get(named(DataContext.NETWORK.name)),
             ingredientDataSource = get(named(DataContext.NETWORK.name)),
+            searchQueriesDataSource = get(named(DataContext.LOCAL.name)),
             dispatcherProvider = get(),
             performanceTracesManager = get()
         )

@@ -29,7 +29,7 @@ import com.zioanacleto.speakeazy.ui.presentation.create.presentation.steps.Creat
 import com.zioanacleto.speakeazy.ui.presentation.create.presentation.steps.CreateCocktailSuccessStepScreen
 import com.zioanacleto.speakeazy.ui.presentation.create.presentation.steps.CreateCocktailThirdStep
 import com.zioanacleto.speakeazy.ui.theme.LocalSnackBarHostState
-import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun CreateCocktailScreen(
@@ -53,7 +53,7 @@ private fun CreateCocktailScreenContent(
             .padding(top = 60.dp, start = 14.dp, end = 14.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        val viewModel: CreateCocktailViewModel = getViewModel()
+        val viewModel: CreateCocktailViewModel = koinViewModel()
         val currentUiState by viewModel.createCocktailUiState.collectAsState()
 
         var isForwardScreen by remember { mutableStateOf(true) }

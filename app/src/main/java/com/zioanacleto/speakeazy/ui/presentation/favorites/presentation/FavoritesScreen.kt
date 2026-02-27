@@ -35,7 +35,7 @@ import com.zioanacleto.speakeazy.ui.presentation.components.CocktailLoadingAnima
 import com.zioanacleto.speakeazy.ui.presentation.components.MainDrinkCard
 import com.zioanacleto.speakeazy.ui.presentation.components.MainFilterView
 import com.zioanacleto.speakeazy.ui.presentation.main.presentation.MainFilterItem
-import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun FavoritesScreen(
@@ -47,7 +47,7 @@ fun FavoritesScreen(
             .padding(top = 50.dp, start = 14.dp, end = 14.dp),
         contentAlignment = Alignment.Center
     ) {
-        val viewModel: FavoritesViewModel = getViewModel()
+        val viewModel: FavoritesViewModel = koinViewModel()
 
         when (val state =
             viewModel.favoritesUiState.collectAsState(FavoritesUiState.Loading).value) {

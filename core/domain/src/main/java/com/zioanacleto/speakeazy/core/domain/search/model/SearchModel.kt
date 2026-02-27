@@ -5,14 +5,23 @@ data class SearchModel(
 )
 
 sealed interface SearchItem {
-    data class Cocktail(
-        val id: String,
-        val name: String,
-        val imageUrl: String
-    ): SearchItem
+    val id: String
+    val name: String
+    val imageUrl: String
 
-    data class Ingredient(
-        val id: String,
-        val name: String
-    )
+    data class Cocktail(
+        override val id: String,
+        override val name: String,
+        override val imageUrl: String,
+        val category: String,
+        val favorite: Boolean,
+        val username: String? = null
+    ) : SearchItem
+
+    // todo: add ingredients as result when BE allows it
+    /*data class Ingredient(
+        override val id: String,
+        override val name: String,
+        override val imageUrl: String
+    ) : SearchItem*/
 }

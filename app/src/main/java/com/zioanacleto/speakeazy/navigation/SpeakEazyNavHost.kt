@@ -45,7 +45,9 @@ fun SpeakEazyNavHost(
         favoritesSection(
             onCocktailClick = navController::navigateToDetail
         )
-        searchSection()
+        searchSection(
+            onCocktailClick = navController::navigateToDetail
+        )
         userSection(
             onBackButton = navController::popBackStack
         )

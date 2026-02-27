@@ -59,7 +59,7 @@ import com.zioanacleto.speakeazy.ui.presentation.components.SafeClickableGeneric
 import com.zioanacleto.speakeazy.ui.theme.LocalSnackBarHostState
 import com.zioanacleto.speakeazy.ui.theme.YellowFFE271
 import kotlinx.coroutines.flow.Flow
-import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun UserScreen(
@@ -74,7 +74,7 @@ private fun UserScreenContent(
     modifier: Modifier = Modifier,
     onBackButton: () -> Unit
 ) {
-    val viewModel: UserViewModel = getViewModel()
+    val viewModel: UserViewModel = koinViewModel()
     var emailLink: String? by remember { mutableStateOf(null) }
     var registrationSuccessful by remember { mutableStateOf(false) }
     val snackbarHostState = LocalSnackBarHostState.current
@@ -383,7 +383,7 @@ private fun UserDetailScreen(
     onBackButton: () -> Unit,
     onLogoutClick: () -> Unit
 ) {
-    val viewModel: UserViewModel = getViewModel()
+    val viewModel: UserViewModel = koinViewModel()
 
     Column(
         modifier = Modifier
@@ -534,7 +534,7 @@ private fun String.isValidEmail() = android.util.Patterns.EMAIL_ADDRESS.matcher(
 @Preview
 @Composable
 private fun RegisterUserScreenPreview() {
-    RegisterUserScreen(viewModel = getViewModel()) { }
+    RegisterUserScreen(viewModel = koinViewModel()) { }
 }
 
 @Preview

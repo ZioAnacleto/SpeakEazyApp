@@ -17,4 +17,5 @@ val databaseModule = module {
     factory { get<SpeakEazyRoomDatabase>().favoritesDao() }
     factory { get<SpeakEazyRoomDatabase>().userDao() }
     factory { get<SpeakEazyRoomDatabase>().createCocktailDao() }
+    factory { get<SpeakEazyRoomDatabase>().searchDao() }
 }

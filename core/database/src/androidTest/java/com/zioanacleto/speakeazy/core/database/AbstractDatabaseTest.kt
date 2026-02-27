@@ -6,6 +6,7 @@ import androidx.test.core.app.ApplicationProvider
 import com.zioanacleto.speakeazy.core.database.dao.CreateCocktailDao
 import com.zioanacleto.speakeazy.core.database.dao.FavoritesDao
 import com.zioanacleto.speakeazy.core.database.dao.IngredientDao
+import com.zioanacleto.speakeazy.core.database.dao.SearchDao
 import com.zioanacleto.speakeazy.core.database.dao.UserDao
 import org.junit.After
 import org.junit.Before
@@ -16,6 +17,7 @@ abstract class AbstractDatabaseTest {
     protected lateinit var createCocktailDao: CreateCocktailDao
     protected lateinit var favoritesDao: FavoritesDao
     protected lateinit var ingredientsDao: IngredientDao
+    protected lateinit var searchDao: SearchDao
     protected lateinit var userDao: UserDao
 
     @Before
@@ -31,6 +33,7 @@ abstract class AbstractDatabaseTest {
         createCocktailDao = database.createCocktailDao()
         favoritesDao = database.favoritesDao()
         ingredientsDao = database.ingredientDao()
+        searchDao = database.searchDao()
         userDao = database.userDao()
     }
 

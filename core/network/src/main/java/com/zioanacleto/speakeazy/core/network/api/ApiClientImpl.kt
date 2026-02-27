@@ -1,6 +1,8 @@
 package com.zioanacleto.speakeazy.core.network.api
 
 import com.zioanacleto.speakeazy.core.network.BuildConfig
+import com.zioanacleto.speakeazy.core.network.model.ApiException
+import com.zioanacleto.speakeazy.core.network.model.NoContentException
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.HttpClientEngine
@@ -22,6 +24,7 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.CacheControl
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpStatusCode
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.util.reflect.TypeInfo
@@ -54,13 +57,13 @@ class ApiClientImpl(
 
     val httpClient: HttpClient by lazy { _httpClient }
 
-    suspend fun <T: Any> executeGetRequest(
+    suspend fun <T : Any> executeGetRequest(
         url: String,
         responseType: KClass<T>,
         isCached: Boolean = false,
         maxAgeSeconds: Int = CACHE_MAX_AGE_ONE_HOUR
     ): T {
-        return httpClient
+        val response = httpClient
             .get(url) {
                 headers {
                     if (isCached)
@@ -70,10 +73,27 @@ class ApiClientImpl(
                         )
                     append(HttpHeaders.Authorization, createAuthorizationHeader())
                 }
-            }.body(TypeInfo(responseType))
+            }
+
+        when (response.status) {
+            HttpStatusCode.OK -> {
+                return response.body(TypeInfo(responseType))
+            }
+
+            HttpStatusCode.NoContent -> {
+                throw NoContentException("No content found.")
+            }
+
+            else -> {
+                throw ApiException(
+                    statusCode = response.status,
+                    message = response.bodyAsText()
+                )
+            }
+        }
     }
 
-    suspend fun <T: Any> executePutRequest(
+    suspend fun <T : Any> executePutRequest(
         url: String,
         body: T? = null,
         serializer: KSerializer<T>? = null
@@ -110,9 +130,24 @@ class ApiClientImpl(
             timeout {
                 requestTimeoutMillis = REQUEST_TIMEOUT
             }
-        }.bodyAsText()
+        }
 
-        return Json.decodeFromString(responseSerializer, response)
+        when (response.status) {
+            HttpStatusCode.OK -> {
+                return Json.decodeFromString(responseSerializer, response.bodyAsText())
+            }
+
+            HttpStatusCode.NoContent -> {
+                throw NoContentException("No content found.")
+            }
+
+            else -> {
+                throw ApiException(
+                    statusCode = response.status,
+                    message = response.bodyAsText()
+                )
+            }
+        }
     }
 
     fun createAuthorizationHeader(): String {

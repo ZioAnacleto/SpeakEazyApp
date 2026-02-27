@@ -92,10 +92,13 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.navigation.runtime)
     implementation(libs.androidx.navigation.common)
+    implementation(libs.work.runtime)
 
     // Koin
     implementation(libs.koin.core)
     implementation(libs.koin.android)
+    implementation(libs.koin.android.compose)
+    implementation(libs.koin.android.workmanager)
 
     // Zioanacleto Buffa
     implementation(libs.zioanacleto.buffa)

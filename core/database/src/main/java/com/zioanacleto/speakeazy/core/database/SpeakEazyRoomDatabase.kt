@@ -9,10 +9,12 @@ import com.zioanacleto.speakeazy.core.database.converters.MapConverter
 import com.zioanacleto.speakeazy.core.database.dao.CreateCocktailDao
 import com.zioanacleto.speakeazy.core.database.dao.FavoritesDao
 import com.zioanacleto.speakeazy.core.database.dao.IngredientDao
+import com.zioanacleto.speakeazy.core.database.dao.SearchDao
 import com.zioanacleto.speakeazy.core.database.dao.UserDao
 import com.zioanacleto.speakeazy.core.database.entities.CreateCocktailEntity
 import com.zioanacleto.speakeazy.core.database.entities.FavoriteEntity
 import com.zioanacleto.speakeazy.core.database.entities.IngredientEntity
+import com.zioanacleto.speakeazy.core.database.entities.SearchQueryEntity
 import com.zioanacleto.speakeazy.core.database.entities.UserEntity
 
 @Database(
@@ -20,9 +22,10 @@ import com.zioanacleto.speakeazy.core.database.entities.UserEntity
         IngredientEntity::class,
         FavoriteEntity::class,
         UserEntity::class,
-        CreateCocktailEntity::class
+        CreateCocktailEntity::class,
+        SearchQueryEntity::class
     ],
-    version = 11,
+    version = 12,
     exportSchema = true,
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
@@ -34,7 +37,8 @@ import com.zioanacleto.speakeazy.core.database.entities.UserEntity
         AutoMigration(from = 7, to = 8, spec = DatabaseMigrations.Schema7to8::class),
         AutoMigration(from = 8, to = 9),
         AutoMigration(from = 9, to = 10),
-        AutoMigration(from = 10, to = 11)
+        AutoMigration(from = 10, to = 11),
+        AutoMigration(from = 11, to = 12)
     ]
 )
 @TypeConverters(DateConverter::class, MapConverter::class)
@@ -43,4 +47,5 @@ abstract class SpeakEazyRoomDatabase : RoomDatabase() {
     abstract fun favoritesDao(): FavoritesDao
     abstract fun userDao(): UserDao
     abstract fun createCocktailDao(): CreateCocktailDao
+    abstract fun searchDao(): SearchDao
 }

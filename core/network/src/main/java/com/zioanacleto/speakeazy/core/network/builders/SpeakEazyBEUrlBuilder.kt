@@ -9,6 +9,7 @@ object SpeakEazyBEUrlBuilder {
     private const val INGREDIENTS_URI = "ingredients"
     private const val HOME_URI = "home"
     private const val SEARCH_URI = "search"
+    private const val SEARCH_QUERY_PARAM = "query="
     private const val TAGS_URI = "tags"
     private const val FILTER_URI = "filter"
     private const val INGREDIENT_QUERY_PARAM = "ingredient="
@@ -48,8 +49,9 @@ object SpeakEazyBEUrlBuilder {
             override val url: String = HOME_URI
         }
 
-        data object Search : Endpoint() {
-            override val url: String = SEARCH_URI
+        data class Search(val query: String? = null) : Endpoint() {
+            override val url: String =
+                query?.let { "$SEARCH_URI?$SEARCH_QUERY_PARAM${it.encode()}" } ?: SEARCH_URI
         }
 
         data object Tags : Endpoint() {
@@ -66,7 +68,7 @@ object SpeakEazyBEUrlBuilder {
                     ingredients?.forEachIndexed { index, ingredient ->
                         if (index != 0) builder.append("&")
                         builder.append("$INGREDIENT_QUERY_PARAM${ingredient.encode()}")
-                        if(index == ingredients.lastIndex) builder.append("&")
+                        if (index == ingredients.lastIndex) builder.append("&")
                     }
                     tags?.forEachIndexed { index, tag ->
                         if (index != 0) builder.append("&")
@@ -74,8 +76,9 @@ object SpeakEazyBEUrlBuilder {
                     }
                     builder.toString()
                 }
-
-            private fun String.encode() = URLEncoder.encode(this, StandardCharsets.UTF_8.toString())
         }
+
+        protected fun String.encode(): String? =
+            URLEncoder.encode(this, StandardCharsets.UTF_8.toString())
     }
 }

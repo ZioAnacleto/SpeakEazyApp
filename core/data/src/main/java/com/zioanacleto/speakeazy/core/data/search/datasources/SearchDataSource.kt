@@ -7,7 +7,7 @@ import com.zioanacleto.speakeazy.core.domain.search.model.SearchModel
 import com.zioanacleto.speakeazy.core.domain.search.model.TagsModel
 
 interface SearchDataSource {
-    suspend fun querySearch(query: String): Resource<SearchModel>
+    suspend fun querySearch(isAiSearchMode: Boolean, query: String): Resource<SearchModel>
     suspend fun getTags(): Resource<TagsModel>
     suspend fun queryFilter(
         filters: Map<SearchFilterModel, List<String>>

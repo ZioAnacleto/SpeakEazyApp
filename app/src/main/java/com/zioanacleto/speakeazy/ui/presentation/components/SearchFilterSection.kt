@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -47,8 +48,8 @@ fun SearchFilterSection(
     onFilterDoneClick: (Map<SearchFilterItem, List<SelectedFilter>>) -> Unit = { }
 ) {
     // view variables
-    val collapsedHeight = 40f
-    val expandedHeight = 238f
+    val collapsedHeight = 50f
+    val expandedHeight = 244f
     var currentHeight by remember { mutableFloatStateOf(collapsedHeight) }
 
     // animation variables
@@ -98,7 +99,7 @@ fun SearchFilterSection(
                 orientation = Orientation.Vertical
             )
             .border(
-                width = 1.dp,
+                width = if (selectedFilterNumber == 0) 1.dp else 2.dp,
                 color = if (selectedFilterNumber == 0)
                     Color.DarkGray
                 else
@@ -113,7 +114,7 @@ fun SearchFilterSection(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(start = 16.dp, end = 10.dp, bottom = 10.dp)
+                .padding(start = 16.dp, end = 10.dp, bottom = 8.dp)
                 .alpha(expandedAlpha),
             contentAlignment = Alignment.TopStart
         ) {
@@ -164,34 +165,48 @@ fun SearchFilterSection(
                 }
             }
 
-            SafeClickableGenericButton(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)
                     .padding(top = 6.dp),
-                enabled = buttonEnabled,
-                border = BorderStroke(
-                    width = 2.dp,
-                    color = if (buttonEnabled) YellowFFE271 else Color.DarkGray
-                ),
-                colors = ButtonColors(
-                    containerColor = Color.Transparent,
-                    contentColor = YellowFFE271,
-                    disabledContentColor = Color.DarkGray,
-                    disabledContainerColor = Color.Transparent
-                ),
-                onClick = {
-                    val allSelectedFilters =
-                        filterState.mapValues { (_, values) ->
-                            values.filter { it.second }
-                        }.filterValues { it.isNotEmpty() }
-                    onFilterDoneClick(allSelectedFilters)
-                    collapseRequested = true
-                }
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    fontSize = TextUnit(15f, TextUnitType.Sp),
-                    text = "Apply filters"
+                SafeClickableGenericButton(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    enabled = buttonEnabled,
+                    border = BorderStroke(
+                        width = 2.dp,
+                        color = if (buttonEnabled) YellowFFE271 else Color.DarkGray
+                    ),
+                    colors = ButtonColors(
+                        containerColor = Color.Transparent,
+                        contentColor = YellowFFE271,
+                        disabledContentColor = Color.DarkGray,
+                        disabledContainerColor = Color.Transparent
+                    ),
+                    onClick = {
+                        val allSelectedFilters =
+                            filterState.mapValues { (_, values) ->
+                                values.filter { it.second }
+                            }.filterValues { it.isNotEmpty() }
+                        onFilterDoneClick(allSelectedFilters)
+                        collapseRequested = true
+                    }
+                ) {
+                    Text(
+                        fontSize = TextUnit(15f, TextUnitType.Sp),
+                        text = "Apply filters"
+                    )
+                }
+
+                Box(
+                    modifier = Modifier
+                        .padding(top = 6.dp)
+                        .size(width = 30.dp, height = 2.dp)
+                        .clip(RoundedCornerShape(2.dp))
+                        .background(Color.White)
                 )
             }
         }
@@ -204,10 +219,19 @@ fun SearchFilterSection(
             contentAlignment = Alignment.CenterStart
         ) {
             Text(
-                modifier = Modifier.padding(start = 16.dp),
+                modifier = Modifier.padding(start = 16.dp, bottom = 8.dp),
                 color = if (selectedFilterNumber > 0) YellowFFE271 else Color.White,
                 text = selectedFilterNumber.filterSectionText(),
                 fontSize = TextUnit(16f, TextUnitType.Sp)
+            )
+
+            Box(
+                modifier = Modifier
+                    .padding(bottom = 8.dp)
+                    .size(width = 30.dp, height = 2.dp)
+                    .clip(RoundedCornerShape(2.dp))
+                    .align(Alignment.BottomCenter)
+                    .background(Color.White)
             )
         }
     }

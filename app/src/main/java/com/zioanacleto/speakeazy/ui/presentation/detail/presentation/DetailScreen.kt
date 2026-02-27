@@ -35,8 +35,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -47,7 +45,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
@@ -56,7 +53,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
@@ -71,15 +67,15 @@ import com.zioanacleto.speakeazy.ui.presentation.components.CocktailDetailInform
 import com.zioanacleto.speakeazy.ui.presentation.components.CocktailLoadingAnimation
 import com.zioanacleto.speakeazy.ui.presentation.components.GradientCircularShadowBox
 import com.zioanacleto.speakeazy.ui.presentation.components.IngredientView
+import com.zioanacleto.speakeazy.ui.presentation.components.NewsBanner
 import com.zioanacleto.speakeazy.ui.presentation.components.VideoPlayer
 import com.zioanacleto.speakeazy.ui.presentation.components.bottomSheetStyle
 import com.zioanacleto.speakeazy.ui.presentation.components.parallaxLayoutModifier
 import com.zioanacleto.speakeazy.ui.presentation.components.speakEazyGradientBackground
 import com.zioanacleto.speakeazy.ui.presentation.components.withAlpha
 import com.zioanacleto.speakeazy.ui.theme.BottomBarBackground
-import com.zioanacleto.speakeazy.ui.theme.Pink80
 import com.zioanacleto.speakeazy.ui.theme.YellowFFE271
-import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun DetailScreen(
@@ -105,7 +101,7 @@ private fun DetailScreenContent(
         label = "fadeInAnimation"
     )
 
-    val viewModel: DetailViewModel = getViewModel()
+    val viewModel: DetailViewModel = koinViewModel()
 
     // do this because we don't have a base view to do the call in
     val uiStateFlow = remember(cocktailId) { viewModel.detailUiState(cocktailId) }
@@ -164,7 +160,6 @@ private fun DetailScreenSuccessView(
     var titleY by remember { mutableFloatStateOf(0f) }
     var showCollapsedToolbar by remember { mutableStateOf(false) }
     val toolbarHeightPx = with(LocalDensity.current) { 60.dp.toPx() }
-    val viewModel: DetailViewModel = getViewModel()
 
     LaunchedEffect(scrollState.value, titleY) {
         showCollapsedToolbar = titleY <= toolbarHeightPx
@@ -259,33 +254,10 @@ private fun DetailScreenSuccessView(
                         IngredientView(ingredient)
                     }
 
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                        elevation = CardDefaults.elevatedCardElevation()
-                    ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .background(
-                                    Brush.horizontalGradient(
-                                        listOf(
-                                            YellowFFE271,
-                                            Pink80
-                                        )
-                                    )
-                                )
-                                .padding(16.dp)
-                        ) {
-                            Text(
-                                text = "Check out our brand new 3D modelling instructions section!",
-                                fontSize = TextUnit(18f, TextUnitType.Sp),
-                                color = Color(41, 20, 51, 255),
-                                fontWeight = FontWeight.Bold
-                            )
-                        }
-                    }
+                    NewsBanner(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "Check out our brand new 3D modelling instructions section!"
+                    )
 
                     // todo: think about something else
                     Text(
