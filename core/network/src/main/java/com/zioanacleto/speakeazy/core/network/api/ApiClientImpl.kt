@@ -30,7 +30,6 @@ import io.ktor.serialization.kotlinx.json.json
 import io.ktor.util.reflect.TypeInfo
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
-import java.security.MessageDigest
 import kotlin.reflect.KClass
 
 class ApiClientImpl(
@@ -71,7 +70,7 @@ class ApiClientImpl(
                             HttpHeaders.CacheControl,
                             CacheControl.MaxAge(maxAgeSeconds).toString()
                         )
-                    append(HttpHeaders.Authorization, createAuthorizationHeader())
+                    append(X_API_KEY, createApiKeyHeader())
                 }
             }
 
@@ -100,7 +99,7 @@ class ApiClientImpl(
     ): Int {
         return httpClient.put(url) {
             headers {
-                append(HttpHeaders.Authorization, createAuthorizationHeader())
+                append(X_API_KEY, createApiKeyHeader())
             }
             contentType(ContentType.Application.Json)
             body?.let { requestBody ->
@@ -119,7 +118,7 @@ class ApiClientImpl(
     ): Output {
         val response = httpClient.post(url) {
             headers {
-                append(HttpHeaders.Authorization, createAuthorizationHeader())
+                append(X_API_KEY, createApiKeyHeader())
             }
             contentType(ContentType.Application.Json)
             body?.let { requestBody ->
@@ -150,19 +149,15 @@ class ApiClientImpl(
         }
     }
 
-    fun createAuthorizationHeader(): String {
+    fun createApiKeyHeader(): String {
         val apiKey = BuildConfig.API_KEY
-        return "Bearer ${apiKey.hashToken()}"
-    }
-
-    private fun String.hashToken(): String {
-        val bytes = MessageDigest.getInstance("SHA-256").digest(this.toByteArray())
-        return bytes.joinToString("") { "%02x".format(it) }
+        return apiKey
     }
 
     companion object {
         const val CACHE_MAX_AGE_ONE_HOUR = 1 * 60 * 60
         const val CACHE_MAX_AGE_FIVE_MINUTE = 5 * 60
         const val REQUEST_TIMEOUT = 45_000L
+        const val X_API_KEY = "X-API-Key"
     }
 }

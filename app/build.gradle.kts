@@ -33,8 +33,8 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        val apiToken = getLocalPropertiesVariable("apiToken")
-        buildConfigField("String", "API_KEY", apiToken)
+        val apiKey = getLocalPropertiesVariable("apiKey")
+        buildConfigField("String", "API_KEY", apiKey)
     }
 
     buildTypes {
