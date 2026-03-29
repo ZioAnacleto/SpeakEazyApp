@@ -66,10 +66,9 @@ class ApiClientImplTest {
             )
 
             // Authorization header
-            val authHeader = request.headers[HttpHeaders.Authorization]
+            val authHeader = request.headers[ApiClientImpl.X_API_KEY]
 
             assert(authHeader != null)
-            assertTrue(authHeader?.startsWith("Bearer ") == true)
 
             respond(
                 status = HttpStatusCode.OK,
@@ -98,10 +97,9 @@ class ApiClientImplTest {
             )
 
             // Authorization header
-            val authHeader = request.headers[HttpHeaders.Authorization]
+            val authHeader = request.headers[ApiClientImpl.X_API_KEY]
 
             assert(authHeader != null)
-            assertTrue(authHeader?.startsWith("Bearer ") == true)
 
             respond(
                 status = HttpStatusCode.NoContent,
@@ -134,10 +132,9 @@ class ApiClientImplTest {
             )
 
             // Authorization header
-            val authHeader = request.headers[HttpHeaders.Authorization]
+            val authHeader = request.headers[ApiClientImpl.X_API_KEY]
 
             assert(authHeader != null)
-            assertTrue(authHeader?.startsWith("Bearer ") == true)
 
             respond(
                 status = HttpStatusCode.BadGateway,
@@ -161,10 +158,10 @@ class ApiClientImplTest {
     fun `executePutRequest - success should return data`() = runBlocking {
         // given
         val sut = createSut {request ->
-            val authHeader = request.headers[HttpHeaders.Authorization]
+            // Authorization header
+            val authHeader = request.headers[ApiClientImpl.X_API_KEY]
 
             assert(authHeader != null)
-            assertTrue(authHeader?.startsWith("Bearer ") == true)
 
             respond(
                 status = HttpStatusCode.OK,
@@ -185,10 +182,9 @@ class ApiClientImplTest {
         // given
         val sut = createSut {request ->
             // Authorization header
-            val authHeader = request.headers[HttpHeaders.Authorization]
+            val authHeader = request.headers[ApiClientImpl.X_API_KEY]
 
             assert(authHeader != null)
-            assertTrue(authHeader?.startsWith("Bearer ") == true)
 
             // Timeout capability
             val timeout = request.getCapabilityOrNull(HttpTimeoutCapability)?.requestTimeoutMillis
@@ -221,10 +217,9 @@ class ApiClientImplTest {
         var isExceptionThrown = false
         val sut = createSut {request ->
             // Authorization header
-            val authHeader = request.headers[HttpHeaders.Authorization]
+            val authHeader = request.headers[ApiClientImpl.X_API_KEY]
 
             assert(authHeader != null)
-            assertTrue(authHeader?.startsWith("Bearer ") == true)
 
             // Timeout capability
             val timeout = request.getCapabilityOrNull(HttpTimeoutCapability)?.requestTimeoutMillis
@@ -261,10 +256,9 @@ class ApiClientImplTest {
         var isExceptionThrown = false
         val sut = createSut {request ->
             // Authorization header
-            val authHeader = request.headers[HttpHeaders.Authorization]
+            val authHeader = request.headers[ApiClientImpl.X_API_KEY]
 
             assert(authHeader != null)
-            assertTrue(authHeader?.startsWith("Bearer ") == true)
 
             // Timeout capability
             val timeout = request.getCapabilityOrNull(HttpTimeoutCapability)?.requestTimeoutMillis
