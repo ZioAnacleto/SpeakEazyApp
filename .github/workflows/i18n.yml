@@ -74,7 +74,7 @@ jobs:
         uses: gradle/gradle-build-action@v3
 
       - name: Upload strings to backend
-        run: ./gradlew gatherAllStrings uploadStrings
+        run: ./gradlew :gatherAllStrings :uploadStrings
 
   # ----------------------------------
   # 🔥 MAIN → generate + publish AAR
