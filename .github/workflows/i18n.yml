@@ -1,0 +1,135 @@
+name: I18n Pipeline
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+
+  x-setup-aws: &setup-aws
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ vars.REGION }}
+
+    - name: Configure CodeArtifact
+      id: codeartifact
+      run: |
+        export CODEARTIFACT_AUTH_TOKEN=$(aws codeartifact get-authorization-token \
+          --domain ${{ vars.DOMAIN }} \
+          --domain-owner ${{ vars.OWNER }} \
+          --region ${{ vars.REGION }} \
+          --query authorizationToken \
+          --output text)
+
+        export CODEARTIFACT_REPO_URL=$(aws codeartifact get-repository-endpoint \
+          --domain ${{ vars.DOMAIN }} \
+          --domain-owner ${{ vars.OWNER }} \
+          --repository ${{ vars.REPOSITORY }} \
+          --format maven \
+          --region ${{ vars.REGION }} \
+          --query repositoryEndpoint \
+          --output text)
+
+        echo "token=$CODEARTIFACT_AUTH_TOKEN" >> $GITHUB_OUTPUT
+        echo "url=$CODEARTIFACT_REPO_URL" >> $GITHUB_OUTPUT
+
+    - name: Export CodeArtifact env
+      run: |
+        echo "CODEARTIFACT_TOKEN=${{ steps.codeartifact.outputs.token }}" >> $GITHUB_ENV
+        echo "CODEARTIFACT_URL=${{ steps.codeartifact.outputs.url }}" >> $GITHUB_ENV
+
+    - name: Setup Gradle auth
+      env:
+        PRIVATE_GRADLE_FILE: ${{ secrets.CODEARTIFACT_GRADLE_FILE }}
+      run: |
+        mkdir -p ~/.gradle
+        printf '%s' "$PRIVATE_GRADLE_FILE" > ~/.gradle/init.gradle.kts
+        chmod 600 ~/.gradle/init.gradle.kts
+        touch .use-codeartifact
+
+  # ----------------------------------
+  # 🔹 PR → upload strings to DB
+  # ----------------------------------
+  sync-i18n:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - <<: *setup-aws
+
+      - name: Cache Gradle
+        uses: gradle/gradle-build-action@v3
+
+      - name: Upload strings to backend
+        run: ./gradlew gatherAllStrings uploadStrings
+
+  # ----------------------------------
+  # 🔥 MAIN → generate + publish AAR
+  # ----------------------------------
+  publish-i18n:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - <<: *setup-aws
+
+      - name: Cache Gradle
+        uses: gradle/gradle-build-action@v3
+
+      - name: Check if translations changed
+        id: check_translations
+        run: |
+          RESPONSE=$(curl -s ${{ vars.BACKEND_PUBLIC_DOMAIN }}/i18n/has-updates)
+          echo "Response: $RESPONSE"
+
+          HAS_UPDATES=$(echo $RESPONSE | jq -r '.hasUpdates')
+
+          echo "has_updates=$HAS_UPDATES" >> $GITHUB_OUTPUT
+
+      - name: Generate and publish i18n
+        if: steps.check_translations.outputs.has_updates == 'true'
+        run: ./gradlew generateI18nLib :i18n-lib:publish
+
+      - name: Get version from Gradle
+        if: steps.check_translations.outputs.has_updates == 'true'
+        id: version
+        run: |
+          VERSION=$(./gradlew -q :i18n-lib:printModuleVersion)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Mark as published
+        if: steps.check_translations.outputs.has_updates == 'true'
+        run: |
+          curl -X POST \
+            -H "Content-Type: text/plain" \
+            -d "${{ steps.version.outputs.version }}" \
+            ${{ vars.BACKEND_PUBLIC_DOMAIN }}/i18n/mark-published
+
+      - name: Skip publish
+        if: steps.check_translations.outputs.has_updates != 'true'
+        run: echo "No new translations → skipping publish"
