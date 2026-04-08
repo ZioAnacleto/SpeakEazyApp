@@ -10,50 +10,6 @@ on:
 
 jobs:
 
-  x-setup-aws: &setup-aws
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v4
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ vars.REGION }}
-
-    - name: Configure CodeArtifact
-      id: codeartifact
-      run: |
-        export CODEARTIFACT_AUTH_TOKEN=$(aws codeartifact get-authorization-token \
-          --domain ${{ vars.DOMAIN }} \
-          --domain-owner ${{ vars.OWNER }} \
-          --region ${{ vars.REGION }} \
-          --query authorizationToken \
-          --output text)
-
-        export CODEARTIFACT_REPO_URL=$(aws codeartifact get-repository-endpoint \
-          --domain ${{ vars.DOMAIN }} \
-          --domain-owner ${{ vars.OWNER }} \
-          --repository ${{ vars.REPOSITORY }} \
-          --format maven \
-          --region ${{ vars.REGION }} \
-          --query repositoryEndpoint \
-          --output text)
-
-        echo "token=$CODEARTIFACT_AUTH_TOKEN" >> $GITHUB_OUTPUT
-        echo "url=$CODEARTIFACT_REPO_URL" >> $GITHUB_OUTPUT
-
-    - name: Export CodeArtifact env
-      run: |
-        echo "CODEARTIFACT_TOKEN=${{ steps.codeartifact.outputs.token }}" >> $GITHUB_ENV
-        echo "CODEARTIFACT_URL=${{ steps.codeartifact.outputs.url }}" >> $GITHUB_ENV
-
-    - name: Setup Gradle auth
-      env:
-        PRIVATE_GRADLE_FILE: ${{ secrets.CODEARTIFACT_GRADLE_FILE }}
-      run: |
-        mkdir -p ~/.gradle
-        printf '%s' "$PRIVATE_GRADLE_FILE" > ~/.gradle/init.gradle.kts
-        chmod 600 ~/.gradle/init.gradle.kts
-        touch .use-codeartifact
-
   # ----------------------------------
   # 🔹 PR → upload strings to DB
   # ----------------------------------
@@ -71,7 +27,48 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - <<: *setup-aws
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.REGION }}
+
+      - name: Configure CodeArtifact
+        id: codeartifact
+        run: |
+          export CODEARTIFACT_AUTH_TOKEN=$(aws codeartifact get-authorization-token \
+            --domain ${{ vars.MAVEN_DOMAIN }} \
+            --domain-owner ${{ vars.MAVEN_OWNER }} \
+            --region ${{ vars.REGION }} \
+            --query authorizationToken \
+            --output text)
+
+          export CODEARTIFACT_REPO_URL=$(aws codeartifact get-repository-endpoint \
+            --domain ${{ vars.MAVEN_DOMAIN }} \
+            --domain-owner ${{ vars.MAVEN_OWNER }} \
+            --repository ${{ vars.REPOSITORY }} \
+            --format maven \
+            --region ${{ vars.REGION }} \
+            --query repositoryEndpoint \
+            --output text)
+
+          echo "token=$CODEARTIFACT_AUTH_TOKEN" >> $GITHUB_OUTPUT
+          echo "url=$CODEARTIFACT_REPO_URL" >> $GITHUB_OUTPUT
+
+      - name: Export CodeArtifact env
+        run: |
+          echo "CODEARTIFACT_TOKEN=${{ steps.codeartifact.outputs.token }}" >> $GITHUB_ENV
+          echo "CODEARTIFACT_URL=${{ steps.codeartifact.outputs.url }}" >> $GITHUB_ENV
+
+      - name: Setup Gradle auth
+        env:
+          PRIVATE_GRADLE_FILE: ${{ secrets.CODEARTIFACT_GRADLE_FILE }}
+        run: |
+          mkdir -p ~/.gradle
+          printf '%s' "$PRIVATE_GRADLE_FILE" > ~/.gradle/init.gradle.kts
+          chmod 600 ~/.gradle/init.gradle.kts
+          touch .use-codeartifact
 
       - name: Cache Gradle
         uses: gradle/gradle-build-action@v3
@@ -96,7 +93,48 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - <<: *setup-aws
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ vars.REGION }}
+
+      - name: Configure CodeArtifact
+        id: codeartifact
+        run: |
+          export CODEARTIFACT_AUTH_TOKEN=$(aws codeartifact get-authorization-token \
+            --domain ${{ vars.MAVEN_DOMAIN }} \
+            --domain-owner ${{ vars.MAVEN_OWNER }} \
+            --region ${{ vars.REGION }} \
+            --query authorizationToken \
+            --output text)
+
+          export CODEARTIFACT_REPO_URL=$(aws codeartifact get-repository-endpoint \
+            --domain ${{ vars.MAVEN_DOMAIN }} \
+            --domain-owner ${{ vars.MAVEN_OWNER }} \
+            --repository ${{ vars.REPOSITORY }} \
+            --format maven \
+            --region ${{ vars.REGION }} \
+            --query repositoryEndpoint \
+            --output text)
+
+          echo "token=$CODEARTIFACT_AUTH_TOKEN" >> $GITHUB_OUTPUT
+          echo "url=$CODEARTIFACT_REPO_URL" >> $GITHUB_OUTPUT
+
+      - name: Export CodeArtifact env
+        run: |
+          echo "CODEARTIFACT_TOKEN=${{ steps.codeartifact.outputs.token }}" >> $GITHUB_ENV
+          echo "CODEARTIFACT_URL=${{ steps.codeartifact.outputs.url }}" >> $GITHUB_ENV
+
+      - name: Setup Gradle auth
+        env:
+          PRIVATE_GRADLE_FILE: ${{ secrets.CODEARTIFACT_GRADLE_FILE }}
+        run: |
+          mkdir -p ~/.gradle
+          printf '%s' "$PRIVATE_GRADLE_FILE" > ~/.gradle/init.gradle.kts
+          chmod 600 ~/.gradle/init.gradle.kts
+          touch .use-codeartifact
 
       - name: Cache Gradle
         uses: gradle/gradle-build-action@v3
