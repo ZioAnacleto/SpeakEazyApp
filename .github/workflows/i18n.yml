@@ -77,6 +77,9 @@ jobs:
         env:
           API_KEY: ${{ secrets.API_KEY }}
           BACKEND_URL: ${{ vars.BACKEND_PUBLIC_DOMAIN }}
+          MAVEN_DOMAIN: ${{ vars.DOMAIN }}
+          MAVEN_OWNER: ${{ vars.OWNER }}
+          MAVEN_URL: ${{ steps.codeartifact.outputs.url }}
         run: ./gradlew :gatherAllStrings :uploadStrings
 
   # ----------------------------------
@@ -165,6 +168,12 @@ jobs:
       - name: Get version from Gradle
         if: steps.check_translations.outputs.has_updates == 'true'
         id: version
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
+          BACKEND_URL: ${{ vars.BACKEND_PUBLIC_DOMAIN }}
+          MAVEN_DOMAIN: ${{ vars.DOMAIN }}
+          MAVEN_OWNER: ${{ vars.OWNER }}
+          MAVEN_URL: ${{ steps.codeartifact.outputs.url }}
         run: |
           VERSION=$(./gradlew -q :i18n-lib:printModuleVersion)
           echo "version=$VERSION" >> $GITHUB_OUTPUT
