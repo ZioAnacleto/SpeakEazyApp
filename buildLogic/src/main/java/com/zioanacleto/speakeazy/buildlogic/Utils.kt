@@ -1,5 +1,6 @@
 package com.zioanacleto.speakeazy.buildlogic
 
+import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalog
 import org.gradle.api.artifacts.VersionCatalogsExtension
@@ -28,9 +29,23 @@ sealed class CoreModule(val name: String) {
 }
 
 fun DependencyHandler.coreModule(module: CoreModule) = project(module.name)
+// to be used when testing new translated strings
 fun DependencyHandler.i18nModule() = project(":i18n-lib")
 
-fun Project.getLocalProperty(key: String): String? {
+fun Project.resolveProperty(
+    key: String,
+    envKey: String = key.uppercase().replace('.', '_')
+): String {
+    return providers.environmentVariable(envKey).orNull
+        ?: providers.gradleProperty(key).orNull
+        ?: getLocalProperty(key)
+        ?: throw GradleException(
+            "Missing property $key. " +
+                    "Define it as ENV[$envKey], gradle.properties or local.properties"
+        )
+}
+
+private fun Project.getLocalProperty(key: String): String? {
     val localProperties = Properties()
     val localPropertiesFile = rootProject.file("local.properties")
     if (localPropertiesFile.exists()) {

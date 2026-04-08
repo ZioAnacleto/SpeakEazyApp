@@ -35,7 +35,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        val apiKey = getLocalPropertiesVariable("apiKey")
+        val apiKey = getLocalPropertiesVariable("api.key")
         buildConfigField("String", "API_KEY", apiKey)
     }
 

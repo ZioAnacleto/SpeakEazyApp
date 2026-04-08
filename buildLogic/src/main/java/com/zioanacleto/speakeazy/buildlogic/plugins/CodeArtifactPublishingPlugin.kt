@@ -1,5 +1,6 @@
 package com.zioanacleto.speakeazy.buildlogic.plugins
 
+import com.zioanacleto.speakeazy.buildlogic.resolveProperty
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -7,7 +8,6 @@ import org.gradle.api.artifacts.dsl.RepositoryHandler
 import org.gradle.api.artifacts.repositories.MavenArtifactRepository
 import org.gradle.api.publish.PublishingExtension
 import java.net.URI
-import java.util.Properties
 
 class CodeArtifactPublishingPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -30,26 +30,6 @@ class CodeArtifactPublishingPlugin : Plugin<Project> {
                 }
             }
         }
-    }
-
-    private fun Project.resolveProperty(
-        key: String,
-        envKey: String = key.uppercase().replace('.', '_')
-    ): String {
-        return providers.environmentVariable(envKey).orNull
-            ?: providers.gradleProperty(key).orNull
-            ?: run {
-                val localProps = rootProject.file("local.properties")
-                if (localProps.exists()) {
-                    Properties().apply {
-                        localProps.inputStream().use { load(it) }
-                    }.getProperty(key)
-                } else null
-            }
-            ?: throw GradleException(
-                "Missing property $key. " +
-                        "Define it as ENV[$envKey], gradle.properties or local.properties"
-            )
     }
 
     // code to retrieve AWS CodeArtifact refreshed authorization token

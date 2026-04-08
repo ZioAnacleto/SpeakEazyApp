@@ -1,6 +1,6 @@
 package com.zioanacleto.speakeazy.buildlogic.plugins
 
-import com.zioanacleto.speakeazy.buildlogic.getLocalProperty
+import com.zioanacleto.speakeazy.buildlogic.resolveProperty
 import com.zioanacleto.speakeazy.buildlogic.tasks.GatherStringsTask
 import com.zioanacleto.speakeazy.buildlogic.tasks.UploadStringsTask
 import org.gradle.api.Plugin
@@ -11,13 +11,14 @@ class StringsGathererPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         if (project != project.rootProject) return
 
-        val apiToken = project.getLocalProperty("apiKey")?.removeSurrounding("\"")
-        val backendUrl = project.getLocalProperty("backend.url")?.removeSurrounding("\"")
+        val apiToken = project.resolveProperty("api.key")
+        val backendUrl = project.resolveProperty("backend.url", "BACKEND_PUBLIC_DOMAIN")
 
         val gatherTask = project.tasks.register(
             "gatherAllStrings",
             GatherStringsTask::class.java
         ) {
+            group = "i18n"
             val resFiles = mutableListOf<File>()
 
             project.subprojects.forEach { subproject ->
@@ -35,7 +36,11 @@ class StringsGathererPlugin : Plugin<Project> {
             outputJsonFile.set(project.layout.buildDirectory.file("outputs/strings/all_strings.json"))
         }
 
-        project.tasks.register("uploadStrings", UploadStringsTask::class.java) {
+        project.tasks.register(
+            "uploadStrings",
+            UploadStringsTask::class.java
+        ) {
+            group = "i18n"
             dependsOn(gatherTask)
 
             inputJsonFile.set(
