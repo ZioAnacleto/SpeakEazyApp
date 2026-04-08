@@ -80,7 +80,7 @@ jobs:
   # 🔥 MAIN → generate + publish AAR
   # ----------------------------------
   publish-i18n:
-    if: github.event_name == 'push'
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
