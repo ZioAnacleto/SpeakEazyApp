@@ -12,7 +12,7 @@ class StringsGathererPlugin : Plugin<Project> {
         if (project != project.rootProject) return
 
         val apiToken = project.resolveProperty("api.key")
-        val backendUrl = project.resolveProperty("backend.url", "BACKEND_PUBLIC_DOMAIN")
+        val backendUrl = project.resolveProperty("backend.url")
 
         val gatherTask = project.tasks.register(
             "gatherAllStrings",
