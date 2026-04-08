@@ -93,6 +93,12 @@ jobs:
 
       # Run all unit tests
       - name: Run unit tests
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
+          BACKEND_URL: ${{ vars.BACKEND_PUBLIC_DOMAIN }}
+          MAVEN_DOMAIN: ${{ vars.DOMAIN }}
+          MAVEN_OWNER: ${{ vars.OWNER }}
+          MAVEN_URL: ${{ steps.codeartifact.outputs.url }}
         run: |
           ( while sleep 30; do echo "⏳ Tests running..."; done ) &
           KEEPALIVE_PID=$!
@@ -112,6 +118,12 @@ jobs:
       # Run android tests on core:database module
       - name: Run androidTest (core:database)
         uses: reactivecircus/android-emulator-runner@v2
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
+          BACKEND_URL: ${{ vars.BACKEND_PUBLIC_DOMAIN }}
+          MAVEN_DOMAIN: ${{ vars.DOMAIN }}
+          MAVEN_OWNER: ${{ vars.OWNER }}
+          MAVEN_URL: ${{ steps.codeartifact.outputs.url }}
         with:
           api-level: 31
           target: google_apis
@@ -133,6 +145,12 @@ jobs:
 
       # Generate Jacoco Report for code coverage
       - name: Generate JaCoCo report
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
+          BACKEND_URL: ${{ vars.BACKEND_PUBLIC_DOMAIN }}
+          MAVEN_DOMAIN: ${{ vars.DOMAIN }}
+          MAVEN_OWNER: ${{ vars.OWNER }}
+          MAVEN_URL: ${{ steps.codeartifact.outputs.url }}
         run: ./gradlew jacocoAggregateReport
 
       # installing xmllint to read coverage file
