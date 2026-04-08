@@ -10,11 +10,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import com.zioanacleto.speakeazy.R
 import com.zioanacleto.speakeazy.ui.presentation.components.SafeClickableGenericButton
 
 // todo: beautify
@@ -31,7 +33,7 @@ fun CreateCocktailSuccessStepScreen(
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Cocktail uploaded successfully!",
+                text = stringResource(R.string.create_cocktail_success_step__text),
                 color = Color.White,
                 fontSize = TextUnit(34f, TextUnitType.Sp),
                 textAlign = TextAlign.Center
@@ -46,7 +48,7 @@ fun CreateCocktailSuccessStepScreen(
             onClick = onButtonClick
         ) {
             Text(
-                text = "Close",
+                text = stringResource(R.string.create_cocktail_success_step__close_button),
                 color = Color.White,
                 fontSize = TextUnit(16f, TextUnitType.Sp)
             )

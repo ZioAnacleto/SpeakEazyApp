@@ -22,6 +22,7 @@ import androidx.compose.material.icons.twotone.AddCircle
 import androidx.compose.material.icons.twotone.Build
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -63,27 +64,41 @@ fun CustomSwitchButton(
         mutableStateOf(firstValue)
     }
 
-    var padding by remember {
-        mutableStateOf(0.dp)
+    // Flag to ensure onValueChange is only called when triggered by a user click
+    var isTriggeredByUser by remember { mutableStateOf(false) }
+
+    // Sync internal state with external value changes
+    LaunchedEffect(firstValue) {
+        if (switchClicked != firstValue) {
+            switchClicked = firstValue
+            isTriggeredByUser = false
+        }
     }
 
-    padding = if (switchClicked)
+    val padding = if (switchClicked)
         buttonWidth - switchSize - switchPadding * 2
     else
         0.dp
 
     val animateSize by animateDpAsState(
-        targetValue = if (switchClicked) padding else 0.dp,
-        tween(
+        targetValue = padding,
+        animationSpec = tween(
             durationMillis = animationDuration,
             easing = LinearOutSlowInEasing
-        )
+        ),
+        label = "switchPadding"
     )
 
     val progressBar by animateFloatAsState(
         targetValue = if (switchClicked) 1f else 0f,
         animationSpec = tween(durationMillis = animationDuration),
-        label = "barProgress"
+        label = "barProgress",
+        finishedListener = {
+            if (isTriggeredByUser) {
+                onValueChange(switchClicked)
+                isTriggeredByUser = false
+            }
+        }
     )
 
     val barColor = lerp(Color.DarkGray, YellowFFE271, progressBar)
@@ -98,8 +113,8 @@ fun CustomSwitchButton(
                 interactionSource = interactionSource,
                 indication = null
             ) {
+                isTriggeredByUser = true
                 switchClicked = !switchClicked
-                onValueChange(switchClicked)
             }
     ) {
         Row(
@@ -124,7 +139,8 @@ fun CustomSwitchButton(
             ) {
                 Crossfade(
                     targetState = switchClicked,
-                    animationSpec = tween(durationMillis = animationDuration)
+                    animationSpec = tween(durationMillis = animationDuration),
+                    label = "iconCrossfade"
                 ) {
                     if (it) onContent() else offContent()
                 }

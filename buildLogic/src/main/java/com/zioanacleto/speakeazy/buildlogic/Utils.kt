@@ -6,6 +6,7 @@ import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.api.artifacts.dsl.DependencyHandler
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.project
+import java.util.Properties
 
 val Project.libs
     get(): VersionCatalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
@@ -27,3 +28,14 @@ sealed class CoreModule(val name: String) {
 }
 
 fun DependencyHandler.coreModule(module: CoreModule) = project(module.name)
+fun DependencyHandler.i18nModule() = project(":i18n-lib")
+
+fun Project.getLocalProperty(key: String): String? {
+    val localProperties = Properties()
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        localPropertiesFile.inputStream().use { localProperties.load(it) }
+    }
+
+    return localProperties.getProperty(key)?.removeSurrounding("\"")
+}

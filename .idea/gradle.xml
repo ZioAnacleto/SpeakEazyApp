@@ -29,6 +29,7 @@
             <option value="$PROJECT_DIR$/core/database" />
             <option value="$PROJECT_DIR$/core/domain" />
             <option value="$PROJECT_DIR$/core/network" />
+            <option value="$PROJECT_DIR$/i18n-lib" />
           </set>
         </option>
       </GradleProjectSettings>

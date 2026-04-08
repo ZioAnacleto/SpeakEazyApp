@@ -1,21 +1,23 @@
 package com.zioanacleto.speakeazy.ui.presentation.user.presentation
 
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import com.zioanacleto.buffa.base.BaseViewModel
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
 import com.zioanacleto.buffa.default
 import com.zioanacleto.buffa.logging.AnacletoLevel
 import com.zioanacleto.buffa.logging.AnacletoLogger
-import com.zioanacleto.speakeazy.APP_PACKAGE
-import com.zioanacleto.speakeazy.USER_DEEPLINK_URI
 import com.zioanacleto.speakeazy.core.domain.user.FirebaseAuthRepository
 import com.zioanacleto.speakeazy.core.domain.user.UserRepository
 import com.zioanacleto.speakeazy.core.domain.user.model.UserModel
+import com.zioanacleto.speakeazy.core.domain.user.model.toLocaleName
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class UserViewModel(
     private val userRepository: UserRepository,
@@ -82,10 +84,16 @@ class UserViewModel(
         }
     }
 
-    fun updateUserWithLanguage(userModel: UserModel) =
+    fun updateUserWithLanguage(userModel: UserModel) {
         coroutineScope.launch(dispatcherProvider.io()) {
             userRepository.updateUser(userModel)
+            withContext(dispatcherProvider.main()) {
+                AppCompatDelegate.setApplicationLocales(
+                    LocaleListCompat.forLanguageTags(userModel.selectedLanguage.toLocaleName())
+                )
+            }
         }
+    }
 
     fun finishUserLogin(
         emailLink: String,

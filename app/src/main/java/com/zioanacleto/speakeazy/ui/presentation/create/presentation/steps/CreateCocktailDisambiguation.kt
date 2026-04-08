@@ -22,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
@@ -57,7 +58,7 @@ fun CreateCocktailDisambiguationScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 10.dp, start = 10.dp, end = 10.dp),
-                text = "Choose a cocktail wizard to complete",
+                text = stringResource(R.string.create_cocktail_disambiguation__title),
                 color = Color.White,
                 fontSize = TextUnit(24f, TextUnitType.Sp)
             )
@@ -66,12 +67,12 @@ fun CreateCocktailDisambiguationScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 10.dp, start = 10.dp, end = 10.dp, bottom = 20.dp),
-                text = "Long tap on an element to delete it.",
+                text = stringResource(R.string.create_cocktail_disambiguation__subtitle),
                 color = Color.White,
                 fontSize = TextUnit(16f, TextUnitType.Sp)
             )
 
-            if(createCocktailModels.isNotEmpty()) {
+            if (createCocktailModels.isNotEmpty()) {
                 LazyColumn(
                     modifier = Modifier,
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -106,16 +107,15 @@ fun CreateCocktailDisambiguationScreen(
                         )
                     }
                 }
-            }
-            else {
-                Column (
+            } else {
+                Column(
                     modifier = Modifier
                         .fillMaxSize(),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "No wizards here, create a new one.",
+                        text = stringResource(R.string.create_cocktail_disambiguation__empty_screen),
                         color = Color.White,
                         fontSize = TextUnit(16f, TextUnitType.Sp)
                     )

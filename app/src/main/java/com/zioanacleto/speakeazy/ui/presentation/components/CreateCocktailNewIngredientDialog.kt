@@ -22,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,6 +33,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.zioanacleto.buffa.compose.hideKeyboardOnTouch
 import com.zioanacleto.buffa.logging.AnacletoLogger
+import com.zioanacleto.speakeazy.R
 import com.zioanacleto.speakeazy.ui.theme.YellowFFE271
 
 // todo: for now we return just the pair (name, id), change it with correct implementation
@@ -107,7 +109,7 @@ fun CreateCocktailNewIngredientDialog(
                     label = {
                         Text(
                             color = Color.White,
-                            text = "Measure"
+                            text = stringResource(R.string.create_cocktail_new_ingredient_dialog__text_input_placeholder)
                         )
                     },
                     isError = isMeasureValueError,
@@ -138,7 +140,7 @@ fun CreateCocktailNewIngredientDialog(
                 }
             ) {
                 Text(
-                    text = "Add",
+                    text = stringResource(R.string.create_cocktail_new_ingredient_dialog__add_button),
                     color = Color.White,
                     fontSize = TextUnit(16f, TextUnitType.Sp)
                 )

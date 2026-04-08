@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
@@ -38,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zioanacleto.buffa.compose.hideKeyboardOnTouch
 import com.zioanacleto.buffa.default
+import com.zioanacleto.speakeazy.R
 import com.zioanacleto.speakeazy.core.domain.main.model.DrinkModel
 import com.zioanacleto.speakeazy.core.domain.search.model.QueryModel
 import com.zioanacleto.speakeazy.core.domain.search.model.SearchItem
@@ -133,7 +135,7 @@ private fun SearchScreenWithFilter(
             Text(
                 modifier = Modifier
                     .padding(start = 20.dp, bottom = 10.dp),
-                text = "Search cocktails",
+                text = stringResource(R.string.search_screen__title),
                 color = Color.White,
                 fontSize = TextUnit(36f, TextUnitType.Sp),
                 fontWeight = FontWeight.SemiBold,
@@ -143,7 +145,7 @@ private fun SearchScreenWithFilter(
             NewsBanner(
                 modifier = Modifier
                     .fillMaxWidth(),
-                text = "Try our AI assistant, tap on the input field's leading icon!",
+                text = stringResource(R.string.search_screen__banner_text),
                 timed = true
             )
 
@@ -231,7 +233,7 @@ private fun SearchScreenWithFilter(
                     Text(
                         modifier = Modifier
                             .padding(top = 40.dp),
-                        text = "No results found by query search.",
+                        text = stringResource(R.string.search_screen__query_no_results_found),
                         color = Color.White,
                         fontSize = TextUnit(28f, TextUnitType.Sp),
                         textAlign = TextAlign.Center
@@ -249,7 +251,7 @@ private fun SearchScreenWithFilter(
                     Text(
                         modifier = Modifier
                             .padding(top = 40.dp),
-                        text = "No results found by filter search.",
+                        text = stringResource(R.string.search_screen__filter_no_results_found),
                         color = Color.White,
                         fontSize = TextUnit(28f, TextUnitType.Sp),
                         textAlign = TextAlign.Center

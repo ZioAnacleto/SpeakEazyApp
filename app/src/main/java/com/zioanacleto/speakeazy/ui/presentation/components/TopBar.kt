@@ -18,6 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
@@ -54,7 +55,7 @@ fun MainTopBar(
 @Composable
 fun CreateCocktailTopBar(
     modifier: Modifier = Modifier,
-    title: String = "Create",
+    title: String = stringResource(R.string.topbar__create_title),
     onClick: () -> Unit
 ) {
     Box(
@@ -98,5 +99,5 @@ fun MainTopBarPreview() {
 @Preview
 @Composable
 fun CreateCocktailBarPreview() {
-    CreateCocktailTopBar {  }
+    CreateCocktailTopBar { }
 }

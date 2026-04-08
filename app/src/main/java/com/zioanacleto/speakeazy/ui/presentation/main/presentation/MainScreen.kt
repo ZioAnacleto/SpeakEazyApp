@@ -17,10 +17,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import com.zioanacleto.speakeazy.R
 import com.zioanacleto.speakeazy.core.domain.main.model.BannerModel
 import com.zioanacleto.speakeazy.core.domain.main.model.HomeSectionModel
 import com.zioanacleto.speakeazy.ui.presentation.components.BannerSection
@@ -130,7 +132,7 @@ fun MainScreenHomeSuccessView(
             Text(
                 modifier = Modifier
                     .padding(start = 24.dp, end = 24.dp, top = 10.dp, bottom = 16.dp),
-                text = "Choose your cocktail",
+                text = stringResource(R.string.main_screen__title),
                 color = Color.White,
                 fontSize = TextUnit(36f, TextUnitType.Sp),
                 fontWeight = FontWeight.SemiBold,

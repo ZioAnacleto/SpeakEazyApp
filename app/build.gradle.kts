@@ -1,3 +1,4 @@
+
 import com.zioanacleto.speakeazy.buildlogic.CoreModule
 import com.zioanacleto.speakeazy.buildlogic.coreModule
 import org.w3c.dom.Document
@@ -18,6 +19,7 @@ plugins {
     jacoco
     alias(libs.plugins.zioanacleto.core.convention.plugin)
     alias(libs.plugins.zioanacleto.jacoco.application.plugin)
+    alias(libs.plugins.zioanacleto.strings.plugin)
 }
 
 android {
@@ -102,6 +104,7 @@ dependencies {
 
     // Zioanacleto Buffa
     implementation(libs.zioanacleto.buffa)
+    implementation(libs.zioanacleto.i18n)
 
     // Timber
     implementation(libs.timber)

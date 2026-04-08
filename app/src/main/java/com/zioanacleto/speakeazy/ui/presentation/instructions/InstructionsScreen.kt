@@ -20,9 +20,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import com.zioanacleto.speakeazy.R
 import com.zioanacleto.speakeazy.core.domain.main.model.InstructionModel
 import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.Cocktail3DScene
 import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.controller.Cocktail3DSceneController
@@ -104,7 +106,7 @@ private fun InstructionsScreenContent(
                             .padding(top = 10.dp, start = 16.dp),
                         fontSize = TextUnit(18f, TextUnitType.Sp),
                         color = Color.White,
-                        text = "Directions"
+                        text = stringResource(R.string.instructions_screen__directions_title)
                     )
 
                     LazyColumn(

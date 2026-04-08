@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -72,7 +73,10 @@ fun CreateCocktailInformation(
                 Text(
                     modifier = Modifier
                         .padding(top = 4.dp),
-                    text = "Created: $createdDate",
+                    text = stringResource(
+                        R.string.create_cocktail_information__created_date_text,
+                        createdDate
+                    ),
                     color = Color.White,
                 )
             }

@@ -24,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -33,6 +34,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import com.zioanacleto.buffa.compose.hideKeyboardOnTouch
+import com.zioanacleto.speakeazy.R
 import com.zioanacleto.speakeazy.ui.theme.YellowFFE271
 
 @Composable
@@ -58,7 +60,7 @@ fun CreateCocktailFirstStepScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 10.dp, start = 20.dp, end = 20.dp),
-            text = "What's your cocktail's name?",
+            text = stringResource(R.string.create_cocktail_first_step__first_question_title),
             color = Color.White,
             fontSize = TextUnit(24f, TextUnitType.Sp)
         )
@@ -74,13 +76,13 @@ fun CreateCocktailFirstStepScreen(
             label = {
                 Text(
                     color = Color.White,
-                    text = "Name"
+                    text = stringResource(R.string.create_cocktail_first_step__first_question_label)
                 )
             },
             placeholder = {
                 Text(
                     color = Color.White,
-                    text = "Insert cocktail's name"
+                    text = stringResource(R.string.create_cocktail_first_step__first_question_placeholder)
                 )
             },
             singleLine = true,
@@ -105,7 +107,7 @@ fun CreateCocktailFirstStepScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 20.dp, start = 20.dp, end = 20.dp),
-            text = "Is it alcoholic?",
+            text = stringResource(R.string.create_cocktail_first_step__second_question_title),
             color = Color.White,
             fontSize = TextUnit(24f, TextUnitType.Sp)
         )
@@ -115,7 +117,7 @@ fun CreateCocktailFirstStepScreen(
                 .padding(top = 10.dp),
             onClick = { selected = !selected },
             label = {
-                Text("Alcoholic")
+                Text(stringResource(R.string.create_cocktail_first_step__second_question_alcoholic))
             },
             selected = selected,
             leadingIcon = if (selected) {
@@ -137,7 +139,7 @@ fun CreateCocktailFirstStepScreen(
             enabled = cocktailNameTextState.text.isNotEmpty(),
             onClick = { onButtonClick(cocktailNameTextState.text, selected) }
         ) {
-            Text(text = "Continue")
+            Text(text = stringResource(R.string.create_cocktail_first_step__continue_button))
         }
     }
 }

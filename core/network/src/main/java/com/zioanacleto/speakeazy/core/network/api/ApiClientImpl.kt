@@ -35,7 +35,6 @@ import kotlin.reflect.KClass
 class ApiClientImpl(
     engine: HttpClientEngine = CIO.create()
 ) {
-
     private val _httpClient = HttpClient(engine) {
         install(ContentNegotiation) {
             json(

@@ -13,8 +13,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.zioanacleto.buffa.default
+import com.zioanacleto.speakeazy.R
 import com.zioanacleto.speakeazy.ui.presentation.components.CocktailLoadingAnimation
 import com.zioanacleto.speakeazy.ui.presentation.components.ConfirmationDialog
 import com.zioanacleto.speakeazy.ui.presentation.components.CreateWizardLinearStepBar
@@ -62,13 +64,14 @@ private fun CreateCocktailScreenContent(
         val isCreateCocktailDeleted by viewModel.createCocktailDeleted.collectAsState()
         val isCreateCocktailUploaded by viewModel.createCocktailUploaded.collectAsState()
         val snackbarHostState = LocalSnackBarHostState.current
+        val snackbarText = stringResource(R.string.create_cocktail_screen__delete_snackbar_message)
 
         createCocktailToBeDeleted?.let {
             ConfirmationDialog(
-                title = "Delete",
-                message = "Are you sure you want to delete this cocktail wizard?",
-                confirmButtonText = "Delete",
-                dismissButtonText = "Cancel",
+                title = stringResource(R.string.create_cocktail_screen__delete_dialog_title),
+                message = stringResource(R.string.create_cocktail_screen__delete_dialog_message),
+                confirmButtonText = stringResource(R.string.create_cocktail_screen__delete_dialog_confirm_button),
+                dismissButtonText = stringResource(R.string.create_cocktail_screen__delete_dialog_close_button),
                 onConfirmButtonClick = {
                     viewModel.deleteCreateCocktail(it.id)
                 },
@@ -80,7 +83,7 @@ private fun CreateCocktailScreenContent(
 
         LaunchedEffect(isCreateCocktailDeleted) {
             if (isCreateCocktailDeleted) {
-                snackbarHostState.showSnackbar("Cocktail wizard deleted.")
+                snackbarHostState.showSnackbar(snackbarText)
             }
         }
 

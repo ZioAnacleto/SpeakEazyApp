@@ -26,10 +26,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import com.zioanacleto.speakeazy.R
 import com.zioanacleto.speakeazy.core.domain.main.model.DrinkModel
 import com.zioanacleto.speakeazy.ui.presentation.components.CocktailLoadingAnimation
 import com.zioanacleto.speakeazy.ui.presentation.components.MainDrinkCard
@@ -103,7 +105,7 @@ private fun FavoritesScreenSuccessView(
         Text(
             modifier = Modifier
                 .padding(top = 10.dp, start = 10.dp, bottom = 16.dp),
-            text = "My favorites",
+            text = stringResource(R.string.favorites_screen__title),
             color = Color.White,
             fontSize = TextUnit(currentStringSize, TextUnitType.Sp),
             fontWeight = FontWeight.SemiBold

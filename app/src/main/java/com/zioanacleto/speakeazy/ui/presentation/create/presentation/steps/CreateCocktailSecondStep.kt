@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -30,6 +31,7 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import com.zioanacleto.buffa.compose.hideKeyboardOnTouch
+import com.zioanacleto.speakeazy.R
 import com.zioanacleto.speakeazy.ui.theme.YellowFFE271
 
 @Composable
@@ -52,8 +54,8 @@ fun CreateCocktailSecondStepScreen(
     }
 
     val isContinueButtonEnabled = cocktailTypeTextState.text.isNotEmpty()
-        && cocktailMethodTextState.text.isNotEmpty()
-        && cocktailGlassTextState.text.isNotEmpty()
+            && cocktailMethodTextState.text.isNotEmpty()
+            && cocktailGlassTextState.text.isNotEmpty()
 
     Column(
         modifier = modifier
@@ -66,7 +68,7 @@ fun CreateCocktailSecondStepScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 10.dp, start = 20.dp, end = 20.dp),
-            text = "What type is your cocktail?",
+            text = stringResource(R.string.create_cocktail_second_step__first_question_title),
             color = Color.White,
             fontSize = TextUnit(24f, TextUnitType.Sp)
         )
@@ -82,13 +84,13 @@ fun CreateCocktailSecondStepScreen(
             label = {
                 Text(
                     color = Color.White,
-                    text = "Type"
+                    text = stringResource(R.string.create_cocktail_second_step__first_question_label)
                 )
             },
             placeholder = {
                 Text(
                     color = Color.White,
-                    text = "Insert cocktail's type"
+                    text = stringResource(R.string.create_cocktail_second_step__first_question_placeholder)
                 )
             },
             singleLine = true,
@@ -115,7 +117,7 @@ fun CreateCocktailSecondStepScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 20.dp, start = 20.dp, end = 20.dp),
-            text = "What method it's used to create your cocktail?",
+            text = stringResource(R.string.create_cocktail_second_step__second_question_title),
             color = Color.White,
             fontSize = TextUnit(24f, TextUnitType.Sp)
         )
@@ -131,13 +133,13 @@ fun CreateCocktailSecondStepScreen(
             label = {
                 Text(
                     color = Color.White,
-                    text = "Method"
+                    text = stringResource(R.string.create_cocktail_second_step__second_question_label)
                 )
             },
             placeholder = {
                 Text(
                     color = Color.White,
-                    text = "Insert cocktail's method"
+                    text = stringResource(R.string.create_cocktail_second_step__second_question_placeholder)
                 )
             },
             singleLine = true,
@@ -164,7 +166,7 @@ fun CreateCocktailSecondStepScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 20.dp, start = 20.dp, end = 20.dp),
-            text = "What glass it's used to create your cocktail?",
+            text = stringResource(R.string.create_cocktail_second_step__third_question_title),
             color = Color.White,
             fontSize = TextUnit(24f, TextUnitType.Sp)
         )
@@ -180,13 +182,13 @@ fun CreateCocktailSecondStepScreen(
             label = {
                 Text(
                     color = Color.White,
-                    text = "Glass"
+                    text = stringResource(R.string.create_cocktail_second_step__third_question_label)
                 )
             },
             placeholder = {
                 Text(
                     color = Color.White,
-                    text = "Insert cocktail's glass"
+                    text = stringResource(R.string.create_cocktail_second_step__third_question_placeholder)
                 )
             },
             singleLine = true,
@@ -218,7 +220,7 @@ fun CreateCocktailSecondStepScreen(
                 shape = ButtonDefaults.outlinedShape,
                 onClick = onPreviousButtonClick
             ) {
-                Text(text = "Back")
+                Text(text = stringResource(R.string.create_cocktail_second_step__back_button))
             }
 
             Button(
@@ -231,7 +233,7 @@ fun CreateCocktailSecondStepScreen(
                     )
                 }
             ) {
-                Text(text = "Continue")
+                Text(text = stringResource(R.string.create_cocktail_second_step__continue_button))
             }
         }
     }
