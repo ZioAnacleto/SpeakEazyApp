@@ -38,15 +38,15 @@ jobs:
         id: codeartifact
         run: |
           export CODEARTIFACT_AUTH_TOKEN=$(aws codeartifact get-authorization-token \
-            --domain ${{ vars.MAVEN_DOMAIN }} \
-            --domain-owner ${{ vars.MAVEN_OWNER }} \
+            --domain ${{ vars.DOMAIN }} \
+            --domain-owner ${{ vars.OWNER }} \
             --region ${{ vars.REGION }} \
             --query authorizationToken \
             --output text)
 
           export CODEARTIFACT_REPO_URL=$(aws codeartifact get-repository-endpoint \
-            --domain ${{ vars.MAVEN_DOMAIN }} \
-            --domain-owner ${{ vars.MAVEN_OWNER }} \
+            --domain ${{ vars.DOMAIN }} \
+            --domain-owner ${{ vars.OWNER }} \
             --repository ${{ vars.REPOSITORY }} \
             --format maven \
             --region ${{ vars.REGION }} \
@@ -110,15 +110,15 @@ jobs:
         id: codeartifact
         run: |
           export CODEARTIFACT_AUTH_TOKEN=$(aws codeartifact get-authorization-token \
-            --domain ${{ vars.MAVEN_DOMAIN }} \
-            --domain-owner ${{ vars.MAVEN_OWNER }} \
+            --domain ${{ vars.DOMAIN }} \
+            --domain-owner ${{ vars.OWNER }} \
             --region ${{ vars.REGION }} \
             --query authorizationToken \
             --output text)
 
           export CODEARTIFACT_REPO_URL=$(aws codeartifact get-repository-endpoint \
-            --domain ${{ vars.MAVEN_DOMAIN }} \
-            --domain-owner ${{ vars.MAVEN_OWNER }} \
+            --domain ${{ vars.DOMAIN }} \
+            --domain-owner ${{ vars.OWNER }} \
             --repository ${{ vars.REPOSITORY }} \
             --format maven \
             --region ${{ vars.REGION }} \
@@ -150,7 +150,10 @@ jobs:
         env:
           API_KEY: ${{ secrets.API_KEY }}
         run: |
-          RESPONSE=$(curl -s ${{ vars.BACKEND_PUBLIC_DOMAIN }}/i18n/has-updates)
+          RESPONSE=$(curl -s \
+            -H "X-Api-Key: $API_KEY" \
+            ${{ vars.BACKEND_PUBLIC_DOMAIN }}/i18n/has-updates)
+
           echo "Response: $RESPONSE"
 
           HAS_UPDATES=$(echo $RESPONSE | jq -r '.hasUpdates')
@@ -182,9 +185,12 @@ jobs:
 
       - name: Mark as published
         if: steps.check_translations.outputs.has_updates == 'true'
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
         run: |
           curl -X POST \
             -H "Content-Type: text/plain" \
+            -H "X-Api-Key: $API_KEY" \
             -d "${{ steps.version.outputs.version }}" \
             ${{ vars.BACKEND_PUBLIC_DOMAIN }}/i18n/mark-published
 
