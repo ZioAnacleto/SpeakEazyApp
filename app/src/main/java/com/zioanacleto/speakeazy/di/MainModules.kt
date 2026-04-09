@@ -6,6 +6,7 @@ import androidx.media3.datasource.cache.LeastRecentlyUsedCacheEvictor
 import androidx.media3.datasource.cache.SimpleCache
 import com.zioanacleto.buffa.coroutines.DefaultDispatcherProvider
 import com.zioanacleto.buffa.coroutines.DispatcherProvider
+import com.zioanacleto.speakeazy.BuildConfig
 import com.zioanacleto.speakeazy.MainActivityViewModel
 import com.zioanacleto.speakeazy.core.data.cocktail3d.datamapper.Cocktail3DModelDataMapper
 import com.zioanacleto.speakeazy.core.data.cocktail3d.datamapper.CocktailSceneDataMapper
@@ -30,7 +31,7 @@ import java.io.File
 // Singleton
 @SuppressLint("UnsafeOptInUsageError")
 val singletonModule = module {
-    single { ApiClientImpl() }
+    single { ApiClientImpl(enableErrorInterceptor = BuildConfig.ENABLE_ERROR_INTERCEPTOR) }
     single<DispatcherProvider> { DefaultDispatcherProvider() }
     single<Cocktail3DSceneController> {
         Cocktail3DSceneControllerImpl(

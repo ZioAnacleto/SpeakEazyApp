@@ -77,6 +77,7 @@ fun MainDrinkCard(
             }
             Box(
                 modifier = Modifier
+                    .fillMaxSize()
                     .safeClickable { onClick(id) }
                     .padding(16.dp)
             ) {
@@ -137,7 +138,7 @@ fun MainDrinkCardPreview() {
     MainDrinkCard(
         modifier = Modifier,
         id = "1",
-        name = "Mojito lungo aa",
+        name = "Mojito lungo",
         category = "Cocktail",
         imageString = "https://res.cloudinary.com/dyhi3yudn/image/upload/v1743889914/aviation.jpg",
         isFavorite = true,

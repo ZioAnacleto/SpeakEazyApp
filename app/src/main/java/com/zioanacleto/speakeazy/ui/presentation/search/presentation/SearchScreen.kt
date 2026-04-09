@@ -47,6 +47,7 @@ import com.zioanacleto.speakeazy.core.domain.search.model.SearchLandingModel
 import com.zioanacleto.speakeazy.ui.presentation.components.CocktailLoadingAnimation
 import com.zioanacleto.speakeazy.ui.presentation.components.FadeAndSlideAnimatedVisibility
 import com.zioanacleto.speakeazy.ui.presentation.components.MainDrinkCard
+import com.zioanacleto.speakeazy.ui.presentation.components.NetworkErrorView
 import com.zioanacleto.speakeazy.ui.presentation.components.NewsBanner
 import com.zioanacleto.speakeazy.ui.presentation.components.SearchFilterSection
 import com.zioanacleto.speakeazy.ui.presentation.components.SearchInputText
@@ -84,12 +85,7 @@ private fun SearchScreenContent(
         }
 
         is SearchLandingUiState.Error -> {
-            Text(
-                modifier = Modifier
-                    .padding(top = 10.dp),
-                color = Color.White,
-                text = "Error"
-            )
+            NetworkErrorView(Modifier.fillMaxSize())
         }
 
         is SearchLandingUiState.Loading -> {

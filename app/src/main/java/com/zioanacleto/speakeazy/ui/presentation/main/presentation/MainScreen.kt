@@ -1,6 +1,5 @@
 package com.zioanacleto.speakeazy.ui.presentation.main.presentation
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,20 +13,22 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import com.zioanacleto.speakeazy.R
 import com.zioanacleto.speakeazy.core.domain.main.model.BannerModel
+import com.zioanacleto.speakeazy.core.domain.main.model.DrinkModel
 import com.zioanacleto.speakeazy.core.domain.main.model.HomeSectionModel
 import com.zioanacleto.speakeazy.ui.presentation.components.BannerSection
 import com.zioanacleto.speakeazy.ui.presentation.components.CocktailLoadingAnimation
 import com.zioanacleto.speakeazy.ui.presentation.components.MainDrinkCard
+import com.zioanacleto.speakeazy.ui.presentation.components.NetworkErrorView
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -60,8 +61,8 @@ private fun MainScreenContent(
             }
 
             is HomeUiState.Error -> {
-                MainScreenErrorView(
-                    errorMessage = state.exception?.message ?: "Generic Error"
+                NetworkErrorView(
+                    modifier = Modifier.fillMaxSize()
                 )
             }
 
@@ -174,23 +175,21 @@ fun MainScreenHomeSuccessView(
     }
 }
 
+@Preview
 @Composable
-private fun MainScreenErrorView(errorMessage: String) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = "Sorry, there was a problem...",
-            color = Color.White,
-            fontSize = TextUnit(24f, TextUnitType.Sp)
+private fun MainScreenHomeSuccessPreview() {
+    MainScreenHomeSuccessView(
+        sections = listOf(
+            HomeSectionModel(
+                id = "",
+                name = "First Section",
+                cocktails = listOf(
+                    DrinkModel(
+                        id = "1",
+                        name = "Cocktail"
+                    )
+                )
+            )
         )
-        Text(
-            modifier = Modifier
-                .padding(top = 10.dp),
-            text = errorMessage,
-            color = Color.White,
-            fontSize = TextUnit(14f, TextUnitType.Sp)
-        )
-    }
+    ) { }
 }

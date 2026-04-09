@@ -4,6 +4,7 @@ import com.zioanacleto.speakeazy.core.network.BuildConfig
 import com.zioanacleto.speakeazy.core.network.model.ApiException
 import com.zioanacleto.speakeazy.core.network.model.NoContentException
 import io.ktor.client.HttpClient
+import io.ktor.client.call.HttpClientCall
 import io.ktor.client.call.body
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.cio.CIO
@@ -15,6 +16,10 @@ import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.logging.SIMPLE
 import io.ktor.client.plugins.timeout
+import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.HttpRequestData
+import io.ktor.client.request.HttpResponseData
+import io.ktor.client.request.HttpSendPipeline
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
 import io.ktor.client.request.post
@@ -23,17 +28,28 @@ import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.CacheControl
 import io.ktor.http.ContentType
+import io.ktor.http.Headers
 import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpProtocolVersion
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.content.OutgoingContent
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
+import io.ktor.util.date.GMTDate
+import io.ktor.util.pipeline.PipelineContext
 import io.ktor.util.reflect.TypeInfo
+import io.ktor.utils.io.ByteReadChannel
+import io.ktor.utils.io.InternalAPI
+import kotlinx.coroutines.CoroutineName
+import kotlinx.coroutines.Job
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 import kotlin.reflect.KClass
 
+@OptIn(InternalAPI::class)
 class ApiClientImpl(
-    engine: HttpClientEngine = CIO.create()
+    engine: HttpClientEngine = CIO.create(),
+    private val enableErrorInterceptor: Boolean = false
 ) {
     private val _httpClient = HttpClient(engine) {
         install(ContentNegotiation) {
@@ -51,6 +67,12 @@ class ApiClientImpl(
         }
         install(HttpCache)
         install(HttpTimeout)
+    }.apply {
+        if (enableErrorInterceptor) {
+            sendPipeline.intercept(HttpSendPipeline.State) { _ ->
+                configureInterceptor(this@apply)
+            }
+        }
     }
 
     val httpClient: HttpClient by lazy { _httpClient }
@@ -151,6 +173,32 @@ class ApiClientImpl(
     fun createApiKeyHeader(): String {
         val apiKey = BuildConfig.API_KEY
         return apiKey
+    }
+
+    // this interceptor allows to mock all the API calls, useful for testing errors
+    private suspend fun PipelineContext<Any, HttpRequestBuilder>.configureInterceptor(client: HttpClient) {
+        finish()
+        proceedWith(
+            HttpClientCall(
+                client,
+                HttpRequestData(
+                    url = context.url.build(),
+                    method = context.method,
+                    headers = Headers.Empty,
+                    executionContext = context.executionContext,
+                    attributes = context.attributes,
+                    body = context.body as OutgoingContent
+                ),
+                HttpResponseData(
+                    statusCode = HttpStatusCode.InternalServerError,
+                    requestTime = GMTDate(),
+                    headers = Headers.Empty,
+                    version = HttpProtocolVersion.HTTP_1_1,
+                    callContext = CoroutineName("response") + Job(),
+                    body = ByteReadChannel("Mocked response body")
+                )
+            )
+        )
     }
 
     companion object {

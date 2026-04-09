@@ -1,4 +1,3 @@
-
 import com.zioanacleto.speakeazy.buildlogic.CoreModule
 import com.zioanacleto.speakeazy.buildlogic.coreModule
 import org.w3c.dom.Document
@@ -37,6 +36,19 @@ android {
 
         val apiKey = getLocalPropertiesVariable("api.key")
         buildConfigField("String", "API_KEY", apiKey)
+    }
+
+    // add flavors for testing purposes
+    flavorDimensions += "env"
+    productFlavors {
+        create("prod") {
+            dimension = "env"
+            buildConfigField("Boolean", "ENABLE_ERROR_INTERCEPTOR", "false")
+        }
+        create("mock") {
+            dimension = "env"
+            buildConfigField("Boolean", "ENABLE_ERROR_INTERCEPTOR", "true")
+        }
     }
 
     buildTypes {
