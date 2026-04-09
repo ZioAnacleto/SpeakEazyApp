@@ -147,6 +147,8 @@ jobs:
 
       - name: Check if translations changed
         id: check_translations
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
         run: |
           RESPONSE=$(curl -s ${{ vars.BACKEND_PUBLIC_DOMAIN }}/i18n/has-updates)
           echo "Response: $RESPONSE"
