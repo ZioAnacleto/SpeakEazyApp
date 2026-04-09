@@ -14,8 +14,6 @@ navigation = "2.9.1"
 koin = "3.5.6"
 buffa = "1.0.12"
 featurefromtemplate-plugin = "1.1.0"
-jacoco-plugin = "1.0.0"
-core-convention-plugin = "1.0.0"
 timber = "5.0.1"
 ktor = "3.1.1"
 kotlin-serialization = "1.9.21"
@@ -41,6 +39,7 @@ sceneform = "2.3.0"
 kotlin-math = "1.6.0"
 exoplayer = "1.9.2"
 work-runtime = "2.9.0"
+i18n-current = "2026.4.5.1" # Format: yyyy.m.d.{daily_counter}
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -67,6 +66,7 @@ koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-android-workmanager = { module = "io.insert-koin:koin-androidx-workmanager", version.ref = "koin" }
 koin-android-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
 zioanacleto-buffa = { module = "com.zioanacleto:buffa", version.ref = "buffa" }
+zioanacleto-i18n = { module = "com.zioanacleto.speakeazy:i18n-lib", version.ref = "i18n-current" }
 timber = {group = "com.jakewharton.timber", name = "timber", version.ref = "timber"}
 compose-material = { module = "androidx.compose.material:material", version.ref = "compose" }
 lottie = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
@@ -131,6 +131,10 @@ zioanacleto-core-convention-plugin = { id = "com.zioanacleto.speakeazy.core-conv
 zioanacleto-jacoco-library-plugin = { id = "com.zioanacleto.speakeazy.jacoco-library-settings-plugin" }
 zioanacleto-jacoco-application-plugin = { id = "com.zioanacleto.speakeazy.jacoco-application-settings-plugin"}
 zioanacleto-jacoco-aggregate-plugin = { id = "com.zioanacleto.speakeazy.jacoco-aggregate-report-plugin" }
+zioanacleto-strings-plugin = { id = "com.zioanacleto.speakeazy.strings-gatherer-plugin" }
+zioanacleto-i18n-plugin = { id = "com.zioanacleto.speakeazy.i18n-library-plugin" }
+zioanacleto-codeartifact-publishing-plugin = { id = "com.zioanacleto.speakeazy.codeartifact-publishing" }
+zioanacleto-library-print-version-plugin = { id = "com.zioanacleto.speakeazy.print-android-library-version" }
 
 [bundles]
 ktor = [

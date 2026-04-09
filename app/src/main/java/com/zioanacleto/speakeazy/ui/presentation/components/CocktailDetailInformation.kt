@@ -14,20 +14,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import com.zioanacleto.speakeazy.R
 import com.zioanacleto.speakeazy.ui.theme.YellowFFE271
 
 @Composable
 fun CocktailDetailInformation(
     modifier: Modifier = Modifier,
-    glassTitle: String = "GLASS",
-    cocktailTypeTitle: String = "TYPE",
-    methodTitle: String = "METHOD",
+    glassTitle: String = stringResource(R.string.cocktail_detail_information__glass_title),
+    cocktailTypeTitle: String = stringResource(R.string.cocktail_detail_information__type_title),
+    methodTitle: String = stringResource(R.string.cocktail_detail_information__method_title),
     glassType: String,
     cocktailType: String,
     method: String
@@ -45,7 +47,7 @@ fun CocktailDetailInformation(
         ) {
             Text(
                 color = Color.White,
-                text = glassTitle,
+                text = glassTitle.uppercase(),
                 fontSize = TextUnit(12f, TextUnitType.Sp)
             )
             Text(
@@ -73,7 +75,7 @@ fun CocktailDetailInformation(
         ) {
             Text(
                 color = Color.White,
-                text = cocktailTypeTitle,
+                text = cocktailTypeTitle.uppercase(),
                 fontSize = TextUnit(12f, TextUnitType.Sp)
             )
             Text(
@@ -101,7 +103,7 @@ fun CocktailDetailInformation(
         ) {
             Text(
                 color = Color.White,
-                text = methodTitle,
+                text = methodTitle.uppercase(),
                 fontSize = TextUnit(12f, TextUnitType.Sp)
             )
             Text(

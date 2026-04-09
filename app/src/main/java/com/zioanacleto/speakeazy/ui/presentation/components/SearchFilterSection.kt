@@ -31,11 +31,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import com.zioanacleto.speakeazy.R
 import com.zioanacleto.speakeazy.ui.presentation.search.presentation.SearchFilterItem
 import com.zioanacleto.speakeazy.ui.theme.YellowFFE271
 import kotlinx.coroutines.delay
@@ -124,7 +126,7 @@ fun SearchFilterSection(
                         modifier = Modifier
                             .padding(top = 10.dp),
                         color = Color.White,
-                        text = filter.label,
+                        text = stringResource(filter.label),
                         fontWeight = FontWeight.SemiBold,
                         fontSize = TextUnit(16f, TextUnitType.Sp)
                     )
@@ -197,7 +199,7 @@ fun SearchFilterSection(
                 ) {
                     Text(
                         fontSize = TextUnit(15f, TextUnitType.Sp),
-                        text = "Apply filters"
+                        text = stringResource(R.string.search_filter_section__apply_filters_button)
                     )
                 }
 
@@ -237,10 +239,14 @@ fun SearchFilterSection(
     }
 }
 
+@Composable
 private fun Int.filterSectionText() = when (this) {
-    0 -> "Filter section"
-    1 -> "$this filter selected"
-    else -> "$this filters selected"
+    0 -> stringResource(R.string.search_filter_section__collapsed_section_text)
+    1 -> stringResource(R.string.search_filter_section__collapsed_section_1_selected_text)
+    else -> stringResource(
+        R.string.search_filter_section__collapsed_section_many_selected_text,
+        this
+    )
 }
 
 @Preview(showBackground = true)

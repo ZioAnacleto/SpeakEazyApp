@@ -1,3 +1,136 @@
 <resources>
-    <string name="app_name">SpeakEazy</string>
+    <string name="app_name" translatable="false">SpeakEazy</string>
+
+    <!-- ConfirmationDialog -->
+    <string name="confirmation_dialog__ok_button">Ok</string>
+    <string name="confirmation_dialog__cancel_button">Cancel</string>
+
+    <!-- CreateCocktailDisambiguation -->
+    <string name="create_cocktail_disambiguation__title">Choose a cocktail wizard to complete</string>
+    <string name="create_cocktail_disambiguation__subtitle">Long tap on an element to delete it.</string>
+    <string name="create_cocktail_disambiguation__empty_screen">No wizards here, create a new one.</string>
+
+    <!-- CreateCocktailFifthStep -->
+    <string name="create_cocktail_fifth_step__continue_button">Continue</string>
+    <string name="create_cocktail_fifth_step__back_button">Back</string>
+
+    <!-- CreateCocktailFirstStep -->
+    <string name="create_cocktail_first_step__first_question_title">What\'s your cocktail\'s name?</string>
+    <string name="create_cocktail_first_step__first_question_label">Name</string>
+    <string name="create_cocktail_first_step__first_question_placeholder">Insert cocktail\'s name</string>
+    <string name="create_cocktail_first_step__second_question_title">Is it alcoholic?</string>
+    <string name="create_cocktail_first_step__second_question_alcoholic">Alcoholic</string>
+    <string name="create_cocktail_first_step__continue_button">Continue</string>
+
+    <!-- CreateCocktailFourthStep -->
+    <string name="create_cocktail_fourth_step__title">How\'s your cocktail made?</string>
+    <string name="create_cocktail_fourth_step__label">Instructions</string>
+    <string name="create_cocktail_fourth_step__placeholder">Insert cocktail\'s instructions</string>
+    <string name="create_cocktail_fourth_step__continue_button">Continue</string>
+    <string name="create_cocktail_fourth_step__back_button">Back</string>
+
+    <!-- CreateCocktailSecondStep -->
+    <string name="create_cocktail_second_step__first_question_title">What type is your cocktail?</string>
+    <string name="create_cocktail_second_step__first_question_label">Type</string>
+    <string name="create_cocktail_second_step__first_question_placeholder">Insert cocktail\'s type</string>
+    <string name="create_cocktail_second_step__second_question_title">What method it\'s used to create your cocktail?</string>
+    <string name="create_cocktail_second_step__second_question_label">Method</string>
+    <string name="create_cocktail_second_step__second_question_placeholder">Insert cocktail\'s method</string>
+    <string name="create_cocktail_second_step__third_question_title">What glass it\'s used to create your cocktail?</string>
+    <string name="create_cocktail_second_step__third_question_label">Glass</string>
+    <string name="create_cocktail_second_step__third_question_placeholder">Insert cocktail\'s glass</string>
+    <string name="create_cocktail_second_step__continue_button">Continue</string>
+    <string name="create_cocktail_second_step__back_button">Back</string>
+
+    <!-- CreateCocktailSuccessStep -->
+    <string name="create_cocktail_success_step__text">Cocktail uploaded successfully!</string>
+    <string name="create_cocktail_success_step__close_button">Close</string>
+
+    <!-- CreateCocktailThirdStep -->
+    <string name="create_cocktail_third_step__continue_button">Continue</string>
+    <string name="create_cocktail_third_step__back_button">Back</string>
+
+    <!-- CreateCocktailInformation -->
+    <string name="create_cocktail_information__created_date_text">Created: %s</string>
+
+    <!-- CreateCocktailNewIngredientDialog -->
+    <string name="create_cocktail_new_ingredient_dialog__text_input_placeholder">Measure</string>
+    <string name="create_cocktail_new_ingredient_dialog__add_button">Add</string>
+
+    <!-- CocktailDetailInformation -->
+    <string name="cocktail_detail_information__glass_title">Glass</string>
+    <string name="cocktail_detail_information__type_title">Type</string>
+    <string name="cocktail_detail_information__method_title">Method</string>
+
+    <!-- CreateCocktailScreen -->
+    <string name="create_cocktail_screen__delete_dialog_title">Delete cocktail wizard</string>
+    <string name="create_cocktail_screen__delete_dialog_message">Are you sure you want to delete this cocktail wizard?</string>
+    <string name="create_cocktail_screen__delete_dialog_confirm_button">Delete</string>
+    <string name="create_cocktail_screen__delete_dialog_close_button">Cancel</string>
+    <string name="create_cocktail_screen__delete_snackbar_message">Cocktail wizard deleted.</string>
+
+    <!-- DetailScreen -->
+    <string name="detail_screen__ingredients_section_title">Instructions</string>
+    <string name="detail_screen__ingredients_section_subtitle">%s items</string>
+    <string name="detail_screen__banner_text">Check out our brand new 3D modelling instructions section!</string>
+    <string name="detail_screen__directions_button">Go to directions</string>
+
+    <!-- FavoritesScreen -->
+    <string name="favorites_screen__title">My favorites</string>
+
+    <!-- InstructionsScreen -->
+    <string name="instructions_screen__directions_title">Directions</string>
+
+    <!-- MainScreen -->
+    <string name="main_screen__title">Choose your cocktail</string>
+
+    <!-- OfflineBlockingScreen -->
+    <string name="offline_blocking_screen__error_text">No internet connection detected, please check and try again later.</string>
+
+    <!-- SearchFilterItem -->
+    <string name="search_filter_item__ingredients_label">Ingredients</string>
+    <string name="search_filter_item__tags_label">Tags</string>
+    <string name="search_filter_item__method_label">Method</string>
+    <string name="search_filter_item__type_label">Type</string>
+
+    <!-- SearchFilterSection -->
+    <string name="search_filter_section__apply_filters_button">Apply filters</string>
+    <string name="search_filter_section__collapsed_section_text">Filter section</string>
+    <string name="search_filter_section__collapsed_section_1_selected_text">1 filter selected</string>
+    <string name="search_filter_section__collapsed_section_many_selected_text">%s filters selected</string>
+
+    <!-- SearchInputText -->
+    <string name="search_input_text__ai_search_mode_label">Search with AI</string>
+    <string name="search_input_text__normal_search_mode_label">Search</string>
+    <string name="search_input_text__ai_search_mode_placeholder">Ask to our AI assistant</string>
+    <string name="search_input_text__normal_search_mode_placeholder">Search cocktails</string>
+
+    <!-- SearchScreen -->
+    <string name="search_screen__title">Search cocktails</string>
+    <string name="search_screen__banner_text">Try our AI assistant, tap on the input field\'s leading icon!</string>
+    <string name="search_screen__query_no_results_found">No results found by query search.</string>
+    <string name="search_screen__filter_no_results_found">No results found by filter search.</string>
+
+    <!-- TopBar -->
+    <string name="topbar__create_title">Create</string>
+
+    <!-- UserScreen -->
+    <string name="user_screen__send_email_snackbar_success">Email successfully sent.</string>
+    <string name="user_screen__send_email_snackbar_failure">Email not sent, something went wrong.</string>
+    <string name="user_screen__register_user_title">Sign up to join the most interactive cocktails community at the moment.</string>
+    <string name="user_screen__register_user_mail_label">Email</string>
+    <string name="user_screen__register_user_mail_placeholder">Insert your email</string>
+    <string name="user_screen__register_user_button">Sign up</string>
+    <string name="user_screen__register_user_name_title">Almost there, just tell us your name:</string>
+    <string name="user_screen__register_user_name_label">Name</string>
+    <string name="user_screen__register_user_name_placeholder">Type your name</string>
+    <string name="user_screen__register_user_name_default">Anonymous barman</string>
+    <string name="user_screen__register_user_name_button">Done</string>
+    <string name="user_screen__user_detail_title">Hello, %s</string>
+    <string name="user_screen__user_detail_language">Selected language:</string>
+    <string name="user_screen__user_detail_language_italian" translatable="false">IT</string>
+    <string name="user_screen__user_detail_language_english" translatable="false">EN</string>
+    <string name="user_screen__user_detail_logout_button">Logout</string>
+    <string name="user_screen__email_sent_title">We have sent you a link at the given email address, check your inbox!</string>
+    <string name="user_screen__email_sent_button">Send again</string>
 </resources>

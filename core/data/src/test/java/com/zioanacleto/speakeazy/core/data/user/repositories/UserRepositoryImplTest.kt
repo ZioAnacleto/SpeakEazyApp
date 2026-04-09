@@ -14,6 +14,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
@@ -43,8 +44,10 @@ class UserRepositoryImplTest {
     @Test
     fun `getUser - when Success should return correct data`() = runTest {
         // given
-        coEvery { dataSource.getUser() } returns Resource.Success(
-            UserModel(name = "testName", email = "testEmail@blablabla.com")
+        coEvery { dataSource.getUser() } returns flowOf(
+            Resource.Success(
+                UserModel(name = "testName", email = "testEmail@blablabla.com")
+            )
         )
 
         // when

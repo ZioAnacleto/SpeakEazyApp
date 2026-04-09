@@ -32,6 +32,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
@@ -193,7 +194,7 @@ fun ExpandableHorizontalFilterView(
                         modifier = Modifier
                             .padding(start = 5.dp, end = 12.dp),
                         color = if (!isFilterSelected) Color.LightGray else Color.Black,
-                        text = filter.label,
+                        text = stringResource(filter.label),
                         fontSize = TextUnit(11f, TextUnitType.Sp),
                         textAlign = TextAlign.Center,
                         lineHeight = TextUnit(14f, TextUnitType.Sp)
@@ -208,7 +209,7 @@ private fun Modifier.conditionalBackground(
     useColor: Boolean,
     color: Color,
     gradient: Brush
-) = if(useColor) this.background(color) else this.background(gradient)
+) = if (useColor) this.background(color) else this.background(gradient)
 
 @Preview
 @Composable

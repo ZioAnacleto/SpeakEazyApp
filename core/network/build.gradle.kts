@@ -17,8 +17,10 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
 
-        val apiKey = getLocalPropertiesVariable("apiKey")
+        val apiKey = getLocalPropertiesVariable("api.key")
+        val backendUrl = getLocalPropertiesVariable("backend.url")
         buildConfigField("String", "API_KEY", apiKey)
+        buildConfigField("String", "BACKEND_URL", backendUrl)
     }
 
     buildTypes {

@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
@@ -37,6 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
+import com.zioanacleto.speakeazy.R
 import com.zioanacleto.speakeazy.ui.theme.YellowFFE271
 import kotlinx.coroutines.launch
 
@@ -64,13 +66,17 @@ fun SearchInputText(
         label = {
             Text(
                 color = Color.White,
-                text = if (isAiSearchMode) "Search with AI" else "Search"
+                text = if (isAiSearchMode)
+                    stringResource(R.string.search_input_text__ai_search_mode_label)
+                else stringResource(R.string.search_input_text__normal_search_mode_label)
             )
         },
         placeholder = {
             Text(
                 color = Color.White,
-                text = if (isAiSearchMode) "Ask to our AI assistant" else "Search cocktails"
+                text = if (isAiSearchMode)
+                    stringResource(R.string.search_input_text__ai_search_mode_placeholder)
+                else stringResource(R.string.search_input_text__normal_search_mode_placeholder)
             )
         },
         leadingIcon = {

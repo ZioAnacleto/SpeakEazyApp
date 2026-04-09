@@ -53,12 +53,14 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
+import com.zioanacleto.speakeazy.R
 import com.zioanacleto.speakeazy.core.domain.main.model.DrinkModel
 import com.zioanacleto.speakeazy.core.domain.main.model.IngredientModel
 import com.zioanacleto.speakeazy.core.domain.main.model.InstructionModel
@@ -240,12 +242,15 @@ private fun DetailScreenSuccessView(
                     ) {
                         Text(
                             color = Color.White,
-                            text = "Ingredients",
+                            text = stringResource(R.string.detail_screen__ingredients_section_title),
                             fontSize = TextUnit(22f, TextUnitType.Sp)
                         )
                         Text(
                             color = Color.White,
-                            text = "${cocktail.ingredients.size} items",
+                            text = stringResource(
+                                R.string.detail_screen__ingredients_section_subtitle,
+                                cocktail.ingredients.size
+                            ),
                             fontSize = TextUnit(16f, TextUnitType.Sp)
                         )
                     }
@@ -256,7 +261,7 @@ private fun DetailScreenSuccessView(
 
                     NewsBanner(
                         modifier = Modifier.fillMaxWidth(),
-                        text = "Check out our brand new 3D modelling instructions section!"
+                        text = stringResource(R.string.detail_screen__banner_text)
                     )
 
                     // todo: think about something else
@@ -272,7 +277,7 @@ private fun DetailScreenSuccessView(
                             }
                             .border(2.dp, YellowFFE271, RoundedCornerShape(8.dp))
                             .padding(8.dp),
-                        text = "Go to directions",
+                        text = stringResource(R.string.detail_screen__directions_button),
                         color = YellowFFE271,
                         fontSize = TextUnit(18f, TextUnitType.Sp)
                     )

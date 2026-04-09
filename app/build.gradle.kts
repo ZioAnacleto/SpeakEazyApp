@@ -1,3 +1,4 @@
+
 import com.zioanacleto.speakeazy.buildlogic.CoreModule
 import com.zioanacleto.speakeazy.buildlogic.coreModule
 import org.w3c.dom.Document
@@ -18,6 +19,7 @@ plugins {
     jacoco
     alias(libs.plugins.zioanacleto.core.convention.plugin)
     alias(libs.plugins.zioanacleto.jacoco.application.plugin)
+    alias(libs.plugins.zioanacleto.strings.plugin)
 }
 
 android {
@@ -33,7 +35,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        val apiKey = getLocalPropertiesVariable("apiKey")
+        val apiKey = getLocalPropertiesVariable("api.key")
         buildConfigField("String", "API_KEY", apiKey)
     }
 
@@ -102,6 +104,7 @@ dependencies {
 
     // Zioanacleto Buffa
     implementation(libs.zioanacleto.buffa)
+    implementation(libs.zioanacleto.i18n)
 
     // Timber
     implementation(libs.timber)

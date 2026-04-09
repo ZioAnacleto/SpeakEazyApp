@@ -1,6 +1,8 @@
 package com.zioanacleto.speakeazy.core.database
 
 import com.zioanacleto.speakeazy.core.database.entities.UserEntity
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 
 class UserDaoTest : AbstractDatabaseTest() {
@@ -32,15 +34,15 @@ class UserDaoTest : AbstractDatabaseTest() {
     }
 
     @Test
-    fun test_getUser_returnsUserWhenItExists() {
+    fun test_getUser_returnsUserWhenItExists() = runBlocking {
         // given
         insertUsers()
 
         // when
-        val user = userDao.getUser()
+        val user = userDao.getUser().first()
 
         // then
-        assert(user.name == "John Doe")
+        assert(user?.name == "John Doe")
     }
 
     @Test
@@ -72,7 +74,7 @@ class UserDaoTest : AbstractDatabaseTest() {
         val newUser = userDao.getUserByEmail(email)
 
         // then
-        assert(user?.name == newUser?.name)
+        assert(user.name == newUser?.name)
     }
 
     private fun insertUsers() {

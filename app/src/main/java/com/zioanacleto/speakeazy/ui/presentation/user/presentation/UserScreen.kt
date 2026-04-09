@@ -37,6 +37,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -79,6 +80,8 @@ private fun UserScreenContent(
     var registrationSuccessful by remember { mutableStateOf(false) }
     val snackbarHostState = LocalSnackBarHostState.current
     var snackbarMessage by remember { mutableStateOf("") }
+    val snackbarSuccessText = stringResource(R.string.user_screen__send_email_snackbar_success)
+    val snackbarFailureText = stringResource(R.string.user_screen__send_email_snackbar_failure)
 
     // retrieving email link from intent
     val context = LocalContext.current
@@ -123,7 +126,7 @@ private fun UserScreenContent(
                             onSendAgainButton = {
                                 viewModel.sendEmail(state.user.email) {
                                     snackbarMessage =
-                                        if (it) "Email successfully sent." else "Email not sent, something went wrong."
+                                        if (it) snackbarSuccessText else snackbarFailureText
                                 }
                             }
                         )
@@ -170,6 +173,8 @@ private fun RegisterUserScreen(
 ) {
     val snackbarHostState = LocalSnackBarHostState.current
     var snackbarMessage by remember { mutableStateOf("") }
+    val snackbarSuccessText = stringResource(R.string.user_screen__send_email_snackbar_success)
+    val snackbarFailureText = stringResource(R.string.user_screen__send_email_snackbar_failure)
 
     Box(
         modifier = Modifier
@@ -196,7 +201,7 @@ private fun RegisterUserScreen(
             Text(
                 modifier = Modifier
                     .padding(horizontal = 20.dp),
-                text = "Registrati per entrare nella community dei cocktail più interattiva del panorama.",
+                text = stringResource(R.string.user_screen__register_user_title),
                 fontSize = TextUnit(36f, TextUnitType.Sp),
                 color = Color.White,
                 fontWeight = FontWeight.SemiBold,
@@ -214,13 +219,13 @@ private fun RegisterUserScreen(
                 label = {
                     Text(
                         color = Color.White,
-                        text = "Email"
+                        text = stringResource(R.string.user_screen__register_user_mail_label)
                     )
                 },
                 placeholder = {
                     Text(
                         color = Color.White,
-                        text = "Insert your email"
+                        text = stringResource(R.string.user_screen__register_user_mail_placeholder)
                     )
                 },
                 singleLine = true,
@@ -250,18 +255,18 @@ private fun RegisterUserScreen(
                     if (mailTextState.text.isNotEmpty()) {
                         viewModel.sendEmail(mailTextState.text) {
                             snackbarMessage =
-                                if (it) "Email successfully sent." else "Email not sent, something went wrong."
+                                if (it) snackbarSuccessText else snackbarFailureText
                         }
                     }
                 }
             ) {
                 Image(
                     imageVector = Icons.Filled.Email,
-                    contentDescription = ""
+                    contentDescription = "Sign up"
                 )
 
                 Text(
-                    text = "Sign up",
+                    text = stringResource(R.string.user_screen__register_user_button),
                     modifier = Modifier
                         .padding(start = 16.dp)
                 )
@@ -285,6 +290,7 @@ private fun RegisterUserNameScreen(
             TextFieldValue("")
         )
     }
+    val defaultUserName = stringResource(R.string.user_screen__register_user_name_default)
 
     Box(
         modifier = Modifier
@@ -305,7 +311,7 @@ private fun RegisterUserNameScreen(
             Text(
                 modifier = Modifier
                     .padding(horizontal = 20.dp),
-                text = "Quasi fatto, dicci ancora il tuo nome:",
+                text = stringResource(R.string.user_screen__register_user_name_title),
                 fontSize = TextUnit(36f, TextUnitType.Sp),
                 color = Color.White,
                 fontWeight = FontWeight.SemiBold,
@@ -323,13 +329,13 @@ private fun RegisterUserNameScreen(
                 label = {
                     Text(
                         color = Color.White,
-                        text = "Name"
+                        text = stringResource(R.string.user_screen__register_user_name_label)
                     )
                 },
                 placeholder = {
                     Text(
                         color = Color.White,
-                        text = "Type your name"
+                        text = stringResource(R.string.user_screen__register_user_name_placeholder)
                     )
                 },
                 singleLine = true,
@@ -357,7 +363,7 @@ private fun RegisterUserNameScreen(
                 enabled = true,
                 onClick = {
                     viewModel.updateUserWithName(
-                        nameTextState.text.ifEmpty { "Barman anonimo" }
+                        nameTextState.text.ifEmpty { defaultUserName }
                     )
                     onBackButton()
                 }
@@ -368,7 +374,7 @@ private fun RegisterUserNameScreen(
                 )
 
                 Text(
-                    text = "Done",
+                    text = stringResource(R.string.user_screen__register_user_name_button),
                     modifier = Modifier
                         .padding(start = 16.dp)
                 )
@@ -414,7 +420,10 @@ private fun UserDetailScreen(
         Text(
             modifier = Modifier
                 .padding(horizontal = 20.dp, vertical = 16.dp),
-            text = "Ciao, ${user.getFirstName()}",
+            text = stringResource(
+                R.string.user_screen__user_detail_title,
+                user.getFirstName()
+            ),
             fontSize = TextUnit(32f, TextUnitType.Sp),
             color = Color.White,
             fontWeight = FontWeight.SemiBold,
@@ -427,7 +436,7 @@ private fun UserDetailScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Selected language:",
+                text = stringResource(R.string.user_screen__user_detail_language),
                 color = Color.White,
                 fontSize = TextUnit(16f, TextUnitType.Sp)
             )
@@ -439,13 +448,13 @@ private fun UserDetailScreen(
                 firstValue = user.selectedLanguage == Language.ITALIAN,
                 onContent = {
                     Text(
-                        text = "IT",
+                        text = stringResource(R.string.user_screen__user_detail_language_italian),
                         color = Color.Black
                     )
                 },
                 offContent = {
                     Text(
-                        text = "EN",
+                        text = stringResource(R.string.user_screen__user_detail_language_english),
                         color = Color.Black
                     )
                 }
@@ -470,7 +479,7 @@ private fun UserDetailScreen(
             )
 
             Text(
-                text = "Logout",
+                text = stringResource(R.string.user_screen__user_detail_logout_button),
                 modifier = Modifier
                     .padding(start = 16.dp)
             )
@@ -499,7 +508,7 @@ fun UserWithoutLinkScreen(
         Text(
             modifier = Modifier
                 .padding(horizontal = 20.dp, vertical = 16.dp),
-            text = "Abbiamo mandato il link alla mail che ci hai fornito, controlla la tua posta.",
+            text = stringResource(R.string.user_screen__email_sent_title),
             fontSize = TextUnit(32f, TextUnitType.Sp),
             color = Color.White,
             fontWeight = FontWeight.SemiBold,
@@ -519,7 +528,7 @@ fun UserWithoutLinkScreen(
             )
 
             Text(
-                text = "Send again",
+                text = stringResource(R.string.user_screen__email_sent_button),
                 modifier = Modifier
                     .padding(start = 16.dp)
             )

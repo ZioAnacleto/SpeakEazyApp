@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.SpeakEazy" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.SpeakEazy" parent="Theme.AppCompat.Light.NoActionBar" />
     <style name="Theme.SpeakEazy.Splash" parent="Theme.SplashScreen">
         <!-- Optional: remove status bar until transition -->
         <item name="windowSplashScreenBackground">#291433</item>

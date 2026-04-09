@@ -25,10 +25,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.zioanacleto.speakeazy.CREATE_COCKTAIL_MAX_INGREDIENTS_NUMBER
+import com.zioanacleto.speakeazy.R
 import com.zioanacleto.speakeazy.ui.presentation.components.CocktailLoadingAnimation
 import com.zioanacleto.speakeazy.ui.presentation.components.CreateCocktailNewIngredientDialog
 import com.zioanacleto.speakeazy.ui.presentation.components.GlassWithIngredients
@@ -36,7 +38,7 @@ import com.zioanacleto.speakeazy.ui.presentation.components.IngredientLayer
 import com.zioanacleto.speakeazy.ui.presentation.components.SafeClickableGenericButton
 import com.zioanacleto.speakeazy.ui.presentation.create.presentation.CreateCocktailIngredientsUiState
 import com.zioanacleto.speakeazy.ui.presentation.create.presentation.CreateCocktailViewModel
-import org.koin.androidx.compose.getViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun CreateCocktailThirdStep(
@@ -45,7 +47,7 @@ fun CreateCocktailThirdStep(
     onPreviousButtonClick: () -> Unit,
     onButtonClick: (Map<String, String>) -> Unit
 ) {
-    val viewModel = getViewModel<CreateCocktailViewModel>()
+    val viewModel: CreateCocktailViewModel = koinViewModel()
     val ingredientsUiState = viewModel.ingredientsUiState.collectAsStateWithLifecycle()
 
     val maxIngredients = CREATE_COCKTAIL_MAX_INGREDIENTS_NUMBER
@@ -128,7 +130,7 @@ fun CreateCocktailThirdStep(
                         shape = ButtonDefaults.outlinedShape,
                         onClick = onPreviousButtonClick
                     ) {
-                        Text(text = "Back")
+                        Text(text = stringResource(R.string.create_cocktail_third_step__back_button))
                     }
 
                     Button(
@@ -144,7 +146,7 @@ fun CreateCocktailThirdStep(
                             )
                         }
                     ) {
-                        Text(text = "Continue")
+                        Text(text = stringResource(R.string.create_cocktail_third_step__continue_button))
                     }
                 }
             }

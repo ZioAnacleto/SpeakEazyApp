@@ -10,3 +10,8 @@ fun String.toLanguageFromName() = when(this) {
     Language.ENGLISH.name -> Language.ENGLISH
     else -> Language.ITALIAN
 }
+
+fun Language.toLocaleName() = when(this) {
+    Language.ITALIAN -> "it"
+    Language.ENGLISH -> "en"
+}

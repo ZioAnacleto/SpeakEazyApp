@@ -29,3 +29,15 @@ suspend fun <T> PerformanceTracesManager.returningTraceSuspend(
 
     return response
 }
+
+fun <T> PerformanceTracesManager.returningTrace(
+    sourceClazz: KClass<*>,
+    traceName: String,
+    block: () -> T
+): T {
+    startTrace(sourceClazz, traceName)
+    val response = block()
+    stopTrace(sourceClazz, traceName)
+
+    return response
+}

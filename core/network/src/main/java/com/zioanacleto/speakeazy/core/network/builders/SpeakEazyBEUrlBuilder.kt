@@ -1,10 +1,11 @@
 package com.zioanacleto.speakeazy.core.network.builders
 
+import com.zioanacleto.speakeazy.core.network.BuildConfig
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
 object SpeakEazyBEUrlBuilder {
-    private const val BASE_URL = "https://speakeazybackend-production.up.railway.app"
+    private const val BASE_URL = BuildConfig.BACKEND_URL
     private const val COCKTAILS_URI = "cocktails"
     private const val INGREDIENTS_URI = "ingredients"
     private const val HOME_URI = "home"
