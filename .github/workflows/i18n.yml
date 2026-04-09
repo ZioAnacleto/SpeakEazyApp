@@ -152,7 +152,7 @@ jobs:
         run: |
           RESPONSE=$(curl -s \
             -H "X-Api-Key: $API_KEY" \
-            ${{ vars.BACKEND_PUBLIC_DOMAIN }}/i18n/has-updates)
+            ${{ vars.BACKEND_PUBLIC_DOMAIN }}/i18n/updates)
 
           echo "Response: $RESPONSE"
 
