@@ -86,7 +86,7 @@ jobs:
   # 🔥 MAIN → generate + publish AAR
   # ----------------------------------
   publish-i18n:
-    if: github.event.pull_request.merged == true
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 
     steps:
