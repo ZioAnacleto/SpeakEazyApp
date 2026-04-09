@@ -70,7 +70,7 @@
     <string name="create_cocktail_screen__delete_snackbar_message">Cocktail wizard deleted.</string>
 
     <!-- DetailScreen -->
-    <string name="detail_screen__ingredients_section_title">Instructions</string>
+    <string name="detail_screen__ingredients_section_title">Ingredients</string>
     <string name="detail_screen__ingredients_section_subtitle">%s items</string>
     <string name="detail_screen__banner_text">Check out our brand new 3D modelling instructions section!</string>
     <string name="detail_screen__directions_button">Go to directions</string>
@@ -83,6 +83,9 @@
 
     <!-- MainScreen -->
     <string name="main_screen__title">Choose your cocktail</string>
+
+    <!-- NetworkErrorView -->
+    <string name="network_error_view__error">Sorry, there has been a problem. Try again later.</string>
 
     <!-- OfflineBlockingScreen -->
     <string name="offline_blocking_screen__error_text">No internet connection detected, please check and try again later.</string>
@@ -108,8 +111,8 @@
     <!-- SearchScreen -->
     <string name="search_screen__title">Search cocktails</string>
     <string name="search_screen__banner_text">Try our AI assistant, tap on the input field\'s leading icon!</string>
-    <string name="search_screen__query_no_results_found">No results found by query search.</string>
-    <string name="search_screen__filter_no_results_found">No results found by filter search.</string>
+    <string name="search_screen__query_no_results_found">No results found with given query.</string>
+    <string name="search_screen__filter_no_results_found">No results found with selected filter.</string>
 
     <!-- TopBar -->
     <string name="topbar__create_title">Create</string>

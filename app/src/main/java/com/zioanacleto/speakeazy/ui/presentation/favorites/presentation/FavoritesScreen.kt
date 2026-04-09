@@ -1,6 +1,5 @@
 package com.zioanacleto.speakeazy.ui.presentation.favorites.presentation
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -36,6 +35,7 @@ import com.zioanacleto.speakeazy.core.domain.main.model.DrinkModel
 import com.zioanacleto.speakeazy.ui.presentation.components.CocktailLoadingAnimation
 import com.zioanacleto.speakeazy.ui.presentation.components.MainDrinkCard
 import com.zioanacleto.speakeazy.ui.presentation.components.MainFilterView
+import com.zioanacleto.speakeazy.ui.presentation.components.NetworkErrorView
 import com.zioanacleto.speakeazy.ui.presentation.main.presentation.MainFilterItem
 import org.koin.androidx.compose.koinViewModel
 
@@ -61,9 +61,7 @@ fun FavoritesScreen(
             }
 
             is FavoritesUiState.Error -> {
-                FavoritesScreenErrorView(
-                    errorMessage = state.exception?.message ?: "Generic Error"
-                )
+                NetworkErrorView(Modifier.fillMaxSize())
             }
 
             is FavoritesUiState.Loading -> {
@@ -144,28 +142,5 @@ private fun FavoritesScreenSuccessView(
                 )
             }
         }
-    }
-}
-
-@Composable
-fun FavoritesScreenErrorView(
-    errorMessage: String
-) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = "Sorry, there was a problem...",
-            color = Color.White,
-            fontSize = TextUnit(24f, TextUnitType.Sp)
-        )
-        Text(
-            modifier = Modifier
-                .padding(top = 10.dp),
-            text = errorMessage,
-            color = Color.White,
-            fontSize = TextUnit(14f, TextUnitType.Sp)
-        )
     }
 }

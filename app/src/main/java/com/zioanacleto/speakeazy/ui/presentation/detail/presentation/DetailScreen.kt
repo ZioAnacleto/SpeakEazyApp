@@ -69,6 +69,7 @@ import com.zioanacleto.speakeazy.ui.presentation.components.CocktailDetailInform
 import com.zioanacleto.speakeazy.ui.presentation.components.CocktailLoadingAnimation
 import com.zioanacleto.speakeazy.ui.presentation.components.GradientCircularShadowBox
 import com.zioanacleto.speakeazy.ui.presentation.components.IngredientView
+import com.zioanacleto.speakeazy.ui.presentation.components.NetworkErrorView
 import com.zioanacleto.speakeazy.ui.presentation.components.NewsBanner
 import com.zioanacleto.speakeazy.ui.presentation.components.VideoPlayer
 import com.zioanacleto.speakeazy.ui.presentation.components.bottomSheetStyle
@@ -130,10 +131,7 @@ private fun DetailScreenContent(
         }
 
         is DetailUiState.Error -> {
-            DetailScreenErrorView(
-                errorMessage = (detailUiState.value as? DetailUiState.Error)
-                    ?.exception?.message ?: "Generic Error"
-            )
+            NetworkErrorView(Modifier.fillMaxSize())
         }
 
         is DetailUiState.Loading -> {
@@ -333,30 +331,6 @@ private fun DetailScreenSuccessView(
 }
 
 @Composable
-private fun DetailScreenErrorView(errorMessage: String) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .speakEazyGradientBackground(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = "Sorry, there was a problem...",
-            color = Color.White,
-            fontSize = TextUnit(24f, TextUnitType.Sp)
-        )
-        Text(
-            modifier = Modifier
-                .padding(top = 10.dp),
-            text = errorMessage,
-            color = Color.White,
-            fontSize = TextUnit(14f, TextUnitType.Sp)
-        )
-    }
-}
-
-@Composable
 private fun DetailScreenTopBar(
     modifier: Modifier = Modifier,
     onBackButton: () -> Unit,
@@ -514,10 +488,4 @@ fun DetailScreen() {
         onAddFavoriteClick = { _, _ -> },
         onDeleteFavoriteClick = {}
     )
-}
-
-@Composable
-@Preview
-fun DetailError() {
-    DetailScreenErrorView("Exception")
 }

@@ -127,6 +127,8 @@ each layer.
 -   Github actions using pull requests
 -   Running unit tests and instrumented tests to ensure code quality
 -   Code coverage threshold **80%**
+-   Managing **i18n** localization strings using server and AI tools for automatic
+    translations, uploading a new module to AWS to be used on app
 
 ------------------------------------------------------------------------
 

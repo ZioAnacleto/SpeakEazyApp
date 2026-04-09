@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.zioanacleto.buffa.logging.AnacletoLogger
+import com.zioanacleto.speakeazy.BuildConfig
 import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.controller.Cocktail3DSceneController
 import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.models.CocktailUiScene
 import com.zioanacleto.speakeazy.ui.presentation.cocktail3d.models.toUiScene
@@ -37,14 +38,14 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import org.koin.androidx.compose.get
+import org.koin.compose.koinInject
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.DurationUnit
 
 @Composable
 fun Cocktail3DScene(
     modifier: Modifier = Modifier,
-    controller: Cocktail3DSceneController = get(),
+    controller: Cocktail3DSceneController = koinInject(),
     onModelLoaded: (Boolean) -> Unit
 ) {
     // 1. Get a coroutine scope that is tied to this Composable's lifecycle
@@ -144,13 +145,15 @@ fun Cocktail3DScene(
             )
         )
 
-        Text(
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(top = 50.dp, end = 10.dp),
-            text = currentScene::class.simpleName ?: "Unknown scene",
-            color = Color.White
-        )
+        if (BuildConfig.DEBUG) {
+            Text(
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(top = 50.dp, end = 10.dp),
+                text = currentScene::class.simpleName ?: "Unknown scene",
+                color = Color.White
+            )
+        }
     }
 }
 

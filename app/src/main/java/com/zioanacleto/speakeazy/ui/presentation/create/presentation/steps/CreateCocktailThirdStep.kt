@@ -35,6 +35,7 @@ import com.zioanacleto.speakeazy.ui.presentation.components.CocktailLoadingAnima
 import com.zioanacleto.speakeazy.ui.presentation.components.CreateCocktailNewIngredientDialog
 import com.zioanacleto.speakeazy.ui.presentation.components.GlassWithIngredients
 import com.zioanacleto.speakeazy.ui.presentation.components.IngredientLayer
+import com.zioanacleto.speakeazy.ui.presentation.components.NetworkErrorView
 import com.zioanacleto.speakeazy.ui.presentation.components.SafeClickableGenericButton
 import com.zioanacleto.speakeazy.ui.presentation.create.presentation.CreateCocktailIngredientsUiState
 import com.zioanacleto.speakeazy.ui.presentation.create.presentation.CreateCocktailViewModel
@@ -168,7 +169,7 @@ fun CreateCocktailThirdStep(
         }
 
         is CreateCocktailIngredientsUiState.Error -> {
-            // todo: show error
+            NetworkErrorView(Modifier.fillMaxSize())
         }
 
         is CreateCocktailIngredientsUiState.Loading -> {
