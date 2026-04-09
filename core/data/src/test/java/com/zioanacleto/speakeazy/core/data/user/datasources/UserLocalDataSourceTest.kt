@@ -12,6 +12,8 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.runs
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
@@ -38,11 +40,11 @@ class UserLocalDataSourceTest {
     @Test
     fun `getUser - should return correct user data`() = runTest {
         // given
-        every { userDao.getUser() } returns mockUserEntity()
+        every { userDao.getUser() } returns flowOf(mockUserEntity())
 
         // when
         val sut = createSut()
-        val response = sut.getUser()
+        val response = sut.getUser().first()
 
         // then
         assertAllTrue(
@@ -60,7 +62,7 @@ class UserLocalDataSourceTest {
 
         // when
         val sut = createSut()
-        val response = sut.getUser()
+        val response = sut.getUser().first()
 
         // then
         assert(response is Resource.Error)

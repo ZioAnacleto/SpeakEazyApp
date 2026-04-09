@@ -12,6 +12,7 @@ import com.zioanacleto.speakeazy.core.database.entities.toUserModel
 import com.zioanacleto.speakeazy.core.domain.user.model.UserModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 
 class UserLocalDataSource(
@@ -19,23 +20,36 @@ class UserLocalDataSource(
     private val performanceTracesManager: PerformanceTracesManager
 ) : UserDataSource {
     override fun getUser(): Flow<Resource<UserModel>> =
-        userDao.getUser().map { userEntity ->
-            performanceTracesManager.returningTraceSuspend(
-                UserLocalDataSource::class,
-                "getUser"
-            ) {
-                if (userEntity != null) {
-                    val user = userEntity.toUserModel()
-                    AnacletoLogger.mumbling(
-                        mumble = "Success in retrieving local user.",
-                        level = AnacletoLevel.INFO
-                    )
-                    Resource.Success(user)
-                } else {
-                    Resource.Error(Exception("User not found"))
+        try {
+            userDao.getUser().map { userEntity ->
+                performanceTracesManager.returningTraceSuspend(
+                    UserLocalDataSource::class,
+                    "getUser"
+                ) {
+                    if (userEntity != null) {
+                        val user = userEntity.toUserModel()
+                        AnacletoLogger.mumbling(
+                            mumble = "Success in retrieving local user.",
+                            level = AnacletoLevel.INFO
+                        )
+                        Resource.Success(user)
+                    } else {
+                        Resource.Error(Exception("User not found"))
+                    }
                 }
+            }.catch { exception ->
+                performanceTracesManager.stopTrace(
+                    UserLocalDataSource::class,
+                    "getUser"
+                )
+                AnacletoLogger.mumbling(
+                    mumble = "Error while converting user",
+                    error = exception,
+                    level = AnacletoLevel.ERROR
+                )
+                emit(Resource.Error(exception))
             }
-        }.catch { exception ->
+        } catch (exception: Exception) {
             performanceTracesManager.stopTrace(
                 UserLocalDataSource::class,
                 "getUser"
@@ -45,7 +59,7 @@ class UserLocalDataSource(
                 error = exception,
                 level = AnacletoLevel.ERROR
             )
-            emit(Resource.Error(exception))
+            flowOf(Resource.Error(exception))
         }
 
     override suspend fun saveUser(
