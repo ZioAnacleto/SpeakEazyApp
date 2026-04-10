@@ -16,9 +16,9 @@ class I18nLibraryPlugin : Plugin<Project> {
         ) {
             group = "i18n"
             description = "Fetches i18n strings from the backend and generates strings.xml files."
-            
+
             // If applied to a subproject (like i18n-lib), use that project's directory
-            outputDir.set(project.layout.projectDirectory)
+            outputDir.set(project.layout.buildDirectory.dir("generated/res/i18n"))
             endpoint.set("$backendUrl/i18n/export")
 
             // Set the apiKey retrieved from local.properties

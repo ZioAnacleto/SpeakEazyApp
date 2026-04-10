@@ -17,14 +17,15 @@ plugins {
     `maven-publish`
 }
 
-publishing {
-    publications {
-        create<MavenPublication>("i18n-lib") {
-            groupId = "com.zioanacleto.speakeazy"
-            artifactId = "i18n-lib"
-            version = computeNewVersion()
-            
-            artifact(layout.buildDirectory.file("outputs/aar/i18n-lib-release.aar"))
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("i18nLib") {
+                from(components["release"])
+                groupId = "com.zioanacleto.speakeazy"
+                artifactId = "i18n-lib"
+                version = computeNewVersion()
+            }
         }
     }
 }
@@ -52,6 +53,16 @@ android {
             )
         }
     }
+
+    sourceSets {
+        getByName("main") {
+            res.srcDir(layout.buildDirectory.dir("generated/res/i18n"))
+        }
+    }
+    publishing {
+        singleVariant("release")
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -69,4 +80,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+}
+
+tasks.named("preBuild") {
+    dependsOn("generateI18nLibrary")
 }

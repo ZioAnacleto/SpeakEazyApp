@@ -52,12 +52,12 @@ abstract class GenerateI18nLibraryTask : DefaultTask() {
         }
 
         val json = connection.inputStream.bufferedReader().use { it.readText() }
-        
+
         val parsedData = parseJson(json)
 
         parsedData.forEach { (language, translations) ->
             val folderName = if (language == "en") "values" else "values-$language"
-            val dir = File(outputDir.get().asFile, "src/main/res/$folderName")
+            val dir = File(outputDir.get().asFile, folderName)
             dir.mkdirs()
 
             val file = File(dir, "strings.xml")
@@ -85,7 +85,7 @@ abstract class GenerateI18nLibraryTask : DefaultTask() {
                 .replace("\n", "\\n")
                 .replace("\r", "\\r")
                 .replace("\t", "\\t")
-            
+
             stringElement.textContent = escapedValue
             resourcesElement.appendChild(stringElement)
         }
@@ -94,7 +94,7 @@ abstract class GenerateI18nLibraryTask : DefaultTask() {
         val transformer = transformerFactory.newTransformer()
         transformer.setOutputProperty(OutputKeys.INDENT, "yes")
         transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4")
-        
+
         val source = DOMSource(doc)
         val result = StreamResult(file)
         transformer.transform(source, result)
@@ -102,15 +102,15 @@ abstract class GenerateI18nLibraryTask : DefaultTask() {
 
     private fun parseJson(json: String): Map<String, Map<String, String>> {
         val result = mutableMapOf<String, Map<String, String>>()
-        
+
         // Find the "languages" array
         val languagesStartIndex = json.indexOf("\"languages\"")
         if (languagesStartIndex == -1) return result
-        
+
         val arrayStart = json.indexOf("[", languagesStartIndex)
         if (arrayStart == -1) return result
         val arrayEnd = findClosingBracket(json, arrayStart, '[', ']')
-        
+
         val languagesArrayContent = json.substring(arrayStart + 1, arrayEnd)
         val languageBlocks = splitJsonObjects(languagesArrayContent)
 
@@ -121,10 +121,11 @@ abstract class GenerateI18nLibraryTask : DefaultTask() {
                 val stringsArrayStart = block.indexOf("[", stringsStart)
                 if (stringsArrayStart != -1) {
                     val stringsArrayEnd = findClosingBracket(block, stringsArrayStart, '[', ']')
-                    
-                    val stringsArrayContent = block.substring(stringsArrayStart + 1, stringsArrayEnd)
+
+                    val stringsArrayContent =
+                        block.substring(stringsArrayStart + 1, stringsArrayEnd)
                     val stringEntries = splitJsonObjects(stringsArrayContent)
-                    
+
                     val translations = mutableMapOf<String, String>()
                     stringEntries.forEach { entry ->
                         val key = extractValue(entry, "key")
@@ -139,7 +140,7 @@ abstract class GenerateI18nLibraryTask : DefaultTask() {
                 }
             }
         }
-        
+
         return result
     }
 
@@ -147,11 +148,11 @@ abstract class GenerateI18nLibraryTask : DefaultTask() {
         val keyWithQuotes = "\"$key\""
         val keyIndex = json.indexOf(keyWithQuotes)
         if (keyIndex == -1) return ""
-        
+
         val colonIndex = json.indexOf(":", keyIndex)
         val quoteStart = json.indexOf("\"", colonIndex)
         if (quoteStart == -1) return ""
-        
+
         val sb = StringBuilder()
         var escaped = false
         for (i in (quoteStart + 1) until json.length) {
@@ -200,7 +201,7 @@ abstract class GenerateI18nLibraryTask : DefaultTask() {
         for (char in json) {
             if (char == '\"' && !escaped) inQuotes = !inQuotes
             escaped = char == '\\' && !escaped
-            
+
             if (!inQuotes) {
                 if (char == '{') bracketCount++
                 if (char == '}') {
@@ -213,7 +214,7 @@ abstract class GenerateI18nLibraryTask : DefaultTask() {
                     }
                 }
             }
-            
+
             if (bracketCount > 0 || inQuotes) {
                 current.append(char)
             }
